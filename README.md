@@ -1,25 +1,28 @@
-# Documentación Paso Rápido
+# Sistema de Validación de Consumos Paso Rápido
 
-Sistema inteligente de validación y gestión de consumos de peajes con telemetría GPS.
+Herramienta de validación de consumos de peajes exportados desde la aplicación oficial Paso Rápido del gobierno dominicano.
 
 ## Acerca del Sistema
 
-Paso Rápido es una solución integral que permite a empresas con flotas de vehículos validar automáticamente los cargos de peajes contra datos reales de ubicación GPS proporcionados por ERM Telematics.
+Esta herramienta permite validar automáticamente los consumos de peajes exportados desde la aplicación Paso Rápido del gobierno dominicano, cruzándolos con datos de telemetría GPS de vehículos registrados en ERM Telematics.
 
 ## Características Principales
 
-- **Validación Automática GPS**: Verifica la ubicación del vehículo al momento del cobro
-- **Detección de Duplicados**: Identifica cargos duplicados por tag y estación  
-- **Validación de Categoría**: Compara montos cobrados vs. esperados
-- **Gestión de Tags**: Control de estado y asignaciones de tags
-- **Reportes Ejecutivos**: Análisis detallados con exportación a Excel
+- **Importación de CSV**: Procesa archivos exportados desde la app oficial Paso Rápido
+- **Integración ERM Telematics**: Conecta con datos de vehículos, proyectos, eventos y viajes
+- **Validación GPS**: Verifica ubicación del vehículo contra telemetría ERM al momento del cobro
+- **Detección de Anomalías**: Identifica duplicados, sobrecargos y tags inhabilitados
+- **Tabla Puente**: Utiliza `tag_assignments` para vincular datos de ambos sistemas
+- **Reportes de Validación**: Análisis detallados con exportación a Excel
 
 ## Estructura de la Documentación
 
-- **Introducción**: Conceptos básicos y modelos de datos
+- **Introducción**: Flujo de trabajo e integración de sistemas
+- **Conceptos Básicos**: Terminología y entidades del sistema
+- **Modelos de Datos**: Estructura de las tablas y relaciones
 - **Sistema de Validación**: Funcionamiento interno de las validaciones
 - **Guías de Usuario**: Instrucciones paso a paso para operadores
-- **Flujos de Trabajo**: Procesos completos del sistema
+- **Flujos de Trabajo**: Procesos completos desde exportación hasta reportes
 
 ## Soporte Técnico
 
@@ -29,4 +32,4 @@ Para consultas técnicas o solicitudes de implementación:
 
 ---
 
-*Desarrollado con tecnología ERM Telematics para United Petroleum* 
+*Módulo de validación desarrollado para integrar Paso Rápido (Gobierno Dominicano) con ERM Telematics* 

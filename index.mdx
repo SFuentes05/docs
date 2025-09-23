@@ -1,122 +1,121 @@
 ---
-title: "Paso Rápido - Sistema de Validación de Peajes"
-description: "Sistema inteligente de validación y gestión de consumos de peajes con telemetría GPS"
+title: "Sistema de Validación de Consumos Paso Rápido"
+description: "Herramienta de validación de consumos de peajes Paso Rápido con telemetría GPS de ERM Telematics"
 ---
 
-# Bienvenido a Paso Rápido
+# Sistema de Validación de Consumos Paso Rápido
 
-Paso Rápido es un sistema integral de validación y gestión de consumos de peajes que utiliza telemetría GPS de ERM Telematics para detectar fraudes y optimizar costos operativos.
+Esta herramienta permite validar automáticamente los consumos de peajes exportados desde la aplicación Paso Rápido del gobierno dominicano, utilizando datos de telemetría GPS de ERM Telematics para detectar fraudes y optimizar costos operativos.
 
 <Note>
-Este sistema está diseñado para empresas que manejan flotas de vehículos y necesitan validar automáticamente los cargos de peajes contra datos reales de ubicación GPS.
+Este módulo de validación está diseñado para empresas que manejan flotas de vehículos registradas en ERM Telematics y necesitan validar automáticamente los cargos de peajes de Paso Rápido contra datos reales de ubicación GPS.
 </Note>
 
-## ¿Qué hace Paso Rápido?
+## ¿Cómo funciona el sistema?
 
 <CardGroup cols={2}>
   <Card
-    title="Validación Automática"
-    icon="shield-check"
-    href="/conceptos-basicos"
+    title="Importación de Datos"
+    icon="upload"
+    href="/guia-usuario"
   >
-    Valida automáticamente cargos de peaje contra datos GPS en tiempo real
+    Importa CSV de consumos exportados desde la app Paso Rápido del gobierno
   </Card>
   <Card
-    title="Detección de Fraudes"
+    title="Validación GPS"
+    icon="shield-check"
+    href="/validacion-sistema"
+  >
+    Valida ubicación del vehículo contra datos de telemetría ERM Telematics
+  </Card>
+  <Card
+    title="Detección de Anomalías"
     icon="magnifying-glass"
     href="/validacion-sistema"
   >
-    Identifica duplicados, cobros excesivos y tags inhabilitados
+    Identifica duplicados, cobros excesivos y tags inhabilitados automáticamente
   </Card>
   <Card
-    title="Gestión de Flota"
-    icon="truck"
-    href="/modelos-datos"
-  >
-    Administra vehículos, tags y asignaciones de manera centralizada
-  </Card>
-  <Card
-    title="Reportes Detallados"
+    title="Reportes de Validación"
     icon="chart-bar"
     href="/guia-usuario"
   >
-    Genera reportes ejecutivos con análisis de validaciones
+    Genera reportes detallados con resultados de validación para análisis
   </Card>
 </CardGroup>
 
-## Conceptos Fundamentales
+## Flujo de Trabajo del Sistema
 
 <Tabs>
-<Tab title="Validación GPS">
-  **Validación de Ubicación**: El sistema cruza cada cargo de peaje con datos GPS del vehículo para confirmar que realmente pasó por la estación en el momento indicado.
+<Tab title="1. Exportación desde Paso Rápido">
+  **Extracción de Datos**: El personal de logística exporta los consumos de peajes desde la aplicación oficial Paso Rápido del gobierno dominicano en formato CSV.
+  
+  - Datos incluyen: fecha, tag, estación, monto, tipo de vehículo
+  - Exportación desde el portal oficial del gobierno
+  - Archivos preparados para importación automática
+</Tab>
+
+<Tab title="2. Importación y Procesamiento">
+  **Carga de Datos**: Los archivos CSV se importan en el sistema y se procesan automáticamente.
+  
+  - Vinculación automática con datos ERM Telematics
+  - Uso de `tag_assignments` como tabla puente
+  - Sincronización con vehículos, proyectos, eventos y viajes
+</Tab>
+
+<Tab title="3. Validación Automática">
+  **Validación GPS**: Compara ubicación del vehículo en ERM con la estación de peaje al momento del cobro.
   
   - Tolerancia de tiempo: ±1 minuto por defecto
   - Tolerancia de distancia: 500 metros por defecto
-  - Estados: Válido, Ubicación Inválida, Sin Telemetría
+  - Detección automática de anomalías y duplicados
 </Tab>
 
-<Tab title="Detección de Duplicados">
-  **Identificación de Dobles Cargos**: Detecta automáticamente cargos duplicados basándose en:
+<Tab title="4. Análisis y Reportes">
+  **Generación de Reportes**: Produce análisis detallados con resultados de validación para revisión.
   
-  - Mismo tag
-  - Misma estación
-  - Fecha y hora similares
-  - Monto idéntico o similar
-</Tab>
-
-<Tab title="Validación de Categoría">
-  **Verificación de Montos**: Compara el monto cobrado contra las tarifas oficiales según la categoría del vehículo:
-  
-  - Categorías 1-5 (Auto, Camioneta, Bus, Camión, etc.)
-  - Detecta cobros menores (favorable) y mayores (desfavorable)
-  - Calcula diferencias automáticamente
-</Tab>
-
-<Tab title="Estado de Tags">
-  **Verificación de Tags**: Confirma que el tag estaba activo en el momento del cargo:
-  
-  - Estados: Válido, Inhabilitado
-  - Histórico de cambios de estado
-  - Asignaciones por período
+  - Reportes ejecutivos con estadísticas
+  - Exportación a Excel con filtros aplicados
+  - Identificación de patrones sospechosos
 </Tab>
 </Tabs>
 
-## Flujo Principal del Sistema
+## Integración de Sistemas
 
 <Steps>
-<Step title="Importación de Datos">
-  Los datos se importan desde múltiples fuentes:
-  - **Consumos de Peajes**: Archivos CSV con cargos
-  - **Datos GPS**: Telemetría desde ERM Karma API
-  - **Información de Vehículos**: Flota y proyectos
-  - **Asignaciones de Tags**: Gestión manual de tags
+<Step title="Extracción desde Paso Rápido Gobierno">
+  El personal de logística exporta datos desde la aplicación oficial:
+  - **Consumos de Peajes**: CSV con todos los cargos del período
+  - **Información de Tags**: Números de tag y estaciones
+  - **Datos de Facturación**: Montos, fechas y tipos de vehículo
+  - **Exportación Manual**: Proceso controlado por el usuario
 
   <Check>
-  Todos los datos se organizan por organización para multi-tenencia
+  Los datos provienen directamente de la fuente oficial del gobierno dominicano
   </Check>
 </Step>
 
-<Step title="Proceso de Validación">
-  El sistema ejecuta 4 tipos de validación automática:
-  1. **GPS**: Confirma presencia del vehículo
-  2. **Duplicados**: Identifica dobles cargos
-  3. **Categoría**: Verifica montos correctos
-  4. **Tags**: Valida estado activo
+<Step title="Conexión con ERM Telematics">
+  El sistema conecta automáticamente con los datos de ERM:
+  - **Vehículos y Proyectos**: Importados desde ERM Karma API
+  - **Eventos GPS**: Telemetría en tiempo real de ubicaciones
+  - **Viajes**: Rutas completas con inicio y fin
+  - **Tabla Puente**: `tag_assignments` vincula Paso Rápido con ERM
 
   <Warning>
-  Las validaciones requieren datos GPS actualizados y asignaciones de tags correctas
+  La validación depende de la correcta asignación de tags a vehículos ERM
   </Warning>
 </Step>
 
-<Step title="Revisión Manual">
-  Los operadores pueden:
-  - Revisar casos sospechosos
-  - Aprobar o rechazar cargos
-  - Agregar comentarios explicativos
-  - Generar reportes detallados
+<Step title="Validación Automática">
+  El sistema ejecuta validaciones cruzando ambas fuentes:
+  1. **GPS**: Confirma que el vehículo ERM estuvo en la estación
+  2. **Duplicados**: Identifica cargos repetidos en Paso Rápido
+  3. **Categoría**: Verifica montos contra tarifas oficiales
+  4. **Tags**: Valida estado activo al momento del cargo
 
   <Tip>
-  Enfócate primero en los cargos con múltiples validaciones fallidas
+  Este módulo es parte de una aplicación más amplia que incluirá visualización de viajes
   </Tip>
 </Step>
 </Steps>
