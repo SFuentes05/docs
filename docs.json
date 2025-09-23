@@ -51,7 +51,7 @@
         },
         {
           "anchor": "Portal de Usuario",
-          "href": "/dashboard",
+          "href": "https://pasorapido.com/dashboard",
           "icon": "gauge-high"
         }
       ]
