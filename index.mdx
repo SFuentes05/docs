@@ -1,97 +1,186 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: "Paso Rápido - Sistema de Validación de Peajes"
+description: "Sistema inteligente de validación y gestión de consumos de peajes con telemetría GPS"
 ---
 
-## Setting up
+# Bienvenido a Paso Rápido
 
-Get your documentation site up and running in minutes.
+Paso Rápido es un sistema integral de validación y gestión de consumos de peajes que utiliza telemetría GPS de ERM Telematics para detectar fraudes y optimizar costos operativos.
 
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
+<Note>
+Este sistema está diseñado para empresas que manejan flotas de vehículos y necesitan validar automáticamente los cargos de peajes contra datos reales de ubicación GPS.
+</Note>
 
-## Make it yours
+## ¿Qué hace Paso Rápido?
 
-Design a docs site that looks great and empowers your users.
-
-<Columns cols={2}>
+<CardGroup cols={2}>
   <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
+    title="Validación Automática"
+    icon="shield-check"
+    href="/conceptos-basicos"
   >
-    Edit your docs locally and preview them in real time.
+    Valida automáticamente cargos de peaje contra datos GPS en tiempo real
   </Card>
   <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
+    title="Detección de Fraudes"
+    icon="magnifying-glass"
+    href="/validacion-sistema"
   >
-    Customize the design and colors of your site to match your brand.
-  </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+    Identifica duplicados, cobros excesivos y tags inhabilitados
   </Card>
   <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
+    title="Gestión de Flota"
+    icon="truck"
+    href="/modelos-datos"
   >
-    Auto-generate API documentation from OpenAPI specifications.
-  </Card>
-</Columns>
-
-## Create beautiful pages
-
-Everything you need to create world-class documentation.
-
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
+    Administra vehículos, tags y asignaciones de manera centralizada
   </Card>
   <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
+    title="Reportes Detallados"
+    icon="chart-bar"
+    href="/guia-usuario"
   >
-    Add sample code to demonstrate how to use your product.
+    Genera reportes ejecutivos con análisis de validaciones
+  </Card>
+</CardGroup>
+
+## Conceptos Fundamentales
+
+<Tabs>
+<Tab title="Validación GPS">
+  **Validación de Ubicación**: El sistema cruza cada cargo de peaje con datos GPS del vehículo para confirmar que realmente pasó por la estación en el momento indicado.
+  
+  - Tolerancia de tiempo: ±1 minuto por defecto
+  - Tolerancia de distancia: 500 metros por defecto
+  - Estados: Válido, Ubicación Inválida, Sin Telemetría
+</Tab>
+
+<Tab title="Detección de Duplicados">
+  **Identificación de Dobles Cargos**: Detecta automáticamente cargos duplicados basándose en:
+  
+  - Mismo tag
+  - Misma estación
+  - Fecha y hora similares
+  - Monto idéntico o similar
+</Tab>
+
+<Tab title="Validación de Categoría">
+  **Verificación de Montos**: Compara el monto cobrado contra las tarifas oficiales según la categoría del vehículo:
+  
+  - Categorías 1-5 (Auto, Camioneta, Bus, Camión, etc.)
+  - Detecta cobros menores (favorable) y mayores (desfavorable)
+  - Calcula diferencias automáticamente
+</Tab>
+
+<Tab title="Estado de Tags">
+  **Verificación de Tags**: Confirma que el tag estaba activo en el momento del cargo:
+  
+  - Estados: Válido, Inhabilitado
+  - Histórico de cambios de estado
+  - Asignaciones por período
+</Tab>
+</Tabs>
+
+## Flujo Principal del Sistema
+
+<Steps>
+<Step title="Importación de Datos">
+  Los datos se importan desde múltiples fuentes:
+  - **Consumos de Peajes**: Archivos CSV con cargos
+  - **Datos GPS**: Telemetría desde ERM Karma API
+  - **Información de Vehículos**: Flota y proyectos
+  - **Asignaciones de Tags**: Gestión manual de tags
+
+  <Check>
+  Todos los datos se organizan por organización para multi-tenencia
+  </Check>
+</Step>
+
+<Step title="Proceso de Validación">
+  El sistema ejecuta 4 tipos de validación automática:
+  1. **GPS**: Confirma presencia del vehículo
+  2. **Duplicados**: Identifica dobles cargos
+  3. **Categoría**: Verifica montos correctos
+  4. **Tags**: Valida estado activo
+
+  <Warning>
+  Las validaciones requieren datos GPS actualizados y asignaciones de tags correctas
+  </Warning>
+</Step>
+
+<Step title="Revisión Manual">
+  Los operadores pueden:
+  - Revisar casos sospechosos
+  - Aprobar o rechazar cargos
+  - Agregar comentarios explicativos
+  - Generar reportes detallados
+
+  <Tip>
+  Enfócate primero en los cargos con múltiples validaciones fallidas
+  </Tip>
+</Step>
+</Steps>
+
+## Beneficios Clave
+
+<AccordionGroup>
+<Accordion title="Ahorro de Costos">
+  - **Detección de Fraudes**: Identifica cobros indebidos automáticamente
+  - **Eliminación de Duplicados**: Evita pagos dobles
+  - **Verificación de Categorías**: Asegura tarifas correctas
+  - **ROI Medible**: Reportes de ahorros generados
+</Accordion>
+
+<Accordion title="Eficiencia Operativa">
+  - **Automatización**: Reduce trabajo manual de validación
+  - **Alertas Inteligentes**: Notifica solo casos relevantes
+  - **Reportes Automáticos**: Genera documentación sin intervención
+  - **Integración API**: Conecta con sistemas existentes
+</Accordion>
+
+<Accordion title="Control y Transparencia">
+  - **Trazabilidad Completa**: Cada validación está documentada
+  - **Auditoría**: Historial completo de cambios
+  - **Reportes Ejecutivos**: Visibilidad para gerencia
+  - **Datos GPS**: Evidencia objetiva de ubicaciones
+</Accordion>
+</AccordionGroup>
+
+## Comenzar
+
+<CardGroup cols={2}>
+  <Card
+    title="Conceptos Básicos"
+    icon="graduation-cap"
+    href="/conceptos-basicos"
+  >
+    Aprende los términos y conceptos fundamentales del sistema
   </Card>
   <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
+    title="Modelos de Datos"
+    icon="database"
+    href="/modelos-datos"
   >
-    Display images and other media.
+    Comprende las entidades principales: vehículos, tags, cargos
   </Card>
   <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
+    title="Sistema de Validación"
+    icon="shield"
+    href="/validacion-sistema"
   >
-    Write once and reuse across your docs.
+    Descubre cómo funciona cada tipo de validación
   </Card>
-</Columns>
+  <Card
+    title="Guía del Usuario"
+    icon="user"
+    href="/guia-usuario"
+  >
+    Instrucciones paso a paso para operar el sistema
+  </Card>
+</CardGroup>
 
-## Need inspiration?
+## Soporte Técnico
 
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+<Info>
+Para soporte técnico o preguntas sobre implementación, contacta al equipo de desarrollo o consulta la documentación técnica en la sección de API Reference.
+</Info>

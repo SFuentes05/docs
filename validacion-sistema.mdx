@@ -1,0 +1,1107 @@
+---
+title: "Sistema de Validación"
+description: "Funcionamiento detallado de los algoritmos de validación automática de cargos de peaje"
+---
+
+# Sistema de Validación
+
+El sistema de validación de Paso Rápido ejecuta automáticamente 4 tipos de validación para detectar fraudes, duplicados y errores en los cargos de peaje. Esta sección explica en detalle cómo funciona cada validación.
+
+## Visión General del Proceso
+
+<Steps>
+<Step title="Activación Automática">
+Las validaciones se ejecutan automáticamente cuando:
+- Se importan nuevos cargos de peaje
+- Se solicita validación manual desde la interfaz
+- Se ejecuta un proceso programado (cron job)
+
+<Note>
+El sistema puede procesar miles de cargos simultáneamente con alta eficiencia.
+</Note>
+</Step>
+
+<Step title="Preparación de Datos">
+Antes de validar, el sistema:
+- Sincroniza datos GPS desde ERM Karma API
+- Identifica asignaciones de tags vigentes
+- Consulta tarifas oficiales de estaciones
+- Prepara contexto completo para cada cargo
+
+<Check>
+La preparación garantiza que las validaciones tengan toda la información necesaria.
+</Check>
+</Step>
+
+<Step title="Ejecución en Paralelo">
+Las 4 validaciones se ejecutan simultáneamente:
+- **Validación GPS**: Confirma ubicación del vehículo
+- **Detección de Duplicados**: Identifica cargos repetidos
+- **Validación de Categoría**: Verifica montos correctos
+- **Verificación de Tags**: Confirma estado activo
+
+<Warning>
+El orden de ejecución no afecta los resultados, pero todas deben completarse.
+</Warning>
+</Step>
+
+<Step title="Consolidación de Resultados">
+El sistema consolida los resultados:
+- Asigna estado final a cada cargo
+- Genera recomendaciones de acción
+- Documenta evidencia para auditoría
+- Actualiza métricas y estadísticas
+
+<Tip>
+Los resultados se almacenan permanentemente para análisis histórico.
+</Tip>
+</Step>
+</Steps>
+
+## 1. Validación GPS
+
+### Objetivo
+Confirmar que el vehículo asociado al tag realmente estuvo presente en la estación de peaje en el momento del cargo.
+
+### Algoritmo Detallado
+
+<Tabs>
+<Tab title="Fase 1: Búsqueda Temporal">
+**Objetivo**: Encontrar datos GPS contemporáneos al cargo
+
+```python
+# Pseudocódigo simplificado
+def buscar_datos_gps(cargo):
+    ventana_inicial = 1  # minuto
+    ventana_maxima = 5   # minutos
+    
+    for ventana in range(ventana_inicial, ventana_maxima + 1):
+        inicio = cargo.fecha - timedelta(minutes=ventana)
+        fin = cargo.fecha + timedelta(minutes=ventana)
+        
+        mensajes_gps = consultar_gps(
+            car_id=cargo.vehiculo.car_id,
+            desde=inicio,
+            hasta=fin
+        )
+        
+        if mensajes_gps:
+            return mensajes_gps
+    
+    return None  # Sin telemetría
+```
+
+**Criterios de búsqueda**:
+- Ventana inicial: ±1 minuto del cargo
+- Expansión progresiva hasta ±5 minutos
+- Filtrado por vehículo específico
+- Ordenamiento por proximidad temporal
+</Tab>
+
+<Tab title="Fase 2: Cálculo de Distancia">
+**Objetivo**: Medir distancia entre posición GPS y estación
+
+```python
+def calcular_distancia_haversine(lat1, lon1, lat2, lon2):
+    """
+    Calcula distancia entre dos puntos GPS usando fórmula haversine
+    Resultado en metros con alta precisión
+    """
+    R = 6371000  # Radio de la Tierra en metros
+    
+    lat1_rad = math.radians(lat1)
+    lat2_rad = math.radians(lat2)
+    delta_lat = math.radians(lat2 - lat1)
+    delta_lon = math.radians(lon2 - lon1)
+    
+    a = (math.sin(delta_lat/2)**2 + 
+         math.cos(lat1_rad) * math.cos(lat2_rad) * 
+         math.sin(delta_lon/2)**2)
+    
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+    
+    return R * c  # Distancia en metros
+```
+
+**Parámetros configurables**:
+- **Umbral de distancia**: 500 metros por defecto
+- **Tolerancia urbana**: 200 metros para zonas densas
+- **Tolerancia rural**: 1000 metros para áreas remotas
+</Tab>
+
+<Tab title="Fase 3: Validación de Coherencia">
+**Objetivo**: Verificar que los datos GPS sean lógicamente válidos
+
+**Verificaciones aplicadas**:
+
+<AccordionGroup>
+<Accordion title="Velocidad Coherente">
+- **Rango normal**: 0-120 km/h
+- **Velocidad cero**: Válida (vehículo detenido)
+- **Velocidad excesiva**: Marca como sospechoso
+- **Aceleración imposible**: Detecta errores de GPS
+</Accordion>
+
+<Accordion title="Secuencia Temporal">
+- **Orden cronológico**: Los timestamps deben ser coherentes
+- **Saltos temporales**: Detecta mensajes fuera de secuencia
+- **Zona horaria**: Normaliza diferencias de UTC
+</Accordion>
+
+<Accordion title="Ubicación Geográfica">
+- **Coordenadas válidas**: Dentro de rangos terrestres
+- **Saltos de ubicación**: Detecta teletransporte imposible
+- **Coherencia de ruta**: Valida continuidad geográfica
+</Accordion>
+</AccordionGroup>
+</Tab>
+
+<Tab title="Fase 4: Clasificación Final">
+**Estados resultantes**:
+
+<CardGroup cols={3}>
+<Card title="VALIDO" icon="check-circle">
+**Criterios cumplidos**:
+- Datos GPS disponibles
+- Distancia ≤ umbral configurado
+- Tiempo ≤ ventana permitida
+- Coherencia verificada
+
+**Acción**: Aprobar cargo automáticamente
+</Card>
+
+<Card title="UBICACION_INVALIDA" icon="x-circle">
+**Criterios fallidos**:
+- Vehículo muy lejos de estación
+- Datos GPS inconsistentes
+- Evidencia de fraude
+
+**Acción**: Marcar para revisión manual
+</Card>
+
+<Card title="SIN_TELEMETRIA" icon="question-mark-circle">
+**Situación**:
+- No hay datos GPS disponibles
+- Dispositivo desconectado
+- Problemas de conectividad
+
+**Acción**: Evaluar caso por caso
+</Card>
+</CardGroup>
+</Tab>
+</Tabs>
+
+### Casos Especiales
+
+<AccordionGroup>
+<Accordion title="Túneles y Zonas Sin Cobertura">
+**Problema**: Pérdida temporal de señal GPS en túneles largos o zonas remotas.
+
+**Solución implementada**:
+- Extrapolación de ruta basada en último punto conocido
+- Tolerancia aumentada en zonas identificadas como problemáticas
+- Validación cruzada con cargos anteriores/posteriores del mismo vehículo
+
+**Estaciones afectadas**: Túneles urbanos, pasos montañosos, zonas rurales remotas
+</Accordion>
+
+<Accordion title="Congestión de Tráfico">
+**Problema**: Vehículo detenido en cola puede estar lejos de la cabina de cobro.
+
+**Solución implementada**:
+- Radio de tolerancia expandido en horas pico
+- Análisis de velocidad promedio en la zona
+- Consideración de tiempo de espera en cola
+
+**Horarios críticos**: 7-9 AM, 12-2 PM, 5-7 PM en días laborales
+</Accordion>
+
+<Accordion title="Estaciones Múltiples Cercanas">
+**Problema**: Varias estaciones de peaje muy próximas pueden generar ambigüedad.
+
+**Solución implementada**:
+- Análisis de dirección de viaje basado en secuencia GPS
+- Correlación con cargos anteriores y posteriores
+- Validación cruzada con datos de tráfico
+
+**Ejemplos**: Complejos de peaje con múltiples cabinas, bifurcaciones de autopistas
+</Accordion>
+</AccordionGroup>
+
+## 2. Detección de Duplicados
+
+### Objetivo
+Identificar cargos duplicados que podrían resultar en doble facturación por el mismo paso de peaje.
+
+### Algoritmo de Detección
+
+<Tabs>
+<Tab title="Criterios de Matching">
+**Campos principales para identificar duplicados**:
+
+<ParamField path="tag_number" type="INTEGER" required>
+Número del tag - debe ser exactamente igual
+</ParamField>
+
+<ParamField path="station_name" type="TEXT" required>
+Nombre de la estación - debe coincidir exactamente
+</ParamField>
+
+<ParamField path="charge_date" type="TIMESTAMP" required>
+Fecha y hora del cargo - tolerancia de ±10 minutos
+</ParamField>
+
+<ParamField path="amount" type="DECIMAL">
+Monto cobrado - tolerancia de ±5% o ±$500 (lo que sea menor)
+</ParamField>
+
+**Algoritmo de scoring**:
+```python
+def calcular_score_duplicado(cargo1, cargo2):
+    score = 0
+    
+    # Tag exacto (+40 puntos)
+    if cargo1.tag == cargo2.tag:
+        score += 40
+    
+    # Estación exacta (+30 puntos)
+    if cargo1.station == cargo2.station:
+        score += 30
+    
+    # Tiempo similar (+20 puntos)
+    diff_minutos = abs((cargo1.fecha - cargo2.fecha).total_seconds() / 60)
+    if diff_minutos <= 10:
+        score += 20 * (1 - diff_minutos/10)  # Score decreciente
+    
+    # Monto similar (+10 puntos)
+    diff_monto = abs(cargo1.amount - cargo2.amount)
+    if diff_monto <= max(500, cargo1.amount * 0.05):
+        score += 10 * (1 - diff_monto/max(500, cargo1.amount * 0.05))
+    
+    return score
+
+# Umbral de duplicado: 70 puntos o más
+```
+</Tab>
+
+<Tab title="Tipos de Duplicados">
+### Duplicado Exacto
+**Características**:
+- Todos los campos principales idénticos
+- Diferencia de tiempo < 2 minutos
+- Mismo monto exacto
+
+**Causa común**: Error en el sistema de facturación de la concesionaria
+
+**Acción recomendada**: Eliminar uno de los cargos automáticamente
+
+### Duplicado Parcial
+**Características**:
+- Tag y estación iguales
+- Tiempo similar (2-10 minutos)
+- Monto ligeramente diferente
+
+**Causa común**: Corrección o ajuste manual por parte de la concesionaria
+
+**Acción recomendada**: Revisión manual para determinar cuál mantener
+
+### Duplicado Sospechoso
+**Características**:
+- Tag y estación iguales
+- Tiempo similar pero monto muy diferente
+- Posible cambio de categoría
+
+**Causa común**: Error en clasificación de vehículo o fraude
+
+**Acción recomendada**: Investigación detallada con validación GPS
+</Tab>
+
+<Tab title="Resolución de Duplicados">
+### Proceso Automático
+
+<Steps>
+<Step title="Identificación">
+El sistema detecta potenciales duplicados usando el algoritmo de scoring.
+
+**Criterios automáticos**:
+- Score ≥ 90: Duplicado exacto
+- Score 70-89: Duplicado probable
+- Score 50-69: Sospechoso, requiere revisión
+</Step>
+
+<Step title="Análisis de Contexto">
+Para cada par de duplicados detectados:
+
+```python
+def analizar_contexto_duplicado(cargo1, cargo2):
+    contexto = {
+        'diferencia_tiempo': abs(cargo1.fecha - cargo2.fecha),
+        'diferencia_monto': abs(cargo1.amount - cargo2.amount),
+        'validacion_gps_cargo1': cargo1.validation_status,
+        'validacion_gps_cargo2': cargo2.validation_status,
+        'secuencia_temporal': determinar_orden_cronologico(cargo1, cargo2)
+    }
+    return contexto
+```
+</Step>
+
+<Step title="Decisión Automática">
+**Reglas de resolución automática**:
+
+<AccordionGroup>
+<Accordion title="Mantener el Primero">
+- Cuando ambos tienen validación GPS exitosa
+- Diferencia de tiempo < 5 minutos
+- Montos idénticos o muy similares
+</Accordion>
+
+<Accordion title="Mantener el Válido">
+- Un cargo tiene validación GPS exitosa, el otro no
+- Se mantiene el que tiene evidencia GPS
+</Accordion>
+
+<Accordion title="Marcar para Revisión">
+- Ambos tienen validación GPS exitosa pero en ubicaciones diferentes
+- Diferencia significativa en montos
+- Patrones sospechosos de uso del tag
+</Accordion>
+</AccordionGroup>
+</Step>
+</Steps>
+
+### Proceso Manual
+
+Para casos que requieren intervención humana:
+
+<CardGroup cols={2}>
+<Card title="Herramientas Disponibles" icon="tools">
+**Información presentada al analista**:
+- Cronología completa de ambos cargos
+- Mapas GPS con ubicaciones exactas
+- Historial reciente del tag
+- Comparación lado a lado de detalles
+- Recomendación del algoritmo automático
+</Card>
+
+<Card title="Opciones de Resolución" icon="check-square">
+**Decisiones posibles**:
+- **Mantener ambos**: Si se determina que son legítimos
+- **Eliminar duplicado**: Marcar uno como duplicado
+- **Investigar más**: Solicitar información adicional
+- **Reportar fraude**: Escalar a investigación de seguridad
+</Card>
+</CardGroup>
+</Tab>
+</Tabs>
+
+### Patrones de Fraude Detectados
+
+<Warning>
+La detección de duplicados también identifica patrones sospechosos que pueden indicar fraude sistemático.
+</Warning>
+
+<AccordionGroup>
+<Accordion title="Uso Simultáneo de Tag">
+**Patrón**: El mismo tag genera cargos en estaciones distantes en tiempos imposibles de recorrer.
+
+**Ejemplo**: Tag #123456 cobra en "Peaje Norte Km 45" a las 14:30 y en "Peaje Sur Km 80" a las 14:35.
+
+**Implicación**: Posible clonación del tag o error en el sistema.
+
+**Acción**: Inhabilitación temporal del tag e investigación.
+</Accordion>
+
+<Accordion title="Frecuencia Anormal">
+**Patrón**: Un tag genera cargos muy frecuentes en la misma estación.
+
+**Ejemplo**: 15 cargos en la misma estación en un día (normal: 2-4 máximo).
+
+**Implicación**: Posible mal funcionamiento del tag o fraude.
+
+**Acción**: Análisis de ruta GPS para confirmar legitimidad.
+</Accordion>
+
+<Accordion title="Montos Inconsistentes">
+**Patrón**: El mismo tag genera cargos con montos muy variables en la misma estación.
+
+**Ejemplo**: Alternancia entre categoría 1 ($5,000) y categoría 4 ($16,000) sin justificación.
+
+**Implicación**: Posible manipulación manual o error sistemático.
+
+**Acción**: Revisión de asignaciones de categoría del vehículo.
+</Accordion>
+</AccordionGroup>
+
+## 3. Validación de Categoría
+
+### Objetivo
+Verificar que el monto cobrado corresponde a la categoría correcta del vehículo según las tarifas oficiales.
+
+### Proceso de Validación
+
+<Tabs>
+<Tab title="Determinación de Categoría">
+**Paso 1**: Identificar el vehículo asociado al cargo
+
+```python
+def obtener_vehiculo_por_tag(tag_number, fecha_cargo, org_id):
+    # Buscar asignación vigente en la fecha del cargo
+    asignacion = db.query("""
+        SELECT car_id, category 
+        FROM tag_assignments 
+        WHERE tag_number = %s 
+        AND org_id = %s
+        AND date <= %s 
+        AND (expires_at IS NULL OR expires_at >= %s)
+        AND status = 'Valido'
+        ORDER BY date DESC 
+        LIMIT 1
+    """, [tag_number, org_id, fecha_cargo, fecha_cargo])
+    
+    if not asignacion:
+        return None, "Tag sin asignación válida"
+    
+    vehiculo = db.get_car(asignacion.car_id)
+    return vehiculo, asignacion.category
+```
+
+**Paso 2**: Determinar categoría esperada
+
+<CardGroup cols={5}>
+<Card title="Categoría 1" icon="car">
+**Vehículos**:
+- Automóvil
+- Motocicleta
+- SUV pequeño
+
+**Identificación**:
+- `car_type`: "Automóvil", "Motocicleta"
+- `sub_type`: "Sedán", "Hatchback"
+</Card>
+
+<Card title="Categoría 2" icon="truck">
+**Vehículos**:
+- Camioneta
+- SUV grande
+- Furgoneta
+
+**Identificación**:
+- `car_type`: "Camioneta"
+- `sub_type`: "Pickup", "SUV"
+</Card>
+
+<Card title="Categoría 3" icon="bus">
+**Vehículos**:
+- Bus
+- Camión 2 ejes
+- Furgón grande
+
+**Identificación**:
+- `car_type`: "Bus", "Camión"
+- Ejes: 2
+</Card>
+
+<Card title="Categoría 4" icon="truck">
+**Vehículos**:
+- Camión 3+ ejes
+- Tractomula sencilla
+
+**Identificación**:
+- `car_type`: "Camión"
+- Ejes: 3 o más
+</Card>
+
+<Card title="Categoría 5" icon="truck">
+**Vehículos**:
+- Tractomula + remolque
+- Vehículos especiales
+
+**Identificación**:
+- `car_type`: "Tractomula"
+- `sub_type`: "Con remolque"
+</Card>
+</CardGroup>
+</Tab>
+
+<Tab title="Consulta de Tarifas">
+**Paso 3**: Obtener tarifa oficial de la estación
+
+```python
+def obtener_tarifa_oficial(station_name, category):
+    tarifa = db.query("""
+        SELECT category_1, category_2, category_3, category_4, category_5
+        FROM tolls 
+        WHERE name = %s
+    """, [station_name]).first()
+    
+    if not tarifa:
+        return None, "Estación no encontrada en catálogo"
+    
+    # Mapear categoría a campo correspondiente
+    tarifas_por_categoria = {
+        1: tarifa.category_1,
+        2: tarifa.category_2,
+        3: tarifa.category_3,
+        4: tarifa.category_4,
+        5: tarifa.category_5
+    }
+    
+    return tarifas_por_categoria.get(category), None
+```
+
+**Manejo de estaciones desconocidas**:
+- Se registra como "Estación Desconocida"
+- Se solicita configuración manual de tarifas
+- Se marca el cargo para revisión
+- Se notifica al administrador para actualizar catálogo
+</Tab>
+
+<Tab title="Comparación y Clasificación">
+**Paso 4**: Comparar monto cobrado vs. esperado
+
+```python
+def validar_categoria(cargo, tarifa_esperada):
+    diferencia = cargo.amount - tarifa_esperada
+    porcentaje_diferencia = (diferencia / tarifa_esperada) * 100
+    
+    # Tolerancia para variaciones menores (promociones, descuentos)
+    tolerancia_pesos = 500  # ±$500
+    tolerancia_porcentaje = 5  # ±5%
+    
+    if abs(diferencia) <= tolerancia_pesos or abs(porcentaje_diferencia) <= tolerancia_porcentaje:
+        return {
+            'status': 'CORRECTO',
+            'diferencia': diferencia,
+            'porcentaje': porcentaje_diferencia,
+            'accion': 'Ninguna - Cargo válido'
+        }
+    elif diferencia > 0:
+        return {
+            'status': 'COBRO_MAYOR',
+            'diferencia': diferencia,
+            'porcentaje': porcentaje_diferencia,
+            'accion': 'Solicitar reembolso',
+            'impacto': 'Pérdida económica',
+            'prioridad': 'Alta'
+        }
+    else:
+        return {
+            'status': 'COBRO_MENOR',
+            'diferencia': abs(diferencia),
+            'porcentaje': abs(porcentaje_diferencia),
+            'accion': 'Aceptar (favorable)',
+            'impacto': 'Ahorro accidental',
+            'prioridad': 'Baja'
+        }
+```
+
+**Estados resultantes**:
+
+<Tabs>
+<Tab title="Correcto">
+**Criterio**: Monto cobrado = Tarifa esperada (±tolerancia)
+
+**Indicador**: ✅ Verde
+
+**Acción**: Ninguna, cargo aprobado automáticamente
+</Tab>
+
+<Tab title="Cobro Mayor">
+**Criterio**: Monto cobrado > Tarifa esperada + tolerancia
+
+**Indicador**: ❌ Rojo
+
+**Acciones recomendadas**:
+- Solicitar reembolso a la concesionaria
+- Documentar para reclamo formal
+- Incluir en reporte de pérdidas
+</Tab>
+
+<Tab title="Cobro Menor">
+**Criterio**: Monto cobrado < Tarifa esperada - tolerancia
+
+**Indicador**: ⚠️ Amarillo
+
+**Acciones recomendadas**:
+- Aceptar (favorable para la empresa)
+- Documentar como ahorro
+- Monitorear si es patrón recurrente
+</Tab>
+</Tabs>
+</Tab>
+</Tabs>
+
+### Casos Especiales de Categoría
+
+<AccordionGroup>
+<Accordion title="Promociones y Descuentos">
+**Situación**: Concesionarias aplican descuentos temporales o promociones especiales.
+
+**Detección**: Múltiples vehículos de la misma categoría cobrados con monto menor en fechas específicas.
+
+**Manejo**:
+- Se marca como "Cobro Menor" inicialmente
+- Sistema aprende patrones de promociones
+- Administrador puede configurar períodos de promoción conocidos
+- Se ajustan tolerancias automáticamente durante promociones
+</Accordion>
+
+<Accordion title="Vehículos Híbridos o Especiales">
+**Situación**: Vehículos que no encajan perfectamente en las 5 categorías estándar.
+
+**Ejemplos**: 
+- Buses articulados (¿categoría 3 o 4?)
+- Camiones con equipos especiales
+- Vehículos de emergencia
+
+**Manejo**:
+- Asignación manual de categoría por parte del administrador
+- Documentación de la decisión para casos similares
+- Creación de reglas específicas para tipos especiales
+</Accordion>
+
+<Accordion title="Cambios de Categoría Temporal">
+**Situación**: Un vehículo cambia temporalmente de categoría (ej: camión descargado vs. cargado).
+
+**Detección**: El mismo vehículo genera cargos con diferentes categorías en períodos cortos.
+
+**Manejo**:
+- Análisis de patrones temporales
+- Validación cruzada con datos de peso (si disponibles)
+- Configuración de categorías variables para vehículos específicos
+</Accordion>
+</AccordionGroup>
+
+## 4. Verificación de Estado de Tags
+
+### Objetivo
+Confirmar que el tag utilizado estaba en estado "Válido" en el momento del cargo, detectando uso de tags inhabilitados.
+
+### Algoritmo de Verificación
+
+<Tabs>
+<Tab title="Consulta de Estado Histórico">
+**Proceso**: Determinar el estado del tag en la fecha específica del cargo
+
+```python
+def verificar_estado_tag(tag_number, fecha_cargo, org_id):
+    # Buscar el estado del tag en la fecha del cargo
+    estado_historico = db.query("""
+        SELECT status, date, expires_at, car_id
+        FROM tag_assignments 
+        WHERE tag_number = %s 
+        AND org_id = %s
+        AND date <= %s
+        ORDER BY date DESC, updated_at DESC
+        LIMIT 1
+    """, [tag_number, org_id, fecha_cargo])
+    
+    if not estado_historico:
+        return {
+            'status': 'TAG_NO_ENCONTRADO',
+            'detalle': 'No existe asignación para este tag',
+            'accion': 'Verificar número de tag'
+        }
+    
+    # Verificar si el tag había expirado
+    if estado_historico.expires_at and estado_historico.expires_at < fecha_cargo:
+        return {
+            'status': 'TAG_EXPIRADO',
+            'detalle': f'Tag expiró el {estado_historico.expires_at}',
+            'accion': 'Verificar renovación'
+        }
+    
+    # Verificar estado en la fecha
+    if estado_historico.status == 'Valido':
+        return {
+            'status': 'VALIDO',
+            'detalle': 'Tag estaba activo',
+            'accion': 'Ninguna'
+        }
+    else:
+        return {
+            'status': 'INHABILITADO',
+            'detalle': f'Tag inhabilitado desde {estado_historico.date}',
+            'accion': 'Investigar uso no autorizado'
+        }
+```
+</Tab>
+
+<Tab title="Detección de Patrones Sospechosos">
+### Uso Posterior a Inhabilitación
+
+**Algoritmo de detección**:
+```python
+def detectar_uso_post_inhabilitacion(tag_number, org_id):
+    # Obtener fecha de inhabilitación
+    inhabilitacion = db.query("""
+        SELECT date, updated_at
+        FROM tag_assignments 
+        WHERE tag_number = %s 
+        AND org_id = %s
+        AND status = 'Inhabilitado'
+        ORDER BY updated_at DESC
+        LIMIT 1
+    """, [tag_number, org_id])
+    
+    if not inhabilitacion:
+        return []
+    
+    # Buscar cargos posteriores a la inhabilitación
+    cargos_sospechosos = db.query("""
+        SELECT id, date, station, amount
+        FROM toll_charges
+        WHERE tag = %s 
+        AND org_id = %s
+        AND date > %s
+        ORDER BY date DESC
+    """, [tag_number, org_id, inhabilitacion.date])
+    
+    return cargos_sospechosos
+```
+
+### Frecuencia Anormal de Inhabilitación
+
+**Detección**: Tags que se inhabilitan y rehabilitan frecuentemente
+```python
+def detectar_patron_inhabilitacion(tag_number, org_id, periodo_dias=90):
+    cambios_estado = db.query("""
+        SELECT status, date, updated_at
+        FROM tag_assignments 
+        WHERE tag_number = %s 
+        AND org_id = %s
+        AND date >= %s
+        ORDER BY updated_at ASC
+    """, [tag_number, org_id, datetime.now() - timedelta(days=periodo_dias)])
+    
+    # Contar cambios de estado
+    cambios = 0
+    estado_anterior = None
+    
+    for registro in cambios_estado:
+        if estado_anterior and estado_anterior != registro.status:
+            cambios += 1
+        estado_anterior = registro.status
+    
+    # Más de 3 cambios en 90 días es sospechoso
+    return cambios > 3
+```
+</Tab>
+
+<Tab title="Validación Cruzada">
+### Correlación con Datos GPS
+
+Cuando un tag inhabilitado genera cargos, se valida si hay evidencia GPS:
+
+<Steps>
+<Step title="Verificar Presencia GPS">
+Si hay datos GPS que confirman la presencia del vehículo asignado:
+- **Conclusión**: Posible error en fecha de inhabilitación
+- **Acción**: Revisar historial de inhabilitación
+- **Prioridad**: Media
+</Step>
+
+<Step title="Sin Datos GPS">
+Si no hay datos GPS del vehículo asignado:
+- **Conclusión**: Posible uso fraudulento del tag
+- **Acción**: Investigación de seguridad
+- **Prioridad**: Alta
+</Step>
+
+<Step title="GPS de Vehículo Diferente">
+Si hay datos GPS pero de un vehículo diferente al asignado:
+- **Conclusión**: Probable clonación o transferencia no autorizada
+- **Acción**: Inhabilitación inmediata y investigación
+- **Prioridad**: Crítica
+</Step>
+</Steps>
+
+### Análisis de Impacto Financiero
+
+```python
+def calcular_impacto_tag_inhabilitado(tag_number, org_id):
+    cargos_post_inhabilitacion = obtener_cargos_sospechosos(tag_number, org_id)
+    
+    impacto = {
+        'total_cargos': len(cargos_post_inhabilitacion),
+        'monto_total': sum(cargo.amount for cargo in cargos_post_inhabilitacion),
+        'periodo': calcular_periodo(cargos_post_inhabilitacion),
+        'estaciones_afectadas': len(set(cargo.station for cargo in cargos_post_inhabilitacion))
+    }
+    
+    return impacto
+```
+</Tab>
+</Tabs>
+
+### Estados de Validación de Tags
+
+<CardGroup cols={3}>
+<Card title="Válido" icon="check-circle">
+**Descripción**: Tag estaba activo en la fecha del cargo
+
+**Criterios**:
+- Estado = "Valido" en fecha del cargo
+- No había expirado
+- Asignación vigente
+
+**Indicador**: 🟢 Verde
+
+**Acción**: Ninguna
+</Card>
+
+<Card title="Inhabilitado" icon="x-circle">
+**Descripción**: Tag estaba desactivado cuando se generó el cargo
+
+**Criterios**:
+- Estado = "Inhabilitado" antes de la fecha del cargo
+- Uso posterior a inhabilitación confirmada
+
+**Indicador**: 🔴 Rojo
+
+**Acción**: Investigar fraude potencial
+</Card>
+
+<Card title="No Encontrado" icon="question-mark-circle">
+**Descripción**: No existe registro del tag en el sistema
+
+**Criterios**:
+- Tag nunca fue asignado
+- Número de tag incorrecto
+- Datos de importación incompletos
+
+**Indicador**: ⚪ Gris
+
+**Acción**: Verificar datos de importación
+</Card>
+</CardGroup>
+
+## Consolidación de Resultados
+
+### Algoritmo de Clasificación Final
+
+Una vez completadas las 4 validaciones, el sistema consolida los resultados:
+
+```python
+def clasificar_cargo_final(cargo, resultados_validaciones):
+    """
+    Determina el estado final del cargo basado en todas las validaciones
+    """
+    gps = resultados_validaciones['gps']
+    duplicado = resultados_validaciones['duplicado']
+    categoria = resultados_validaciones['categoria']
+    tag = resultados_validaciones['tag']
+    
+    # Clasificación por prioridad de severidad
+    if tag['status'] == 'INHABILITADO':
+        return {
+            'estado_final': 'FRAUDULENTO',
+            'prioridad': 'CRITICA',
+            'razon_principal': 'Tag inhabilitado',
+            'accion_recomendada': 'Rechazar cargo e investigar'
+        }
+    
+    if duplicado['is_duplicate']:
+        return {
+            'estado_final': 'DUPLICADO',
+            'prioridad': 'ALTA',
+            'razon_principal': 'Cargo duplicado detectado',
+            'accion_recomendada': 'Eliminar duplicado'
+        }
+    
+    if gps['status'] == 'UBICACION_INVALIDA':
+        return {
+            'estado_final': 'GPS_INVALIDO',
+            'prioridad': 'ALTA',
+            'razon_principal': 'Vehículo no estaba en la ubicación',
+            'accion_recomendada': 'Rechazar cargo'
+        }
+    
+    if categoria['status'] == 'COBRO_MAYOR':
+        return {
+            'estado_final': 'SOBRECARGO',
+            'prioridad': 'MEDIA',
+            'razon_principal': f'Cobro excesivo por ${categoria["diferencia"]}',
+            'accion_recomendada': 'Solicitar reembolso'
+        }
+    
+    if gps['status'] == 'SIN_TELEMETRIA':
+        return {
+            'estado_final': 'SIN_VALIDAR_GPS',
+            'prioridad': 'BAJA',
+            'razon_principal': 'No hay datos GPS para validar',
+            'accion_recomendada': 'Aceptar condicionalmente'
+        }
+    
+    # Si todas las validaciones pasan
+    return {
+        'estado_final': 'VALIDO',
+        'prioridad': 'NINGUNA',
+        'razon_principal': 'Todas las validaciones exitosas',
+        'accion_recomendada': 'Aprobar cargo'
+    }
+```
+
+### Métricas y Estadísticas
+
+El sistema genera métricas automáticas para monitoreo:
+
+<Tabs>
+<Tab title="Métricas de Validación">
+**Por tipo de validación**:
+- **GPS**: % de cargos con ubicación válida
+- **Duplicados**: Número de duplicados detectados por período
+- **Categoría**: % de cargos con monto correcto
+- **Tags**: % de tags válidos vs. inhabilitados
+
+**Tendencias temporales**:
+- Evolución de tasas de fraude por mes
+- Patrones estacionales de errores
+- Efectividad de las validaciones implementadas
+</Tab>
+
+<Tab title="Impacto Financiero">
+**Ahorros detectados**:
+- Monto total de duplicados evitados
+- Sobrecargos identificados para reembolso
+- Fraudes detectados y su valor
+
+**Costos evitados**:
+- Proyección de pérdidas sin el sistema
+- ROI del sistema de validación
+- Tiempo ahorrado en revisiones manuales
+</Tab>
+
+<Tab title="Calidad de Datos">
+**Cobertura GPS**:
+- % de cargos con datos GPS disponibles
+- Calidad promedio de señal GPS
+- Zonas problemáticas identificadas
+
+**Completitud de datos**:
+- % de tags con asignaciones válidas
+- Estaciones con tarifas configuradas
+- Vehículos con categorías definidas
+</Tab>
+</Tabs>
+
+## Configuración y Personalización
+
+### Parámetros Configurables
+
+<AccordionGroup>
+<Accordion title="Validación GPS">
+<ParamField body="time_window_minutes" type="integer" default="1">
+Ventana de tiempo inicial para buscar datos GPS (±minutos)
+</ParamField>
+
+<ParamField body="max_time_window_minutes" type="integer" default="5">
+Ventana máxima de tiempo si no se encuentran datos inicialmente
+</ParamField>
+
+<ParamField body="distance_threshold_meters" type="integer" default="500">
+Distancia máxima permitida entre vehículo y estación
+</ParamField>
+
+<ParamField body="urban_distance_threshold" type="integer" default="200">
+Distancia reducida para zonas urbanas densas
+</ParamField>
+
+<ParamField body="rural_distance_threshold" type="integer" default="1000">
+Distancia aumentada para zonas rurales
+</ParamField>
+</Accordion>
+
+<Accordion title="Detección de Duplicados">
+<ParamField body="duplicate_time_threshold_minutes" type="integer" default="10">
+Tiempo máximo entre cargos para considerarlos duplicados
+</ParamField>
+
+<ParamField body="amount_tolerance_percentage" type="decimal" default="5.0">
+Tolerancia porcentual para diferencias en montos
+</ParamField>
+
+<ParamField body="amount_tolerance_absolute" type="integer" default="500">
+Tolerancia absoluta en pesos para diferencias en montos
+</ParamField>
+
+<ParamField body="duplicate_score_threshold" type="integer" default="70">
+Score mínimo para considerar un cargo como duplicado
+</ParamField>
+</Accordion>
+
+<Accordion title="Validación de Categoría">
+<ParamField body="category_tolerance_percentage" type="decimal" default="5.0">
+Tolerancia porcentual para variaciones de tarifa
+</ParamField>
+
+<ParamField body="category_tolerance_absolute" type="integer" default="500">
+Tolerancia absoluta para variaciones de tarifa
+</ParamField>
+
+<ParamField body="promotion_detection_enabled" type="boolean" default="true">
+Habilitar detección automática de promociones
+</ParamField>
+</Accordion>
+
+<Accordion title="Verificación de Tags">
+<ParamField body="tag_expiration_grace_days" type="integer" default="7">
+Días de gracia después de expiración antes de marcar como inválido
+</ParamField>
+
+<ParamField body="frequent_status_change_threshold" type="integer" default="3">
+Número máximo de cambios de estado en 90 días
+</ParamField>
+</Accordion>
+</AccordionGroup>
+
+### Personalización por Organización
+
+Cada organización puede tener configuraciones específicas:
+
+<Tabs>
+<Tab title="Perfiles de Validación">
+**Perfil Estricto**:
+- Tolerancias mínimas
+- Validación GPS obligatoria
+- Revisión manual de todos los casos sospechosos
+
+**Perfil Balanceado** (por defecto):
+- Tolerancias moderadas
+- Automatización inteligente
+- Revisión manual solo de casos críticos
+
+**Perfil Permisivo**:
+- Tolerancias amplias
+- Máxima automatización
+- Mínima intervención manual
+</Tab>
+
+<Tab title="Reglas Específicas">
+**Por tipo de vehículo**:
+- Tolerancias diferentes para cada categoría
+- Validaciones especiales para vehículos críticos
+- Excepciones para equipos especiales
+
+**Por ruta o estación**:
+- Configuraciones específicas para estaciones problemáticas
+- Ajustes para rutas con cobertura GPS limitada
+- Tolerancias especiales para túneles o zonas remotas
+
+**Por horario**:
+- Tolerancias diferentes para horas pico
+- Validaciones especiales para horarios nocturnos
+- Ajustes para días festivos o fines de semana
+</Tab>
+</Tabs>
+
+## Próximos Pasos
+
+<CardGroup cols={2}>
+<Card title="Guía del Usuario" icon="user" href="/guia-usuario">
+Aprende a operar el sistema día a día y revisar validaciones
+</Card>
+<Card title="Flujos de Trabajo" icon="workflow" href="/flujos-trabajo">
+Procesos completos desde importación hasta reportes finales
+</Card>
+</CardGroup> 

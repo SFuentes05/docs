@@ -1,0 +1,919 @@
+---
+title: "Flujos de Trabajo"
+description: "Procesos completos y flujos de trabajo del sistema Paso Rápido desde importación hasta reportes"
+---
+
+# Flujos de Trabajo
+
+Esta sección describe los procesos completos y flujos de trabajo del sistema Paso Rápido, desde la importación inicial de datos hasta la generación de reportes ejecutivos.
+
+## Flujo Principal: Validación de Consumos
+
+### Visión General del Proceso
+
+<Steps>
+<Step title="Preparación de Datos">
+**Actividades previas**:
+- Configuración de organizaciones y usuarios
+- Sincronización de vehículos desde ERM Karma
+- Gestión de asignaciones de tags
+- Configuración de estaciones de peaje
+
+**Responsables**: Administradores, Despachadores
+**Frecuencia**: Inicial y según necesidades
+**Tiempo estimado**: 2-4 horas (setup inicial)
+</Step>
+
+<Step title="Importación de Cargos">
+**Proceso automático/manual**:
+- Recepción de archivos CSV de concesionarias
+- Validación de formato y contenido
+- Importación masiva de cargos
+- Notificación de resultados
+
+**Responsables**: Sistema automático, Analistas
+**Frecuencia**: Diaria o semanal
+**Tiempo estimado**: 15-30 minutos por archivo
+</Step>
+
+<Step title="Validación Automática">
+**Ejecución de algoritmos**:
+- Sincronización de datos GPS
+- Validación GPS de ubicaciones
+- Detección de duplicados
+- Verificación de categorías y tags
+
+**Responsables**: Sistema automático
+**Frecuencia**: Tras cada importación
+**Tiempo estimado**: 5-60 minutos según volumen
+</Step>
+
+<Step title="Revisión Manual">
+**Análisis humano**:
+- Revisión de casos sospechosos
+- Decisiones sobre cargos dudosos
+- Documentación de resoluciones
+- Escalación de casos complejos
+
+**Responsables**: Analistas
+**Frecuencia**: Diaria
+**Tiempo estimado**: 1-3 horas según casos
+</Step>
+
+<Step title="Generación de Reportes">
+**Documentación y análisis**:
+- Reportes operativos diarios
+- Análisis de tendencias
+- Reportes ejecutivos
+- Documentación de ahorros
+
+**Responsables**: Analistas, Administradores
+**Frecuencia**: Diaria, semanal, mensual
+**Tiempo estimado**: 30-90 minutos
+</Step>
+</Steps>
+
+## Workflow 1: Importación y Procesamiento Diario
+
+### Proceso Matutino (8:00 - 10:00 AM)
+
+<Tabs>
+<Tab title="Preparación (8:00 - 8:15 AM)">
+**Actividades del Analista**:
+
+<Steps>
+<Step title="Revisar Dashboard">
+1. Acceder al sistema Paso Rápido
+2. Revisar métricas del día anterior
+3. Identificar alertas críticas pendientes
+4. Verificar estado de sincronización GPS
+
+**Indicadores clave**:
+- Cargos pendientes de validación
+- Casos críticos sin resolver
+- Estado de conectividad ERM Karma
+- Notificaciones del sistema
+</Step>
+
+<Step title="Verificar Archivos Nuevos">
+1. Revisar carpeta de importación o email
+2. Validar nombres y formatos de archivos CSV
+3. Verificar fechas de cobertura
+4. Identificar concesionarias pendientes
+
+**Archivos esperados**:
+- Autopistas del Norte: `norte_YYYYMMDD.csv`
+- Autopistas del Sur: `sur_YYYYMMDD.csv`
+- Concesión Central: `central_YYYYMMDD.csv`
+</Step>
+</Steps>
+
+**Tiempo total**: 15 minutos
+**Entregable**: Lista de archivos para procesar
+</Tab>
+
+<Tab title="Importación (8:15 - 8:45 AM)">
+**Proceso de carga de datos**:
+
+<Steps>
+<Step title="Importar Primer Archivo">
+1. Ir a "Consumos" → "Importar"
+2. Seleccionar archivo CSV
+3. Revisar vista previa de datos
+4. Confirmar importación
+5. Monitorear progreso
+
+**Validaciones automáticas**:
+- Formato de fechas correcto
+- Números de tag válidos
+- Montos numéricos válidos
+- Detección de duplicados internos
+</Step>
+
+<Step title="Procesar Archivos Adicionales">
+- Repetir proceso para cada archivo
+- Documentar errores encontrados
+- Consolidar estadísticas de importación
+- Notificar problemas críticos
+
+**Métricas por archivo**:
+- Registros importados exitosamente
+- Errores de formato detectados
+- Registros duplicados omitidos
+- Tiempo de procesamiento
+</Step>
+
+<Step title="Verificar Resultados">
+1. Revisar resumen de importación
+2. Validar que todos los archivos se procesaron
+3. Identificar registros problemáticos
+4. Documentar observaciones
+
+<Check>
+Todos los archivos del día deben estar importados antes de continuar.
+</Check>
+</Step>
+</Steps>
+
+**Tiempo total**: 30 minutos
+**Entregable**: Cargos importados listos para validación
+</Tab>
+
+<Tab title="Validación Automática (8:45 - 9:30 AM)">
+**Ejecución de validaciones**:
+
+<Steps>
+<Step title="Iniciar Proceso de Validación">
+1. Ir a "Consumos" → "Validar"
+2. Seleccionar rango de fechas (día anterior)
+3. Configurar parámetros si es necesario
+4. Ejecutar validación automática
+
+**Parámetros estándar**:
+- Ventana GPS: ±1 minuto
+- Distancia máxima: 500 metros
+- Solo cargos sin validar: Sí
+- Incluir re-validación: No
+</Step>
+
+<Step title="Monitorear Progreso">
+- Observar barra de progreso
+- Revisar estadísticas en tiempo real
+- Identificar problemas de conectividad
+- Estimar tiempo de finalización
+
+**Estadísticas en vivo**:
+- Cargos procesados vs. total
+- Validaciones GPS exitosas
+- Duplicados detectados
+- Errores de categoría encontrados
+</Step>
+
+<Step title="Revisar Resultados Preliminares">
+1. Analizar dashboard de resultados
+2. Identificar casos que requieren atención
+3. Priorizar revisión manual
+4. Preparar lista de trabajo
+
+**Clasificación de casos**:
+- 🔴 **Críticos**: Inmediata atención
+- 🟡 **Medios**: Revisión durante el día
+- 🟢 **Bajos**: Monitoreo pasivo
+</Step>
+</Steps>
+
+**Tiempo total**: 45 minutos
+**Entregable**: Validaciones completadas con casos priorizados
+</Tab>
+
+<Tab title="Revisión Inicial (9:30 - 10:00 AM)">
+**Análisis de casos críticos**:
+
+<Steps>
+<Step title="Filtrar Casos Críticos">
+1. Aplicar filtro "Casos Sospechosos"
+2. Ordenar por prioridad crítica
+3. Revisar primeros 10-15 casos
+4. Documentar patrones observados
+
+**Tipos de casos críticos**:
+- Tags inhabilitados con cargos
+- Ubicaciones GPS muy distantes
+- Duplicados con montos diferentes
+- Sobrecargos significativos (>20%)
+</Step>
+
+<Step title="Tomar Decisiones Rápidas">
+Para cada caso crítico:
+1. Revisar evidencia GPS disponible
+2. Consultar historial del tag/vehículo
+3. Tomar decisión inicial
+4. Agregar comentario breve
+5. Marcar para seguimiento si es complejo
+
+**Decisiones posibles**:
+- **Aprobar**: Si evidencia es clara
+- **Rechazar**: Si GPS contradice claramente
+- **Investigar**: Si requiere análisis adicional
+</Step>
+
+<Step title="Escalación de Casos Complejos">
+- Identificar casos que requieren más tiempo
+- Crear lista de seguimiento
+- Notificar supervisor si hay patrones críticos
+- Programar revisión detallada
+
+<Warning>
+No tomar decisiones apresuradas en casos ambiguos. Es mejor marcar para investigación posterior.
+</Warning>
+</Step>
+</Steps>
+
+**Tiempo total**: 30 minutos
+**Entregable**: Casos críticos resueltos o escalados
+</Tab>
+</Tabs>
+
+### Proceso Vespertino (2:00 - 5:00 PM)
+
+<Tabs>
+<Tab title="Revisión Detallada (2:00 - 4:00 PM)">
+**Análisis profundo de casos**:
+
+<AccordionGroup>
+<Accordion title="Casos de Validación GPS">
+**Proceso detallado**:
+1. Abrir vista expandida del cargo
+2. Examinar mapas GPS disponibles
+3. Verificar coherencia temporal
+4. Comparar con cargos anteriores/posteriores
+5. Evaluar contexto de la ruta
+
+**Herramientas utilizadas**:
+- Mapa de ubicación de peaje
+- Mapa de posición del vehículo
+- Mapa de ruta completa (si disponible)
+- Historial de cargos del vehículo
+
+**Criterios de decisión**:
+- Distancia < 500m → Probablemente válido
+- Distancia > 1km → Probablemente inválido
+- 500m - 1km → Requiere análisis contextual
+</Accordion>
+
+<Accordion title="Análisis de Duplicados">
+**Metodología**:
+1. Comparar detalles de cargos similares
+2. Verificar secuencia temporal
+3. Analizar diferencias en montos
+4. Revisar historial del tag
+5. Determinar cuál cargo mantener
+
+**Factores considerados**:
+- Orden cronológico de los cargos
+- Calidad de datos GPS de cada cargo
+- Coherencia con patrones de viaje
+- Recomendación del algoritmo automático
+
+**Resolución típica**:
+- Mantener el primero si son idénticos
+- Mantener el que tiene mejor validación GPS
+- Investigar más si hay discrepancias significativas
+</Accordion>
+
+<Accordion title="Verificación de Categorías">
+**Análisis de sobrecargos**:
+1. Confirmar categoría del vehículo
+2. Verificar tarifas oficiales de la estación
+3. Calcular diferencia exacta
+4. Evaluar si justifica reclamo
+5. Documentar para reporte de ahorros
+
+**Umbrales de acción**:
+- Diferencia < $1,000 → Aceptar
+- Diferencia $1,000-$5,000 → Documentar
+- Diferencia > $5,000 → Reclamar activamente
+
+**Documentación requerida**:
+- Screenshot de tarifa oficial
+- Evidencia de categoría del vehículo
+- Cálculo de monto correcto
+- Recomendación de acción
+</Accordion>
+</AccordionGroup>
+
+**Tiempo total**: 2 horas
+**Meta**: Resolver 80% de casos pendientes
+</Tab>
+
+<Tab title="Generación de Reportes (4:00 - 5:00 PM)">
+**Documentación diaria**:
+
+<Steps>
+<Step title="Reporte Operativo Diario">
+**Contenido del reporte**:
+- Resumen de cargos procesados
+- Estadísticas de validación
+- Casos críticos identificados
+- Acciones tomadas durante el día
+- Casos pendientes para mañana
+
+**Formato**:
+```
+REPORTE DIARIO - [FECHA]
+=======================
+Cargos Importados: XXX
+Validaciones Exitosas: XXX (XX%)
+Casos Críticos: XX resueltos, XX pendientes
+Duplicados Detectados: XX ($XXX,XXX)
+Sobrecargos Identificados: XX ($XXX,XXX)
+
+ACCIONES PENDIENTES:
+- [Lista de casos para seguimiento]
+- [Recomendaciones para mañana]
+```
+</Step>
+
+<Step title="Actualizar Métricas">
+1. Actualizar dashboard con resultados del día
+2. Registrar KPIs en sistema de seguimiento
+3. Comparar con metas establecidas
+4. Identificar tendencias emergentes
+
+**KPIs diarios**:
+- Tasa de validación GPS exitosa
+- Número de duplicados detectados
+- Monto de sobrecargos identificados
+- Tiempo promedio de resolución de casos
+</Step>
+
+<Step title="Comunicación con Stakeholders">
+- Enviar reporte a supervisor
+- Notificar casos críticos a despachadores
+- Alertar sobre patrones preocupantes
+- Programar reuniones si es necesario
+
+<Tip>
+Mantén comunicación proactiva. Los problemas detectados temprano son más fáciles de resolver.
+</Tip>
+</Step>
+</Steps>
+
+**Tiempo total**: 1 hora
+**Entregable**: Reporte diario y métricas actualizadas
+</Tab>
+</Tabs>
+
+## Workflow 2: Gestión de Tags y Asignaciones
+
+### Proceso de Asignación de Nuevos Tags
+
+<Steps>
+<Step title="Recepción de Solicitud">
+**Origen de solicitudes**:
+- Vehículos nuevos en la flota
+- Reemplazo de tags dañados/perdidos
+- Reasignación por cambio de categoría
+- Solicitudes de despachadores
+
+**Información requerida**:
+- Número del tag (6 dígitos)
+- ID del vehículo a asignar
+- Categoría propuesta (1-5)
+- Fecha de inicio de vigencia
+- Justificación del cambio
+</Step>
+
+<Step title="Validación de Datos">
+**Verificaciones automáticas**:
+1. Tag no esté ya asignado a otro vehículo
+2. Vehículo exista en el sistema
+3. Categoría sea coherente con tipo de vehículo
+4. Fechas sean lógicas
+
+**Validaciones manuales**:
+- Confirmar que el tag físico esté disponible
+- Verificar que el vehículo no tenga otro tag activo
+- Validar que la categoría sea correcta
+- Confirmar autorización del solicitante
+</Step>
+
+<Step title="Creación de Asignación">
+**Proceso en el sistema**:
+1. Ir a "Tags" → "Nueva Asignación"
+2. Completar formulario con datos validados
+3. Revisar información antes de confirmar
+4. Crear asignación en el sistema
+5. Generar confirmación automática
+
+**Documentación generada**:
+- Registro de asignación en base de datos
+- Email de confirmación al solicitante
+- Notificación al despachador responsable
+- Actualización en inventario de tags
+</Step>
+
+<Step title="Seguimiento Post-Asignación">
+**Monitoreo inicial**:
+- Verificar primeros cargos del tag (48-72 horas)
+- Confirmar que validaciones GPS funcionen
+- Detectar problemas tempranos
+- Documentar cualquier anomalía
+
+**Métricas de seguimiento**:
+- Tiempo hasta primer uso
+- Tasa de éxito en validaciones GPS
+- Comparación con asignación anterior
+- Feedback del usuario/despachador
+</Step>
+</Steps>
+
+### Proceso de Inhabilitación de Tags
+
+<Tabs>
+<Tab title="Detección de Problemas">
+**Señales de alerta**:
+- Tag reportado como perdido/dañado
+- Patrones anómalos de uso
+- Validaciones GPS consistentemente fallidas
+- Uso simultáneo en ubicaciones distantes
+
+**Fuentes de detección**:
+- Reportes de despachadores
+- Alertas automáticas del sistema
+- Análisis de patrones de uso
+- Validaciones de seguridad rutinarias
+</Tab>
+
+<Tab title="Proceso de Inhabilitación">
+<Steps>
+<Step title="Investigación Inicial">
+1. Revisar historial reciente del tag
+2. Analizar últimos cargos y validaciones
+3. Contactar despachador responsable
+4. Verificar estado físico del tag
+
+**Documentación requerida**:
+- Reporte de pérdida/daño (si aplica)
+- Análisis de últimos usos
+- Confirmación de despachador
+- Recomendación de acción
+</Step>
+
+<Step title="Inhabilitación en Sistema">
+1. Ir a asignación actual del tag
+2. Cambiar estado a "Inhabilitado"
+3. Registrar fecha y motivo
+4. Agregar comentarios explicativos
+5. Confirmar cambio
+
+**Efectos inmediatos**:
+- Tag marcado como inactivo
+- Cargos futuros marcados como sospechosos
+- Alertas automáticas activadas
+- Notificaciones enviadas
+</Step>
+
+<Step title="Seguimiento Post-Inhabilitación">
+- Monitorear cargos posteriores a inhabilitación
+- Investigar cualquier uso sospechoso
+- Coordinar reemplazo si es necesario
+- Documentar resolución final
+
+<Warning>
+Los cargos posteriores a la inhabilitación son críticos y requieren investigación inmediata.
+</Warning>
+</Step>
+</Steps>
+</Tab>
+
+<Tab title="Proceso de Reemplazo">
+**Para tags perdidos o dañados**:
+
+<Steps>
+<Step title="Solicitar Nuevo Tag">
+1. Contactar proveedor de tags
+2. Solicitar número de reemplazo
+3. Programar instalación física
+4. Coordinar con despachador
+
+**Información para proveedor**:
+- Tag anterior inhabilitado
+- Vehículo y categoría
+- Urgencia del reemplazo
+- Ubicación para instalación
+</Step>
+
+<Step title="Configurar Nueva Asignación">
+1. Recibir confirmación de nuevo número
+2. Crear asignación para nuevo tag
+3. Verificar que tag anterior esté inhabilitado
+4. Programar fecha de inicio
+
+**Período de transición**:
+- Overlap mínimo entre tags
+- Monitoreo de ambos durante transición
+- Validación de funcionamiento correcto
+- Confirmación de desactivación del anterior
+</Step>
+</Steps>
+</Tab>
+</Tabs>
+
+## Workflow 3: Análisis y Reportes Ejecutivos
+
+### Proceso Semanal de Análisis
+
+<Steps>
+<Step title="Recopilación de Datos (Lunes)">
+**Métricas de la semana anterior**:
+- Total de cargos procesados
+- Distribución por tipo de validación
+- Casos críticos y su resolución
+- Ahorros generados por detección
+
+**Fuentes de datos**:
+- Dashboard principal del sistema
+- Reportes diarios acumulados
+- Estadísticas de validación
+- Feedback de usuarios
+</Step>
+
+<Step title="Análisis de Tendencias (Martes)">
+**Comparaciones temporales**:
+- Semana actual vs. anterior
+- Mismo período mes anterior
+- Tendencias trimestrales
+- Patrones estacionales
+
+**Indicadores clave**:
+- Mejora/deterioro en tasas de validación
+- Cambios en tipos de fraude detectados
+- Evolución de costos de peaje
+- Eficiencia del sistema
+</Step>
+
+<Step title="Identificación de Oportunidades (Miércoles)">
+**Áreas de mejora**:
+- Procesos que pueden optimizarse
+- Validaciones que requieren ajuste
+- Capacitación adicional necesaria
+- Integraciones que podrían mejorarse
+
+**Recomendaciones**:
+- Cambios en parámetros de validación
+- Mejoras en flujos de trabajo
+- Actualizaciones de catálogos
+- Capacitación de usuarios
+</Step>
+
+<Step title="Preparación de Reporte (Jueves-Viernes)">
+**Estructura del reporte semanal**:
+1. **Resumen Ejecutivo**: Métricas principales
+2. **Análisis Detallado**: Tendencias y patrones
+3. **Casos Destacados**: Fraudes significativos detectados
+4. **Ahorros Generados**: Impacto financiero cuantificado
+5. **Recomendaciones**: Acciones sugeridas
+6. **Próximos Pasos**: Plan para la siguiente semana
+</Step>
+</Steps>
+
+### Proceso Mensual de Reporte Ejecutivo
+
+<Tabs>
+<Tab title="Preparación de Datos">
+**Consolidación mensual**:
+- Agregación de reportes semanales
+- Cálculo de métricas mensuales
+- Comparación con objetivos
+- Análisis de variaciones significativas
+
+**Métricas ejecutivas**:
+- ROI del sistema de validación
+- Ahorros totales generados
+- Eficiencia operativa alcanzada
+- Satisfacción de usuarios
+</Tab>
+
+<Tab title="Análisis Financiero">
+**Impacto económico**:
+- Duplicados evitados: $XXX,XXX
+- Sobrecargos detectados: $XXX,XXX
+- Fraudes prevenidos: $XXX,XXX
+- Costo operativo del sistema: $XXX,XXX
+- **ROI neto**: XXX%
+
+**Proyecciones**:
+- Ahorros esperados próximo mes
+- Tendencias de costos de peaje
+- Optimizaciones adicionales posibles
+- Presupuesto recomendado
+</Tab>
+
+<Tab title="Recomendaciones Estratégicas">
+**Para la dirección**:
+- Inversiones adicionales recomendadas
+- Mejoras en procesos identificadas
+- Riesgos detectados y mitigación
+- Oportunidades de expansión
+
+**Plan de acción**:
+- Prioridades para próximo trimestre
+- Recursos necesarios
+- Cronograma de implementación
+- Métricas de seguimiento
+</Tab>
+</Tabs>
+
+## Workflow 4: Respuesta a Incidentes
+
+### Clasificación de Incidentes
+
+<CardGroup cols={3}>
+<Card title="Crítico" icon="exclamation-triangle">
+**Ejemplos**:
+- Sistema completamente inoperativo
+- Pérdida masiva de datos
+- Brecha de seguridad confirmada
+- Validaciones fallando sistemáticamente
+
+**SLA**: Respuesta inmediata
+**Escalación**: Automática a gerencia
+</Card>
+
+<Card title="Alto" icon="exclamation">
+**Ejemplos**:
+- Funcionalidades importantes no disponibles
+- Importación de datos fallando
+- Validaciones con alta tasa de error
+- Reportes no generándose
+
+**SLA**: Respuesta en 2 horas
+**Escalación**: A supervisor en 4 horas
+</Card>
+
+<Card title="Medio/Bajo" icon="info">
+**Ejemplos**:
+- Problemas de rendimiento menores
+- Errores de interfaz ocasionales
+- Solicitudes de mejora
+- Preguntas de usuarios
+
+**SLA**: Respuesta en 24 horas
+**Escalación**: Según procedimiento normal
+</Card>
+</CardGroup>
+
+### Proceso de Respuesta a Incidentes
+
+<Steps>
+<Step title="Detección y Clasificación">
+**Fuentes de detección**:
+- Alertas automáticas del sistema
+- Reportes de usuarios
+- Monitoreo proactivo
+- Revisiones rutinarias
+
+**Clasificación inicial**:
+1. Evaluar impacto en operaciones
+2. Determinar urgencia de resolución
+3. Asignar nivel de prioridad
+4. Identificar recursos necesarios
+</Step>
+
+<Step title="Respuesta Inmediata">
+**Para incidentes críticos**:
+- Activar protocolo de emergencia
+- Notificar a stakeholders clave
+- Implementar medidas de contención
+- Documentar todas las acciones
+
+**Para incidentes menores**:
+- Asignar a técnico apropiado
+- Establecer cronograma de resolución
+- Comunicar expectativas al usuario
+- Programar seguimiento regular
+</Step>
+
+<Step title="Investigación y Resolución">
+**Proceso sistemático**:
+1. Recopilar toda la información disponible
+2. Reproducir el problema si es posible
+3. Identificar causa raíz
+4. Desarrollar solución apropiada
+5. Probar solución en ambiente controlado
+6. Implementar corrección
+7. Verificar resolución completa
+
+<Warning>
+Documentar cada paso del proceso para futuras referencias y mejora continua.
+</Warning>
+</Step>
+
+<Step title="Seguimiento y Cierre">
+**Actividades post-resolución**:
+- Confirmar satisfacción del usuario
+- Documentar lecciones aprendidas
+- Actualizar procedimientos si es necesario
+- Implementar medidas preventivas
+- Cerrar formalmente el incidente
+
+**Métricas de seguimiento**:
+- Tiempo total de resolución
+- Efectividad de la solución
+- Satisfacción del usuario
+- Medidas preventivas implementadas
+</Step>
+</Steps>
+
+## Workflow 5: Mantenimiento y Optimización
+
+### Rutinas de Mantenimiento
+
+<Tabs>
+<Tab title="Diario">
+**Actividades automáticas**:
+- Respaldo de base de datos
+- Sincronización con ERM Karma
+- Limpieza de logs temporales
+- Verificación de conectividad
+
+**Actividades manuales**:
+- Revisión de alertas del sistema
+- Monitoreo de rendimiento
+- Verificación de importaciones
+- Respuesta a notificaciones críticas
+
+**Tiempo estimado**: 15-30 minutos
+</Tab>
+
+<Tab title="Semanal">
+**Mantenimiento preventivo**:
+- Análisis de rendimiento de base de datos
+- Revisión de logs de error
+- Actualización de catálogos de referencia
+- Verificación de integridad de datos
+
+**Optimizaciones**:
+- Ajuste de parámetros de validación
+- Limpieza de datos obsoletos
+- Optimización de consultas lentas
+- Actualización de documentación
+
+**Tiempo estimado**: 2-3 horas
+</Tab>
+
+<Tab title="Mensual">
+**Mantenimiento mayor**:
+- Revisión completa de configuraciones
+- Análisis de tendencias de uso
+- Evaluación de capacidad del sistema
+- Planificación de mejoras
+
+**Evaluaciones**:
+- Efectividad de validaciones
+- Satisfacción de usuarios
+- ROI del sistema
+- Oportunidades de mejora
+
+**Tiempo estimado**: 4-6 horas
+</Tab>
+</Tabs>
+
+### Proceso de Mejora Continua
+
+<AccordionGroup>
+<Accordion title="Recopilación de Feedback">
+**Fuentes de retroalimentación**:
+- Encuestas regulares a usuarios
+- Análisis de patrones de uso
+- Métricas de rendimiento del sistema
+- Sugerencias de mejora
+
+**Métodos de recopilación**:
+- Formularios en línea
+- Entrevistas con usuarios clave
+- Análisis de tickets de soporte
+- Observación directa de procesos
+</Accordion>
+
+<Accordion title="Análisis y Priorización">
+**Criterios de evaluación**:
+- Impacto en eficiencia operativa
+- Costo de implementación
+- Complejidad técnica
+- Beneficio para usuarios
+
+**Proceso de priorización**:
+1. Catalogar todas las mejoras propuestas
+2. Evaluar cada una según criterios establecidos
+3. Asignar puntaje de prioridad
+4. Crear roadmap de implementación
+</Accordion>
+
+<Accordion title="Implementación de Mejoras">
+**Fases de implementación**:
+1. **Planificación**: Diseño detallado y recursos
+2. **Desarrollo**: Implementación técnica
+3. **Pruebas**: Validación en ambiente controlado
+4. **Despliegue**: Implementación en producción
+5. **Seguimiento**: Monitoreo de resultados
+
+**Gestión del cambio**:
+- Comunicación proactiva a usuarios
+- Capacitación en nuevas funcionalidades
+- Soporte adicional durante transición
+- Documentación actualizada
+</Accordion>
+</AccordionGroup>
+
+## Métricas y KPIs por Workflow
+
+### Indicadores de Rendimiento
+
+<Tabs>
+<Tab title="Operacionales">
+**Eficiencia del proceso**:
+- Tiempo promedio de importación por archivo
+- Tiempo promedio de validación por cargo
+- Porcentaje de cargos procesados automáticamente
+- Tiempo promedio de resolución de casos manuales
+
+**Calidad de datos**:
+- Porcentaje de cargos con validación GPS exitosa
+- Porcentaje de tags con asignaciones válidas
+- Porcentaje de estaciones con tarifas actualizadas
+- Tasa de errores en importación
+</Tab>
+
+<Tab title="Financieros">
+**Impacto económico**:
+- Monto total de duplicados detectados
+- Valor de sobrecargos identificados
+- Estimación de fraudes prevenidos
+- ROI del sistema de validación
+
+**Eficiencia de costos**:
+- Costo por cargo validado
+- Ahorro por cargo procesado
+- Reducción en tiempo de auditoría manual
+- Costo de operación vs. beneficios
+</Tab>
+
+<Tab title="Calidad de Servicio">
+**Satisfacción de usuarios**:
+- Tiempo de respuesta a consultas
+- Porcentaje de casos resueltos en primer contacto
+- Satisfacción general de usuarios
+- Adopción de nuevas funcionalidades
+
+**Confiabilidad del sistema**:
+- Tiempo de actividad del sistema
+- Frecuencia de incidentes críticos
+- Tiempo promedio de resolución de problemas
+- Cumplimiento de SLAs establecidos
+</Tab>
+</Tabs>
+
+## Próximos Pasos
+
+Una vez implementados estos flujos de trabajo, considera:
+
+<CardGroup cols={2}>
+<Card title="Automatización Avanzada" icon="robot">
+Implementar automatización adicional para reducir trabajo manual y mejorar eficiencia
+</Card>
+<Card title="Integración con Otros Sistemas" icon="link">
+Conectar con sistemas de gestión de flota, contabilidad y otros para mayor eficiencia
+</Card>
+<Card title="Análisis Predictivo" icon="chart-line">
+Desarrollar modelos predictivos para anticipar problemas y optimizar operaciones
+</Card>
+<Card title="Expansión de Funcionalidades" icon="plus-circle">
+Agregar nuevas capacidades basadas en necesidades identificadas y feedback de usuarios
+</Card>
+</CardGroup>
+
+<Info>
+Los flujos de trabajo son documentos vivos que deben actualizarse regularmente basándose en la experiencia operativa y las mejoras del sistema.
+</Info> 

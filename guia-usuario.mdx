@@ -1,0 +1,822 @@
+---
+title: "Guía del Usuario"
+description: "Instrucciones paso a paso para operar el sistema Paso Rápido en el día a día"
+---
+
+# Guía del Usuario
+
+Esta guía te enseñará cómo usar el sistema Paso Rápido de manera efectiva para gestionar y validar consumos de peajes. Está organizada por roles y tareas comunes.
+
+## Primeros Pasos
+
+### Acceso al Sistema
+
+<Steps>
+<Step title="Iniciar Sesión">
+1. Navega a la URL del sistema Paso Rápido
+2. Haz clic en "Iniciar Sesión"
+3. Ingresa tu email y contraseña
+4. Si tienes acceso a múltiples organizaciones, selecciona la correcta
+
+<Note>
+Si olvidaste tu contraseña, usa la opción "Recuperar Contraseña" en la página de login.
+</Note>
+</Step>
+
+<Step title="Familiarízate con la Interfaz">
+**Elementos principales**:
+- **Sidebar izquierdo**: Navegación principal entre módulos
+- **Header superior**: Información de usuario y organización
+- **Área principal**: Contenido específico de cada sección
+- **Notificaciones**: Alertas y actualizaciones en tiempo real
+
+<Tip>
+El sidebar se puede colapsar en pantallas pequeñas usando el botón de menú hamburguesa.
+</Tip>
+</Step>
+
+<Step title="Verificar Permisos">
+Según tu rol, tendrás acceso a diferentes secciones:
+- **Dashboard**: Resumen ejecutivo y métricas
+- **Consumos**: Gestión de cargos de peaje
+- **Vehículos**: Información de la flota
+- **Tags**: Gestión de asignaciones
+- **Reportes**: Generación de informes
+- **Configuración**: Ajustes del sistema (solo administradores)
+
+<Check>
+Si no puedes acceder a una sección necesaria, contacta a tu administrador.
+</Check>
+</Step>
+</Steps>
+
+### Dashboard Principal
+
+El dashboard te proporciona una visión general del estado de tus consumos:
+
+<Tabs>
+<Tab title="Métricas Principales">
+**Tarjetas de resumen**:
+- **Total de Consumos**: Número de cargos del período actual
+- **Monto Total**: Suma de todos los cargos
+- **Pendientes de Validación**: Cargos sin procesar
+- **Casos Sospechosos**: Cargos que requieren atención
+
+**Gráficos disponibles**:
+- Evolución temporal de consumos
+- Distribución por tipo de validación
+- Top 10 estaciones con más cargos
+- Análisis de fraudes detectados
+</Tab>
+
+<Tab title="Alertas y Notificaciones">
+**Tipos de alertas**:
+- 🔴 **Críticas**: Fraudes detectados, tags inhabilitados
+- 🟡 **Advertencias**: Duplicados, sobrecargos
+- 🔵 **Informativas**: Importaciones completadas, reportes listos
+
+**Panel de notificaciones**:
+- Haz clic en el ícono de campana para ver todas las notificaciones
+- Las notificaciones críticas aparecen como pop-ups
+- Se mantiene un historial de 30 días
+</Tab>
+
+<Tab title="Filtros Rápidos">
+**Filtros predefinidos**:
+- **Hoy**: Cargos del día actual
+- **Esta semana**: Últimos 7 días
+- **Este mes**: Mes calendario actual
+- **Pendientes**: Solo cargos sin validar
+
+**Personalización**:
+- Puedes guardar combinaciones de filtros frecuentes
+- Los filtros se mantienen entre sesiones
+- Opción de restablecer a valores por defecto
+</Tab>
+</Tabs>
+
+## Gestión de Consumos
+
+### Visualización de Cargos
+
+<Steps>
+<Step title="Navegar a Consumos">
+1. Haz clic en "Consumos" en el sidebar
+2. La tabla principal muestra todos los cargos de peaje
+3. Cada fila representa un cargo individual con información básica
+
+**Columnas principales**:
+- **ID**: Identificador único del cargo
+- **Fecha**: Momento del cargo
+- **Tag**: Número del tag utilizado
+- **Vehículo**: Vehículo asociado
+- **Estación**: Lugar del cobro
+- **Monto**: Cantidad cobrada
+- **Estados de validación**: GPS, Duplicados, Categoría, Tag
+</Step>
+
+<Step title="Usar Filtros Avanzados">
+Haz clic en "Filtros" para acceder a opciones avanzadas:
+
+**Filtros generales**:
+- **Rango de fechas**: Selecciona período específico
+- **Propietarios**: Filtra por empresa o departamento
+- **Vehículos**: Selecciona vehículos específicos
+- **Estaciones**: Filtra por estaciones de peaje
+
+**Filtros de validación**:
+- **Estado GPS**: Válido, Inválido, Sin telemetría
+- **Doble cargo**: Solo duplicados, solo únicos
+- **Categoría**: Correctos, con error
+- **Estado Tag**: Válido, inhabilitado
+- **Revisión manual**: Estados de revisión
+
+<Tip>
+Los filtros se aplican automáticamente y muestran el número de registros encontrados.
+</Tip>
+</Step>
+
+<Step title="Buscar Cargos Específicos">
+Usa la barra de búsqueda para encontrar cargos por:
+- Número de tag
+- Nombre de estación
+- Número de vehículo
+- Placa del vehículo
+- Monto específico
+- ID del cargo
+
+<Note>
+La búsqueda es inteligente y funciona con coincidencias parciales.
+</Note>
+</Step>
+</Steps>
+
+### Revisar Detalles de Cargos
+
+<Tabs>
+<Tab title="Vista Expandida">
+**Para ver detalles completos**:
+1. Haz clic en cualquier fila de la tabla
+2. Se despliega una vista detallada con:
+   - **Información del cargo**: Todos los datos básicos
+   - **Validación GPS**: Mapas de ubicación
+   - **Otras validaciones**: Duplicados, categoría, tag
+   - **Historial**: Cambios y comentarios
+
+**Mapas GPS disponibles**:
+- **Mapa del peaje**: Ubicación de la estación
+- **Mapa del vehículo**: Posición GPS en el momento del cargo
+- **Mapa de ruta**: Trayectoria completa del viaje (si disponible)
+</Tab>
+
+<Tab title="Estados de Validación">
+**Interpretación de colores**:
+- 🟢 **Verde**: Validación exitosa, sin problemas
+- 🔴 **Rojo**: Validación fallida, requiere atención
+- 🟡 **Amarillo**: Advertencia o información incompleta
+- ⚪ **Gris**: Sin validar o no aplicable
+
+**Acciones disponibles**:
+- **Ver evidencia**: Datos GPS, comparaciones, historiales
+- **Agregar comentario**: Notas para otros usuarios
+- **Cambiar estado**: Aprobar/rechazar manualmente (según permisos)
+- **Exportar detalles**: PDF o Excel con toda la información
+</Tab>
+
+<Tab title="Revisión Manual">
+**Para cargos que requieren decisión humana**:
+
+1. **Evaluar evidencia**:
+   - Revisar mapas GPS cuidadosamente
+   - Comparar con cargos similares
+   - Verificar historial del tag/vehículo
+
+2. **Tomar decisión**:
+   - **Válido**: Si confirmas que el cargo es legítimo
+   - **Ubicación Inválida**: Si el GPS contradice el cargo
+   - **Sin Telemetría**: Si no hay datos suficientes para decidir
+
+3. **Documentar decisión**:
+   - Agregar comentario explicativo
+   - Incluir referencia a evidencia utilizada
+   - Marcar nivel de confianza en la decisión
+
+<Warning>
+Las decisiones de revisión manual son permanentes y auditables. Asegúrate de revisar toda la evidencia antes de decidir.
+</Warning>
+</Tab>
+</Tabs>
+
+### Importación de Cargos
+
+<Steps>
+<Step title="Preparar Archivo CSV">
+**Formato requerido**:
+- Archivo CSV con codificación UTF-8
+- Separador: coma (,)
+- Primera fila con encabezados
+
+**Columnas obligatorias**:
+- `fecha`: YYYY-MM-DD HH:MM:SS
+- `tag`: Número entero
+- `estacion`: Nombre de la estación
+- `monto`: Valor numérico (puede ser negativo)
+- `tipo`: Tipo de cargo (opcional)
+
+**Ejemplo**:
+```csv
+fecha,tag,estacion,monto,tipo
+2024-01-15 14:30:00,123456,Peaje Norte Km 45,5000,Normal
+2024-01-15 16:45:00,789012,Peaje Sur Km 80,8000,Normal
+```
+</Step>
+
+<Step title="Subir Archivo">
+1. Ve a "Consumos" → "Importar"
+2. Haz clic en "Seleccionar archivo" o arrastra el CSV
+3. El sistema validará el formato automáticamente
+4. Revisa la vista previa de datos
+5. Haz clic en "Importar" para procesar
+
+**Validaciones automáticas**:
+- Formato de fechas correcto
+- Números de tag válidos
+- Montos numéricos
+- Duplicados dentro del mismo archivo
+
+<Check>
+El sistema te mostrará un resumen de registros importados y errores encontrados.
+</Check>
+</Step>
+
+<Step title="Monitorear Importación">
+**Durante la importación**:
+- Barra de progreso muestra el avance
+- Notificaciones indican problemas encontrados
+- Opción de cancelar si es necesario
+
+**Después de la importación**:
+- Resumen completo de resultados
+- Lista de errores y advertencias
+- Opción de descargar log detallado
+- Los cargos aparecen automáticamente en la tabla principal
+
+<Tip>
+Las importaciones grandes pueden tomar varios minutos. El sistema te notificará cuando termine.
+</Tip>
+</Step>
+</Steps>
+
+### Validación de Consumos
+
+<Tabs>
+<Tab title="Validación Automática">
+**Ejecutar validación**:
+1. Ve a "Consumos" → "Validar"
+2. Selecciona el rango de fechas a validar
+3. Opcional: filtra por vehículos específicos
+4. Haz clic en "Iniciar Validación"
+
+**Parámetros configurables**:
+- **Ventana de tiempo GPS**: ±1 a ±5 minutos
+- **Distancia máxima**: 100 a 1000 metros
+- **Solo cargos sin validar**: Procesar solo pendientes
+- **Incluir re-validación**: Procesar cargos ya validados
+
+**Monitoreo del proceso**:
+- Progreso en tiempo real
+- Estadísticas de validaciones por tipo
+- Estimación de tiempo restante
+- Opción de pausar/reanudar
+</Tab>
+
+<Tab title="Tipos de Validación">
+**1. Validación GPS**:
+- Confirma presencia del vehículo en la estación
+- Usa datos de telemetría ERM Karma
+- Calcula distancia y tiempo de diferencia
+- Estados: Válido, Ubicación Inválida, Sin Telemetría
+
+**2. Detección de Duplicados**:
+- Identifica cargos repetidos
+- Compara tag, estación, fecha y monto
+- Sugiere cuál cargo mantener
+- Estados: Único, Duplicado
+
+**3. Validación de Categoría**:
+- Verifica monto vs. tarifa oficial
+- Compara con categoría del vehículo
+- Detecta sobrecargos y subcargos
+- Estados: Correcto, Cobro Mayor, Cobro Menor
+
+**4. Verificación de Tags**:
+- Confirma que el tag estaba activo
+- Revisa historial de inhabilitaciones
+- Detecta uso de tags vencidos
+- Estados: Válido, Inhabilitado, No Encontrado
+</Tab>
+
+<Tab title="Resultados de Validación">
+**Dashboard de resultados**:
+- Resumen por tipo de validación
+- Gráficos de distribución
+- Lista de casos que requieren atención
+- Métricas de calidad de datos
+
+**Casos prioritarios**:
+1. **Críticos**: Tags inhabilitados, fraudes evidentes
+2. **Altos**: Ubicación GPS inválida, duplicados
+3. **Medios**: Sobrecargos, categorías incorrectas
+4. **Bajos**: Sin telemetría, subcargos favorables
+
+**Acciones recomendadas**:
+- Revisar casos críticos inmediatamente
+- Generar reportes para casos altos
+- Programar revisión para casos medios
+- Monitorear tendencias en casos bajos
+
+<Info>
+Los resultados se actualizan en tiempo real durante la validación.
+</Info>
+</Tab>
+</Tabs>
+
+## Gestión de Vehículos
+
+### Visualización de Flota
+
+<Steps>
+<Step title="Acceder al Módulo de Vehículos">
+1. Haz clic en "Vehículos" en el sidebar
+2. La tabla muestra todos los vehículos de tu organización
+3. Información sincronizada desde ERM Karma automáticamente
+
+**Datos mostrados**:
+- **Número de vehículo**: Identificador interno
+- **Placa**: Matrícula oficial
+- **Tipo**: Categoría del vehículo
+- **Proyecto**: Agrupación lógica
+- **Device ID**: Dispositivo GPS instalado
+- **Última sincronización**: Fecha de actualización
+</Step>
+
+<Step title="Buscar y Filtrar">
+**Opciones de filtrado**:
+- **Por proyecto**: Agrupa vehículos por departamento/área
+- **Por tipo**: Filtra por categoría (Auto, Camión, Bus, etc.)
+- **Por estado GPS**: Activos, inactivos, con problemas
+- **Búsqueda libre**: Por placa, número, o descripción
+
+**Búsqueda inteligente**:
+- Coincidencias parciales en todos los campos
+- Búsqueda por múltiples criterios simultáneos
+- Resultados ordenados por relevancia
+</Step>
+
+<Step title="Ver Detalles del Vehículo">
+Haz clic en cualquier vehículo para ver:
+- **Información completa**: Todos los datos técnicos
+- **Historial de tags**: Asignaciones pasadas y actuales
+- **Consumos recientes**: Últimos cargos de peaje
+- **Ubicación actual**: Última posición GPS conocida
+- **Estadísticas**: Métricas de uso y costos
+
+<Tip>
+La información se actualiza automáticamente desde ERM Karma cada 6 horas.
+</Tip>
+</Step>
+</Steps>
+
+### Gestión de Asignaciones de Tags
+
+<Tabs>
+<Tab title="Ver Asignaciones Actuales">
+**En la sección "Tags"**:
+- Lista de todas las asignaciones activas
+- Estado de cada tag (Válido/Inhabilitado)
+- Vehículo asignado actualmente
+- Fecha de asignación y expiración
+- Categoría configurada
+
+**Indicadores visuales**:
+- 🟢 Tag activo y funcionando
+- 🔴 Tag inhabilitado
+- 🟡 Tag próximo a expirar
+- ⚪ Tag sin asignar
+</Tab>
+
+<Tab title="Crear Nueva Asignación">
+<Steps>
+<Step title="Iniciar Asignación">
+1. Ve a "Tags" → "Nueva Asignación"
+2. Completa el formulario:
+   - **Número de tag**: 6 dígitos
+   - **Vehículo**: Selecciona de la lista
+   - **Categoría**: 1-5 según tipo de vehículo
+   - **Tipo**: Corporativo o Prepago
+   - **Fecha de inicio**: Por defecto hoy
+   - **Fecha de expiración**: Opcional
+</Step>
+
+<Step title="Validaciones Automáticas">
+El sistema verifica:
+- Tag no esté ya asignado a otro vehículo
+- Categoría sea coherente con tipo de vehículo
+- Fechas sean lógicas (inicio < expiración)
+- No haya conflictos con asignaciones existentes
+
+<Warning>
+Si un tag ya está asignado, debes terminarlo antes de crear nueva asignación.
+</Warning>
+</Step>
+
+<Step title="Confirmar Asignación">
+- Revisa todos los datos ingresados
+- El sistema muestra resumen de la asignación
+- Haz clic en "Crear Asignación"
+- Confirmación automática por email/notificación
+
+<Check>
+La nueva asignación estará activa inmediatamente para futuros cargos.
+</Check>
+</Step>
+</Steps>
+</Tab>
+
+<Tab title="Modificar o Terminar Asignaciones">
+**Para cambiar una asignación**:
+1. Busca la asignación actual en la tabla
+2. Haz clic en "Editar" o "Terminar"
+3. Para reasignar: termina la actual y crea una nueva
+4. Para inhabilitar: cambia estado a "Inhabilitado"
+
+**Motivos comunes para cambios**:
+- Tag perdido o dañado → Inhabilitar
+- Vehículo vendido → Terminar asignación
+- Cambio de categoría → Nueva asignación
+- Error en datos → Corrección
+
+**Impacto en validaciones**:
+- Cambios afectan solo cargos futuros
+- Cargos históricos mantienen asignación original
+- Sistema mantiene auditoría completa de cambios
+
+<Note>
+Los cambios de asignación pueden tomar hasta 1 hora en reflejarse en las validaciones.
+</Note>
+</Tab>
+</Tabs>
+
+## Reportes y Análisis
+
+### Generación de Reportes
+
+<Tabs>
+<Tab title="Reporte Básico">
+**Reporte estándar de consumos**:
+1. Ve a "Consumos" → "Exportar Excel"
+2. Selecciona filtros deseados (fechas, vehículos, etc.)
+3. Haz clic en "Exportar"
+4. El archivo se descarga automáticamente
+
+**Contenido incluido**:
+- Todos los cargos con filtros aplicados
+- Estados de validación detallados
+- Información de vehículos y tags
+- Mapas GPS (como enlaces)
+- Resumen ejecutivo en primera hoja
+
+<Tip>
+Los reportes grandes pueden tomar varios minutos en generarse.
+</Tip>
+</Tab>
+
+<Tab title="Reporte Ejecutivo">
+**Para gerencia y administración**:
+- Resumen de métricas principales
+- Análisis de fraudes detectados
+- Ahorros generados por el sistema
+- Tendencias y patrones identificados
+- Recomendaciones de acción
+
+**Frecuencia recomendada**:
+- **Diario**: Para operadores y analistas
+- **Semanal**: Para jefes de área
+- **Mensual**: Para gerencia general
+- **Trimestral**: Para reportes corporativos
+
+**Personalización**:
+- Filtros específicos por área de interés
+- Métricas relevantes para cada rol
+- Formato adaptado al público objetivo
+</Tab>
+
+<Tab title="Análisis de Fraudes">
+**Reporte especializado en detección**:
+- Lista de todos los casos sospechosos
+- Clasificación por tipo de fraude
+- Impacto financiero estimado
+- Evidencia GPS disponible
+- Recomendaciones de investigación
+
+**Casos incluidos**:
+- Tags inhabilitados con cargos
+- Duplicados no resueltos
+- Ubicaciones GPS inválidas
+- Patrones anómalos de uso
+- Sobrecargos significativos
+
+**Uso recomendado**:
+- Revisión semanal por equipo de seguridad
+- Investigación de casos críticos
+- Documentación para reclamos legales
+- Mejora de procesos de validación
+</Tab>
+</Tabs>
+
+### Análisis de Datos
+
+<AccordionGroup>
+<Accordion title="Métricas de Eficiencia">
+**KPIs principales**:
+- **Tasa de validación GPS**: % de cargos con ubicación confirmada
+- **Duplicados detectados**: Número y valor de duplicados por período
+- **Precisión de categorías**: % de cargos con monto correcto
+- **Tags activos**: % de tags válidos vs. inhabilitados
+
+**Tendencias a monitorear**:
+- Evolución mensual de cada métrica
+- Comparación con períodos anteriores
+- Identificación de patrones estacionales
+- Correlación entre métricas diferentes
+</Accordion>
+
+<Accordion title="Análisis Financiero">
+**Impacto económico**:
+- **Ahorros por duplicados**: Monto evitado en doble facturación
+- **Sobrecargos detectados**: Valor de reembolsos potenciales
+- **Fraudes prevenidos**: Estimación de pérdidas evitadas
+- **ROI del sistema**: Retorno de inversión calculado
+
+**Proyecciones**:
+- Ahorros esperados en próximos períodos
+- Tendencias de costos de peajes
+- Optimizaciones posibles en rutas
+- Presupuesto recomendado para peajes
+</Accordion>
+
+<Accordion title="Calidad de Datos">
+**Indicadores de salud del sistema**:
+- **Cobertura GPS**: % de vehículos con datos disponibles
+- **Completitud de asignaciones**: % de tags con vehículos asignados
+- **Actualización de tarifas**: % de estaciones con precios actualizados
+- **Sincronización**: Frecuencia de actualización de datos
+
+**Acciones de mejora**:
+- Identificar vehículos con problemas GPS
+- Actualizar asignaciones faltantes
+- Solicitar tarifas de estaciones nuevas
+- Optimizar frecuencia de sincronización
+</Accordion>
+</AccordionGroup>
+
+## Tareas Comunes por Rol
+
+### Para Analistas
+
+<Steps>
+<Step title="Rutina Diaria">
+**Al inicio del día**:
+1. Revisar dashboard para casos críticos
+2. Procesar notificaciones pendientes
+3. Validar cargos importados la noche anterior
+4. Revisar casos marcados para atención manual
+
+**Tiempo estimado**: 30-45 minutos
+</Step>
+
+<Step title="Revisión de Casos Sospechosos">
+**Proceso recomendado**:
+1. Filtrar por "Casos Sospechosos" en dashboard
+2. Ordenar por prioridad (Críticos → Altos → Medios)
+3. Para cada caso:
+   - Revisar evidencia GPS disponible
+   - Comparar con historial del vehículo/tag
+   - Tomar decisión documentada
+   - Agregar comentarios explicativos
+
+**Meta diaria**: Resolver al menos 80% de casos críticos
+</Step>
+
+<Step title="Generación de Reportes">
+**Reportes regulares**:
+- **Lunes**: Reporte semanal de fraudes
+- **Miércoles**: Análisis de duplicados
+- **Viernes**: Resumen de validaciones
+- **Fin de mes**: Reporte ejecutivo mensual
+
+<Tip>
+Programa recordatorios en tu calendario para no olvidar los reportes regulares.
+</Tip>
+</Step>
+</Steps>
+
+### Para Despachadores
+
+<Tabs>
+<Tab title="Gestión de Tags">
+**Tareas frecuentes**:
+- Asignar tags a vehículos nuevos
+- Reportar tags perdidos o dañados
+- Actualizar asignaciones por cambios de flota
+- Verificar estado de tags antes de viajes largos
+
+**Mejores prácticas**:
+- Mantener inventario actualizado de tags
+- Documentar todos los cambios con motivo
+- Reportar problemas inmediatamente
+- Coordinar con mantenimiento para reemplazos
+</Tab>
+
+<Tab title="Consulta de Consumos">
+**Información útil para operaciones**:
+- Costos de peaje por ruta
+- Historial de consumos por vehículo
+- Identificación de rutas más económicas
+- Detección de desvíos no autorizados
+
+**Reportes operativos**:
+- Consumos diarios por vehículo
+- Comparación de rutas alternativas
+- Análisis de eficiencia por conductor
+- Alertas de uso anómalo de tags
+</Tab>
+
+<Tab title="Coordinación con Analistas">
+**Información a reportar**:
+- Vehículos con problemas GPS conocidos
+- Rutas con cobertura deficiente
+- Tags con comportamiento anómalo
+- Cambios en asignaciones de vehículos
+
+**Comunicación efectiva**:
+- Usar comentarios en el sistema
+- Reportar patrones observados
+- Sugerir mejoras en validaciones
+- Colaborar en resolución de casos dudosos
+</Tab>
+</Tabs>
+
+### Para Administradores
+
+<AccordionGroup>
+<Accordion title="Configuración del Sistema">
+**Tareas de setup inicial**:
+- Configurar integración con ERM Karma API
+- Importar catálogo de estaciones y tarifas
+- Definir usuarios y roles
+- Establecer parámetros de validación
+
+**Mantenimiento regular**:
+- Actualizar tarifas de estaciones
+- Revisar y ajustar parámetros de validación
+- Gestionar usuarios y permisos
+- Monitorear rendimiento del sistema
+</Accordion>
+
+<Accordion title="Supervisión y Mejora">
+**Métricas a monitorear**:
+- Efectividad de las validaciones
+- Satisfacción de usuarios
+- Tiempo de respuesta del sistema
+- Calidad de datos GPS
+
+**Optimizaciones periódicas**:
+- Ajustar umbrales de validación según resultados
+- Mejorar reglas de detección de fraudes
+- Actualizar catálogos de referencia
+- Implementar mejoras sugeridas por usuarios
+</Accordion>
+
+<Accordion title="Reportes Gerenciales">
+**Para presentar a dirección**:
+- ROI del sistema de validación
+- Ahorros generados por detección de fraudes
+- Mejoras en control de costos
+- Recomendaciones estratégicas
+
+**Frecuencia recomendada**:
+- Mensual: Métricas operativas
+- Trimestral: Análisis financiero
+- Anual: Evaluación estratégica
+</Accordion>
+</AccordionGroup>
+
+## Resolución de Problemas
+
+### Problemas Comunes
+
+<Tabs>
+<Tab title="Datos GPS Faltantes">
+**Síntomas**:
+- Muchos cargos marcados como "Sin Telemetría"
+- Validaciones GPS fallando sistemáticamente
+- Mapas vacíos en vista detallada
+
+**Posibles causas**:
+- Problemas de conectividad con ERM Karma
+- Dispositivos GPS desconectados
+- Configuración incorrecta de API
+
+**Soluciones**:
+1. Verificar estado de conexión a ERM Karma
+2. Revisar configuración de credenciales API
+3. Contactar soporte técnico si persiste
+4. Considerar validación manual para casos críticos
+</Tab>
+
+<Tab title="Duplicados Excesivos">
+**Síntomas**:
+- Detección masiva de duplicados
+- Mismos cargos aparecen múltiples veces
+- Alertas constantes de doble facturación
+
+**Posibles causas**:
+- Error en importación de archivos CSV
+- Problema en sistema de facturación de concesionaria
+- Configuración muy sensible de detección
+
+**Soluciones**:
+1. Revisar archivos CSV antes de importar
+2. Ajustar parámetros de detección de duplicados
+3. Contactar concesionaria si es problema sistemático
+4. Usar herramientas de limpieza de datos
+</Tab>
+
+<Tab title="Validaciones Incorrectas">
+**Síntomas**:
+- Cargos válidos marcados como fraudulentos
+- Fraudes evidentes no detectados
+- Resultados inconsistentes
+
+**Posibles causas**:
+- Parámetros de validación muy estrictos/permisivos
+- Datos de referencia desactualizados
+- Problemas en algoritmos de validación
+
+**Soluciones**:
+1. Revisar y ajustar parámetros de validación
+2. Actualizar catálogos de estaciones y tarifas
+3. Calibrar algoritmos con casos conocidos
+4. Solicitar soporte técnico especializado
+</Tab>
+</Tabs>
+
+### Contacto y Soporte
+
+<CardGroup cols={2}>
+<Card title="Soporte Técnico" icon="headset">
+**Para problemas del sistema**:
+- Email: soporte@pasorapido.com
+- Teléfono: +57 (1) 234-5678
+- Chat en vivo: Disponible 8AM-6PM
+- Ticket de soporte: Portal web
+
+**Información a incluir**:
+- Descripción detallada del problema
+- Pasos para reproducir el error
+- Screenshots o videos si es posible
+- Información de usuario y organización
+</Card>
+
+<Card title="Capacitación" icon="academic-cap">
+**Para entrenamiento y mejores prácticas**:
+- Sesiones de capacitación personalizadas
+- Documentación actualizada
+- Videos tutoriales
+- Webinars mensuales
+
+**Recursos disponibles**:
+- Manual de usuario completo
+- Guías rápidas por rol
+- FAQ actualizado
+- Casos de uso reales
+</Card>
+</CardGroup>
+
+## Próximos Pasos
+
+Una vez que domines estas funciones básicas, puedes explorar:
+
+<CardGroup cols={2}>
+<Card title="Flujos de Trabajo" icon="workflow" href="/flujos-trabajo">
+Procesos completos desde importación hasta reportes ejecutivos
+</Card>
+<Card title="API Reference" icon="code" href="/api-reference/introduction">
+Documentación técnica para integraciones avanzadas
+</Card>
+</CardGroup>
+
+<Info>
+¿Tienes preguntas específicas sobre alguna funcionalidad? Consulta la sección de FAQ o contacta al equipo de soporte.
+</Info> 

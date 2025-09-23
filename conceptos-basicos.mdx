@@ -1,0 +1,371 @@
+---
+title: "Conceptos Básicos"
+description: "Terminología y conceptos fundamentales del sistema Paso Rápido"
+---
+
+# Conceptos Básicos
+
+Esta sección explica la terminología y conceptos fundamentales que necesitas conocer para operar eficientemente el sistema Paso Rápido.
+
+## Terminología Principal
+
+### Entidades del Sistema
+
+<AccordionGroup>
+<Accordion title="Organización">
+**Definición**: Entidad principal que representa a una empresa o grupo empresarial que utiliza el sistema.
+
+**Características**:
+- Cada organización tiene sus propios datos aislados (multi-tenencia)
+- Puede tener múltiples usuarios con diferentes roles
+- Administra su propia flota de vehículos y tags
+- Tiene configuración independiente de APIs y credenciales
+
+**Ejemplo**: "Transportes ABC S.A." sería una organización que gestiona 50 vehículos.
+</Accordion>
+
+<Accordion title="Vehículo">
+**Definición**: Unidad de transporte equipada con dispositivo GPS que genera datos de telemetría.
+
+**Información incluye**:
+- **Número de vehículo**: Identificador interno de la flota
+- **Placa**: Matrícula oficial del vehículo
+- **Categoría**: Tipo de vehículo (Auto, Camioneta, Bus, Camión, etc.)
+- **Device ID**: Identificador del dispositivo GPS instalado
+- **Proyecto**: Agrupación lógica dentro de la organización
+
+**Ejemplo**: Vehículo #1001, placa "ABC123", categoría 2 (Camioneta), con GPS device ID 789456.
+</Accordion>
+
+<Accordion title="Tag de Peaje">
+**Definición**: Dispositivo electrónico que permite el paso automático por estaciones de peaje.
+
+**Propiedades**:
+- **Número de Tag**: Identificador único de 6 dígitos
+- **Estado**: Válido o Inhabilitado
+- **Categoría**: Nivel tarifario asignado (1-5)
+- **Tipo**: Corporativo o Prepago
+- **Fechas**: Emisión y expiración
+
+**Ejemplo**: Tag #123456, categoría 2, estado "Válido", tipo "Corporativo".
+</Accordion>
+
+<Accordion title="Asignación de Tag">
+**Definición**: Relación temporal entre un tag y un vehículo específico.
+
+**Importancia**:
+- Un vehículo puede tener diferentes tags en diferentes períodos
+- Un tag solo puede estar asignado a un vehículo a la vez
+- Las validaciones dependen de estas asignaciones históricas
+
+**Ejemplo**: Tag #123456 asignado al vehículo #1001 desde el 01/01/2024 hasta el 31/12/2024.
+</Accordion>
+
+<Accordion title="Estación de Peaje">
+**Definición**: Punto físico donde se cobran las tarifas de tránsito.
+
+**Datos incluidos**:
+- **Nombre**: Identificación de la estación
+- **Ubicación GPS**: Coordenadas exactas (latitud, longitud)
+- **Tarifas por Categoría**: Montos oficiales para cada tipo de vehículo
+
+**Ejemplo**: "Peaje Autopista Norte Km 45", coordenadas (4.7110, -74.0721), tarifa categoría 1: $5,000.
+</Accordion>
+
+<Accordion title="Cargo de Peaje">
+**Definición**: Registro de un cobro realizado cuando un vehículo pasa por una estación.
+
+**Información incluye**:
+- **Fecha y Hora**: Momento exacto del cargo
+- **Tag**: Número del tag usado
+- **Estación**: Donde ocurrió el cobro
+- **Monto**: Cantidad cobrada
+- **Estado de Validación**: Resultado de las verificaciones
+
+**Ejemplo**: Cargo del 15/01/2024 14:30, tag #123456, Peaje Norte Km 45, $5,000.
+</Accordion>
+</AccordionGroup>
+
+## Estados de Validación
+
+### Estados GPS
+
+<Tabs>
+<Tab title="VALIDO">
+**Descripción**: El vehículo estaba presente en la ubicación y momento del cargo.
+
+**Criterios**:
+- Datos GPS disponibles dentro del rango de tiempo (±1 minuto)
+- Distancia a la estación menor a 500 metros
+- Velocidad y dirección coherentes
+
+**Indicador**: ✅ Verde - Cargo aprobado automáticamente
+</Tab>
+
+<Tab title="UBICACION_INVALIDA">
+**Descripción**: Los datos GPS indican que el vehículo no estaba en la estación.
+
+**Posibles causas**:
+- Vehículo en ubicación diferente al momento del cargo
+- Tag usado fraudulentamente en otro vehículo
+- Error en la asignación del tag
+
+**Indicador**: ❌ Rojo - Requiere revisión manual
+</Tab>
+
+<Tab title="SIN_TELEMETRIA">
+**Descripción**: No hay datos GPS disponibles para validar el cargo.
+
+**Causas comunes**:
+- Dispositivo GPS desconectado o averiado
+- Problemas de conectividad celular
+- Vehículo fuera del rango de cobertura
+
+**Indicador**: ⚠️ Amarillo - Validación inconclusa
+</Tab>
+
+<Tab title="Sin Validar">
+**Descripción**: El cargo aún no ha pasado por el proceso de validación.
+
+**Estado inicial**: Todos los cargos importados comienzan en este estado.
+
+**Indicador**: ⭕ Gris - Pendiente de procesamiento
+</Tab>
+</Tabs>
+
+### Estados de Duplicados
+
+<CardGroup cols={2}>
+<Card title="Único" icon="check-circle">
+**Descripción**: Cargo sin duplicados detectados.
+
+**Criterio**: No existe otro cargo con mismo tag, estación y fecha similar.
+
+**Acción**: Ninguna - Cargo válido.
+</Card>
+
+<Card title="Duplicado" icon="exclamation-triangle">
+**Descripción**: Se detectó otro cargo idéntico o muy similar.
+
+**Criterios de detección**:
+- Mismo tag y estación
+- Diferencia de tiempo menor a 10 minutos
+- Monto igual o similar
+
+**Acción**: Revisar manualmente para determinar cuál mantener.
+</Card>
+</CardGroup>
+
+### Estados de Categoría
+
+<Tabs>
+<Tab title="Correcto">
+**Descripción**: El monto cobrado coincide exactamente con la tarifa oficial.
+
+**Validación**: Monto del cargo = Tarifa de la categoría del vehículo.
+
+**Resultado**: ✅ Sin problemas detectados.
+</Tab>
+
+<Tab title="Cobro Mayor">
+**Descripción**: Se cobró más de lo que corresponde según la categoría.
+
+**Impacto**: Pérdida económica - Pago excesivo.
+
+**Acción recomendada**: Solicitar reembolso o ajuste.
+
+**Ejemplo**: Vehículo categoría 1 (tarifa $5,000) cobrado como categoría 2 ($8,000).
+</Tab>
+
+<Tab title="Cobro Menor">
+**Descripción**: Se cobró menos de lo que corresponde según la categoría.
+
+**Impacto**: Favorable - Ahorro accidental.
+
+**Acción**: Generalmente se acepta sin reclamo.
+
+**Ejemplo**: Vehículo categoría 3 (tarifa $12,000) cobrado como categoría 1 ($5,000).
+</Tab>
+</Tabs>
+
+## Proceso de Validación
+
+### Flujo Automático
+
+<Steps>
+<Step title="Importación de Cargos">
+Los cargos se importan desde archivos CSV proporcionados por las concesionarias de peajes.
+
+**Formato típico**: Fecha, Tag, Estación, Monto, Tipo
+
+**Frecuencia**: Diaria o semanal según la concesionaria.
+</Step>
+
+<Step title="Sincronización GPS">
+El sistema obtiene datos de telemetría desde la API de ERM Karma.
+
+**Datos obtenidos**: Posición, velocidad, timestamp, odómetro
+
+**Ventana de tiempo**: ±2 horas alrededor de cada cargo para asegurar cobertura.
+</Step>
+
+<Step title="Ejecución de Validaciones">
+Se ejecutan automáticamente las 4 validaciones principales:
+
+1. **Validación GPS**: Confirma presencia del vehículo
+2. **Detección de Duplicados**: Identifica cargos repetidos
+3. **Validación de Categoría**: Verifica montos correctos
+4. **Verificación de Tags**: Confirma estado activo
+
+<Warning>
+Este proceso puede tomar varios minutos dependiendo del volumen de datos.
+</Warning>
+</Step>
+
+<Step title="Generación de Resultados">
+Cada cargo recibe:
+- Estado de validación para cada tipo
+- Detalles explicativos
+- Recomendaciones de acción
+- Evidencia GPS cuando está disponible
+
+<Check>
+Los resultados se almacenan permanentemente para auditoría.
+</Check>
+</Step>
+</Steps>
+
+### Revisión Manual
+
+Después de la validación automática, los operadores pueden:
+
+<AccordionGroup>
+<Accordion title="Revisar Casos Sospechosos">
+**Criterios de prioridad**:
+- Cargos con validación GPS fallida
+- Duplicados detectados
+- Cobros excesivos (categoría incorrecta)
+- Tags inhabilitados
+
+**Herramientas disponibles**:
+- Mapa GPS con ruta del vehículo
+- Historial de cargos del tag
+- Comparación con cargos similares
+</Accordion>
+
+<Accordion title="Aprobar o Rechazar">
+**Opciones de decisión**:
+- **Válido**: Confirmar que el cargo es legítimo
+- **Ubicación Inválida**: Rechazar por evidencia GPS
+- **Sin Telemetría**: Aceptar por falta de datos
+
+**Documentación**: Cada decisión debe incluir comentarios explicativos.
+</Accordion>
+
+<Accordion title="Generar Reportes">
+**Tipos de reportes**:
+- Resumen ejecutivo de validaciones
+- Detalle de fraudes detectados
+- Análisis de ahorros generados
+- Exportación a Excel con todos los datos
+
+**Periodicidad**: Diario, semanal, mensual según necesidades.
+</Accordion>
+</AccordionGroup>
+
+## Roles y Permisos
+
+### Tipos de Usuario
+
+<Tabs>
+<Tab title="OrgAdmin">
+**Administrador de Organización**
+
+**Permisos completos**:
+- Gestionar usuarios y roles
+- Configurar integraciones API
+- Acceso a todos los módulos
+- Generar cualquier reporte
+- Modificar configuraciones del sistema
+
+**Responsabilidades**: Configuración inicial, gestión de equipo, supervisión general.
+</Tab>
+
+<Tab title="Analyst">
+**Analista de Validaciones**
+
+**Permisos operativos**:
+- Ejecutar validaciones
+- Revisar casos sospechosos
+- Aprobar/rechazar cargos
+- Generar reportes operativos
+- Ver dashboards analíticos
+
+**Responsabilidades**: Validación diaria, análisis de fraudes, reportes de gestión.
+</Tab>
+
+<Tab title="Dispatcher">
+**Despachador de Flota**
+
+**Permisos limitados**:
+- Ver información de vehículos
+- Consultar cargos de peajes
+- Generar reportes básicos
+- Gestionar asignaciones de tags
+
+**Responsabilidades**: Operación diaria de flota, asignación de tags.
+</Tab>
+
+<Tab title="ReadOnly">
+**Solo Lectura**
+
+**Permisos mínimos**:
+- Ver dashboards
+- Consultar reportes generados
+- Acceso a información histórica
+- Sin capacidad de modificación
+
+**Responsabilidades**: Supervisión, auditoría, consulta de información.
+</Tab>
+</Tabs>
+
+## Configuraciones Importantes
+
+### Parámetros de Validación
+
+<ParamField body="time_window_minutes" type="integer" default="1">
+Ventana de tiempo para validación GPS. Rango recomendado: 1-5 minutos.
+</ParamField>
+
+<ParamField body="distance_meters" type="integer" default="500">
+Radio máximo de distancia para considerar válida la ubicación. Rango: 100-1000 metros.
+</ParamField>
+
+<ParamField body="duplicate_time_threshold" type="integer" default="10">
+Tiempo máximo entre cargos para considerar duplicado. Rango: 5-30 minutos.
+</ParamField>
+
+### Integración con ERM Karma
+
+<Note>
+La integración con ERM Karma API es fundamental para obtener datos GPS. Requiere credenciales válidas y configuración correcta de la URL del servidor.
+</Note>
+
+**Configuración requerida**:
+- URL del servidor Karma
+- Usuario y contraseña
+- Sincronización automática habilitada
+- Respaldo de datos GPS local
+
+## Próximos Pasos
+
+Una vez que comprendas estos conceptos básicos, puedes continuar con:
+
+<CardGroup cols={2}>
+<Card title="Modelos de Datos" icon="database" href="/modelos-datos">
+Estructura detallada de cada entidad del sistema
+</Card>
+<Card title="Sistema de Validación" icon="shield" href="/validacion-sistema">
+Funcionamiento interno de cada tipo de validación
+</Card>
+</CardGroup> 
