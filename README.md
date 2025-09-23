@@ -1,43 +1,32 @@
-# Mintlify Starter Kit
+# Documentación Paso Rápido
 
-Use the starter kit to get your docs deployed and ready to customize.
+Sistema inteligente de validación y gestión de consumos de peajes con telemetría GPS.
 
-Click the green **Use this template** button at the top of this repo to copy the Mintlify starter kit. The starter kit contains examples with
+## Acerca del Sistema
 
-- Guide pages
-- Navigation
-- Customizations
-- API reference pages
-- Use of popular components
+Paso Rápido es una solución integral que permite a empresas con flotas de vehículos validar automáticamente los cargos de peajes contra datos reales de ubicación GPS proporcionados por ERM Telematics.
 
-**[Follow the full quickstart guide](https://starter.mintlify.com/quickstart)**
+## Características Principales
 
-## Development
+- **Validación Automática GPS**: Verifica la ubicación del vehículo al momento del cobro
+- **Detección de Duplicados**: Identifica cargos duplicados por tag y estación  
+- **Validación de Categoría**: Compara montos cobrados vs. esperados
+- **Gestión de Tags**: Control de estado y asignaciones de tags
+- **Reportes Ejecutivos**: Análisis detallados con exportación a Excel
 
-Install the [Mintlify CLI](https://www.npmjs.com/package/mint) to preview your documentation changes locally. To install, use the following command:
+## Estructura de la Documentación
 
-```
-npm i -g mint
-```
+- **Introducción**: Conceptos básicos y modelos de datos
+- **Sistema de Validación**: Funcionamiento interno de las validaciones
+- **Guías de Usuario**: Instrucciones paso a paso para operadores
+- **Flujos de Trabajo**: Procesos completos del sistema
 
-Run the following command at the root of your documentation, where your `docs.json` is located:
+## Soporte Técnico
 
-```
-mint dev
-```
+Para consultas técnicas o solicitudes de implementación:
+- Email: soporte@pasorapido.com
+- Portal: [United Petroleum](https://unitedpetroleum.com.do)
 
-View your local preview at `http://localhost:3000`.
+---
 
-## Publishing changes
-
-Install our GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app) to propagate changes from your repo to your deployment. Changes are deployed to production automatically after pushing to the default branch.
-
-## Need help?
-
-### Troubleshooting
-
-- If your dev environment isn't running: Run `mint update` to ensure you have the most recent version of the CLI.
-- If a page loads as a 404: Make sure you are running in a folder with a valid `docs.json`.
-
-### Resources
-- [Mintlify documentation](https://mintlify.com/docs)
+*Desarrollado con tecnología ERM Telematics para United Petroleum* 
