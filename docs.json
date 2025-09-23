@@ -3,9 +3,9 @@
   "theme": "mint",
   "name": "Paso Rápido - Sistema de Validación de Peajes",
   "colors": {
-    "primary": "#1E40AF",
-    "light": "#3B82F6",
-    "dark": "#1E3A8A"
+    "primary": "#00a3e0",
+    "light": "#63ccee",
+    "dark": "#0082b3"
   },
   "favicon": "/favicon.png",
   "navigation": {
@@ -63,5 +63,8 @@
   },
   "footerSocials": {
     "website": "https://unitedpetroleum.com.do"
+  },
+  "search": {
+    "prompt": "Buscar en la documentación..."
   }
 }
