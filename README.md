@@ -27,7 +27,8 @@ Esta herramienta permite validar automáticamente los consumos de peajes exporta
 ## Soporte Técnico
 
 Para consultas técnicas o solicitudes de implementación:
-- Email: soporte@pasorapido.com
+- Email: sfuentes@solidarityagents.com
+- Aplicación: [United Petroleum App](https://unitedpetroleum.app)
 - Portal: [United Petroleum](https://unitedpetroleum.com.do)
 
 ---

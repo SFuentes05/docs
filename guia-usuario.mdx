@@ -105,6 +105,11 @@ El dashboard te proporciona una visión general del estado de tus consumos:
 2. La tabla principal muestra todos los cargos de peaje
 3. Cada fila representa un cargo individual con información básica
 
+<img
+  src="/images/charges.png"
+  alt="Vista principal de consumos de peaje"
+/>
+
 **Columnas principales**:
 - **ID**: Identificador único del cargo
 - **Fecha**: Momento del cargo
@@ -117,6 +122,11 @@ El dashboard te proporciona una visión general del estado de tus consumos:
 
 <Step title="Usar Filtros Avanzados">
 Haz clic en "Filtros" para acceder a opciones avanzadas:
+
+<img
+  src="/images/charges_filter.png"
+  alt="Panel de filtros avanzados"
+/>
 
 **Filtros generales**:
 - **Rango de fechas**: Selecciona período específico
@@ -162,6 +172,11 @@ La búsqueda es inteligente y funciona con coincidencias parciales.
    - **Validación GPS**: Mapas de ubicación
    - **Otras validaciones**: Duplicados, categoría, tag
    - **Historial**: Cambios y comentarios
+
+<img
+  src="/images/charge_detail.png"
+  alt="Vista detallada de un cargo de peaje con validaciones"
+/>
 
 **Mapas GPS disponibles**:
 - **Mapa del peaje**: Ubicación de la estación
@@ -276,6 +291,11 @@ Las importaciones grandes pueden tomar varios minutos. El sistema te notificará
 2. Selecciona el rango de fechas a validar
 3. Opcional: filtra por vehículos específicos
 4. Haz clic en "Iniciar Validación"
+
+<img
+  src="/images/validate charges.png"
+  alt="Panel de validación de consumos"
+/>
 
 **Parámetros configurables**:
 - **Ventana de tiempo GPS**: ±1 a ±5 minutos
@@ -479,6 +499,11 @@ Los cambios de asignación pueden tomar hasta 1 hora en reflejarse en las valida
 3. Haz clic en "Exportar"
 4. El archivo se descarga automáticamente
 
+<img
+  src="/images/excel_consumos.png"
+  alt="Hoja de consumos detallados en Excel"
+/>
+
 **Contenido incluido**:
 - Todos los cargos con filtros aplicados
 - Estados de validación detallados
@@ -499,6 +524,11 @@ Los reportes grandes pueden tomar varios minutos en generarse.
 - Tendencias y patrones identificados
 - Recomendaciones de acción
 
+<img
+  src="/images/excel_1.png"
+  alt="Resumen ejecutivo en Excel"
+/>
+
 **Frecuencia recomendada**:
 - **Diario**: Para operadores y analistas
 - **Semanal**: Para jefes de área
@@ -518,6 +548,23 @@ Los reportes grandes pueden tomar varios minutos en generarse.
 - Impacto financiero estimado
 - Evidencia GPS disponible
 - Recomendaciones de investigación
+
+<CardGroup cols={3}>
+<Card title="Hoja de Vehículos" icon="truck">
+<img src="/images/excel_vehicles.png" alt="Hoja de vehículos en Excel" />
+Información completa de la flota con detalles técnicos y asignaciones.
+</Card>
+
+<Card title="Hoja de Tags" icon="credit-card">
+<img src="/images/excel_tags.png" alt="Hoja de asignaciones de tags" />
+Asignaciones históricas de tags con períodos de vigencia y categorías.
+</Card>
+
+<Card title="Hoja de Estaciones" icon="map-pin">
+<img src="/images/excel_estaciones.png" alt="Hoja de estaciones de peaje" />
+Catálogo de estaciones con ubicaciones GPS y tarifas por categoría.
+</Card>
+</CardGroup>
 
 **Casos incluidos**:
 - Tags inhabilitados con cargos

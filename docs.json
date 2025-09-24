@@ -46,12 +46,12 @@
       "anchors": [
         {
           "anchor": "Soporte Técnico",
-          "href": "mailto:soporte@pasorapido.com",
+          "href": "mailto:sfuentes@solidarityagents.com",
           "icon": "envelope"
         },
         {
-          "anchor": "Portal de Usuario",
-          "href": "https://pasorapido.com/dashboard",
+          "anchor": "Ir a la aplicación",
+          "href": "https://unitedpetroleum.app",
           "icon": "gauge-high"
         }
       ]
