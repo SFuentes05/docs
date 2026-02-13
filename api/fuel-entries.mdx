@@ -1,0 +1,324 @@
+---
+title: "Fuel Entries API"
+description: "Create, read, update, and delete fuel entry records programmatically"
+---
+
+# Fuel Entries API
+
+The Fuel Entries API allows you to manage fuel transaction records for your fleet. This includes creating new fuel entries, retrieving existing records, updating transactions, and deleting entries.
+
+## Endpoints
+
+### Create Fuel Entry (Standard)
+
+```http
+POST /api/fuel-entries
+```
+
+Creates a new fuel entry record using authenticated user credentials.
+
+<Warning>
+This endpoint requires user authentication via Supabase session. For external system integration (like Topkat), use the [Topkat-specific endpoint](#create-fuel-entry-topkat-integration) instead.
+</Warning>
+
+---
+
+### Create Fuel Entry (Topkat Integration)
+
+```http
+POST /api/fuel-entries/topkat
+```
+
+Specialized endpoint for Topkat server integration with smart matching for vehicles and products.
+
+#### Authentication
+
+Include your API key in the request header:
+
+```bash
+X-API-Key: your_api_key_here
+```
+
+<Note>
+Generate your API key in the **Settings** page of your dashboard.
+</Note>
+
+#### Request Body
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `license_plate` | string | ✅ Yes | Vehicle license plate for automatic matching |
+| `quantity` | number | ✅ Yes | Fuel quantity in gallons (decimal) |
+| `ppv` | number | ✅ Yes | Price per volume (price per gallon) |
+| `id` | string/number | ✅ Yes | External transaction ID (Topkat transaction ID) |
+| `timestamp` | string | ✅ Yes | Transaction timestamp in ISO 8601 format |
+| `stn_id` | string | No | Station/vendor UUID from your database |
+| `product_name` | string | No | Product name (defaults to "Diesel") |
+| `odometer` | number | No | Odometer reading from Topkat system |
+| `driver_name` | string | No | Driver name (defaults to "Desconocido") |
+
+#### Timestamp Format
+
+The `timestamp` field must be in **ISO 8601 format** with timezone information:
+
+```
+YYYY-MM-DDTHH:MM:SS±HH:MM
+```
+
+**Examples:**
+- `2026-01-28T11:38:00-04:00` (Santo Domingo time, UTC-4)
+- `2026-01-28T15:38:00Z` (UTC time)
+- `2026-01-28T11:38:00.000-04:00` (with milliseconds)
+
+<Tip>
+For Santo Domingo timezone (UTC-4), append `-04:00` to your timestamp or send in UTC by adding 4 hours to the local time.
+</Tip>
+
+#### Smart Matching Logic
+
+The API automatically matches data to your existing database:
+
+1. **Vehicle Matching**
+   - Matches `license_plate` to vehicles in your database
+   - If matched: Uses vehicle's `car_id`, `car_number`, and `car_title`
+   - If not matched: Saves `license_plate` as both `vehicle_car_number` and `vehicle_name`
+
+2. **Product Matching**
+   - Matches `product_name` (case-insensitive) to active products in your org
+   - If matched: Uses existing product details
+   - If not matched: Creates entry with provided name as "Diesel Premium"
+
+3. **Odometer Handling**
+   - **PRIMARY odometer**: Always uses the odometer value sent via API (Topkat odometer)
+   - **GPS odometer**: Saved separately in `gps_odometer_reading` for reference and validation
+   - **Discrepancy tracking**: Both values are displayed in the UI with the difference highlighted
+   - **Use case**: Allows comparison between physical odometer readings and GPS telemetry
+
+4. **Source Tracking**
+   - All Topkat entries are marked with `source: "API"`
+   - The Topkat transaction ID is stored in `reference_id`
+
+#### Example Request
+
+```bash
+curl -X POST https://unitedpetroleum.app/api/fuel-entries/topkat \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: your_api_key_here" \
+  -d '{
+    "license_plate": "A123456",
+    "stn_id": "0ec19dd0-6803-4fb8-9df2-6998899474c7",
+    "product_name": "Diesel",
+    "timestamp": "2026-01-28T11:38:00-04:00",
+    "quantity": 25.5,
+    "ppv": 224.8,
+    "id": "TKT-2026-001",
+    "odometer": 45678.5,
+    "driver_name": "Juan Pérez"
+  }'
+```
+
+#### Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "org_id": "d87f7281-ea19-45cd-b6fd-d8eb9e310da1",
+    "source": "API",
+    "reference_id": "TKT-2026-001",
+    "transaction_date": "2026-01-28T15:38:00.000Z",
+    "vehicle_id": 15804,
+    "vehicle_car_number": "L51 / L458636",
+    "vehicle_name": "L51",
+    "driver_name": "Juan Pérez",
+    "product_id": "f788c39d-02c8-4bd6-aa1a-fa2af011b5a3",
+    "product_name": "Diesel",
+    "product_type": "Premium",
+    "vendor_id": "0ec19dd0-6803-4fb8-9df2-6998899474c7",
+    "vendor_name": "Terminal Grupo Haina - United Petroleum",
+    "gallons": 25.5,
+    "price_per_gallon": 224.8,
+    "total_cost": 5732.4,
+    "odometer_reading": 136563.076,
+    "created_at": "2026-01-28T15:38:15.123Z"
+  },
+  "matched": {
+    "vehicle": true,
+    "product": true
+  },
+  "gps_data": {
+    "trip_id": 49365680,
+    "message_id": 6295825376,
+    "has_gps_tracking": true,
+    "gps_odometer": 930763.449,
+    "topkat_odometer": 138362,
+    "odometer_difference": 792401.449
+  }
+}
+```
+
+**Response Details:**
+- `matched.vehicle`: Whether the license plate was found in your database
+- `matched.product`: Whether the product name was matched to an existing product
+- `gps_data.has_gps_tracking`: Whether GPS trip and message data was found
+- `gps_data.gps_odometer`: GPS odometer reading (if available)
+- `gps_data.topkat_odometer`: Topkat odometer reading (used as primary)
+- `gps_data.odometer_difference`: Absolute difference between the two odometer readings
+
+#### Error Responses
+
+**400 Bad Request** - Missing required fields
+```json
+{
+  "error": "Missing required fields",
+  "required": ["license_plate", "quantity", "ppv", "id", "timestamp"],
+  "received": ["license_plate", "quantity", "ppv"]
+}
+```
+
+**401 Unauthorized** - Invalid or missing API key
+```json
+{
+  "error": "Invalid API key"
+}
+```
+
+**500 Internal Server Error**
+```json
+{
+  "error": "Failed to create fuel entry",
+  "details": "Error message here"
+}
+```
+
+---
+
+### Get Fuel Entries
+
+```http
+GET /api/fuel-entries?orgId={org_id}
+```
+
+Retrieves fuel entries for your organization.
+
+#### Query Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `orgId` | string | ✅ Yes | Organization UUID |
+| `vehicleCarNumber` | string | No | Filter by vehicle number |
+| `startDate` | string | No | Start date (ISO 8601) |
+| `endDate` | string | No | End date (ISO 8601) |
+| `limit` | number | No | Maximum number of results |
+
+#### Example Request
+
+```bash
+curl -X GET "https://unitedpetroleum.app/api/fuel-entries?orgId=d87f7281-ea19-45cd-b6fd-d8eb9e310da1&limit=10"
+```
+
+#### Example Response
+
+```json
+[
+  {
+    "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "org_id": "d87f7281-ea19-45cd-b6fd-d8eb9e310da1",
+    "source": "API",
+    "reference_id": "TKT-2026-001",
+    "transaction_date": "2026-01-28T15:38:00.000Z",
+    "vehicle_car_number": "L51 / L458636",
+    "vehicle_name": "L51",
+    "driver_name": "Juan Pérez",
+    "product_name": "Diesel",
+    "product_type": "Premium",
+    "gallons": 25.5,
+    "price_per_gallon": 224.8,
+    "total_cost": 5732.4,
+    "odometer_reading": 136563.076,
+    "created_at": "2026-01-28T15:38:15.123Z"
+  }
+]
+```
+
+---
+
+### Update Fuel Entry
+
+```http
+PATCH /api/fuel-entries
+```
+
+Updates an existing fuel entry. Limited fields can be updated to preserve historical data integrity.
+
+<Warning>
+Requires **OrgAdmin** or **SuperAdmin** role.
+</Warning>
+
+#### Request Body
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | string | ✅ Yes | Fuel entry UUID |
+| `org_id` | string | ✅ Yes | Organization UUID |
+| `transaction_date` | string | No | Updated transaction date |
+| `transaction_id` | string | No | Updated transaction ID |
+| `notes` | string | No | Updated notes |
+| `gallons` | number | No | Updated gallons |
+| `price_per_gallon` | number | No | Updated price per gallon |
+| `odometer_reading` | number | No | Updated odometer reading |
+
+---
+
+### Delete Fuel Entry
+
+```http
+DELETE /api/fuel-entries?id={entry_id}&orgId={org_id}
+```
+
+Deletes a fuel entry.
+
+<Warning>
+Requires **OrgAdmin** or **SuperAdmin** role. This is a permanent deletion.
+</Warning>
+
+#### Query Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `id` | string | ✅ Yes | Fuel entry UUID |
+| `orgId` | string | ✅ Yes | Organization UUID |
+
+---
+
+## Best Practices
+
+### Idempotency
+
+To prevent duplicate entries when retrying failed requests:
+- Use unique `reference_id` values for each transaction
+- The system will reject entries with duplicate `reference_id` values for the same organization
+
+### Error Handling
+
+- Always check the HTTP status code
+- Parse the `error` field in the response for details
+- Implement exponential backoff for retries on 500 errors
+- Do not retry on 400 or 401 errors without fixing the request
+
+### Testing
+
+Test your integration with the following scenarios:
+1. **Matched vehicle**: Use a license plate that exists in your database
+2. **Unmatched vehicle**: Use a license plate that doesn't exist
+3. **With/without GPS data**: Test odometer logic with different timestamps
+4. **Different timezones**: Ensure timestamps are correctly formatted
+
+---
+
+## Support
+
+For API support or questions:
+- **Email**: sfuentes@solidarityagents.com
+- **Dashboard**: [United Logistics Settings](https://unitedpetroleum.app/settings)

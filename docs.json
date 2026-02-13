@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Sistema de Validación de Consumos Paso Rápido",
+  "name": "United Logistics | API",
   "colors": {
     "primary": "#00a3e0",
     "light": "#63ccee",
@@ -11,32 +11,64 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Documentación",
+        "tab": "API Documentation",
         "groups": [
           {
-            "group": "Introducción",
+            "group": "Getting Started",
             "pages": [
               "index"
             ]
           },
           {
-            "group": "Conceptos Fundamentales",
+            "group": "API Reference",
             "pages": [
-              "conceptos-basicos",
-              "modelos-datos"
+              "api/fuel-entries"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Paso Rápido",
+        "groups": [
+          {
+            "group": "Introducción",
+            "pages": [
+              "paso-rapido/index"
             ]
           },
           {
-            "group": "Sistema de Validación",
+            "group": "Conceptos Básicos",
             "pages": [
-              "validacion-sistema"
+              "paso-rapido/conceptos-fundamentales"
             ]
           },
           {
-            "group": "Guías de Usuario",
+            "group": "Gestión de Datos",
             "pages": [
-              "guia-usuario",
-              "flujos-trabajo"
+              "paso-rapido/gestion-tags",
+              "paso-rapido/gestion-consumos",
+              "paso-rapido/importacion"
+            ]
+          },
+          {
+            "group": "Sistema de Validaciones",
+            "pages": [
+              "paso-rapido/validaciones",
+              "paso-rapido/interpretacion-resultados"
+            ]
+          },
+          {
+            "group": "Herramientas de Análisis",
+            "pages": [
+              "paso-rapido/filtros-busqueda",
+              "paso-rapido/reporte-pdf",
+              "paso-rapido/exportacion"
+            ]
+          },
+          {
+            "group": "Gestión de Reclamos",
+            "pages": [
+              "paso-rapido/reclamos"
             ]
           }
         ]
@@ -62,7 +94,7 @@
     "dark": "/logo/united-petroleum-logo.png"
   },
   "footerSocials": {
-    "website": "https://unitedpetroleum.com.do"
+    "website": "https://unitedlogistics.com.do"
   },
   "search": {
     "prompt": "Buscar en la documentación..."

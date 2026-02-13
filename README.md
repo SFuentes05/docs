@@ -1,14 +1,14 @@
-# Sistema de Validación de Consumos Paso Rápido
+# United Logistics | App
 
-Herramienta de validación de consumos de peajes exportados desde la aplicación oficial Paso Rápido del gobierno dominicano.
+Herramienta de validación de consumos de peajes exportados desde la aplicación oficial United Logistics.
 
 ## Acerca del Sistema
 
-Esta herramienta permite validar automáticamente los consumos de peajes exportados desde la aplicación Paso Rápido del gobierno dominicano, cruzándolos con datos de telemetría GPS de vehículos registrados en ERM Telematics.
+Esta herramienta permite validar automáticamente los consumos de peajes exportados desde la aplicación United Logistics, cruzándolos con datos de telemetría GPS de vehículos registrados en ERM Telematics.
 
 ## Características Principales
 
-- **Importación de CSV**: Procesa archivos exportados desde la app oficial Paso Rápido
+- **Importación de CSV**: Procesa archivos exportados desde la app oficial United Logistics
 - **Integración ERM Telematics**: Conecta con datos de vehículos, proyectos, eventos y viajes
 - **Validación GPS**: Verifica ubicación del vehículo contra telemetría ERM al momento del cobro
 - **Detección de Anomalías**: Identifica duplicados, sobrecargos y tags inhabilitados
@@ -28,9 +28,9 @@ Esta herramienta permite validar automáticamente los consumos de peajes exporta
 
 Para consultas técnicas o solicitudes de implementación:
 - Email: sfuentes@solidarityagents.com
-- Aplicación: [United Petroleum App](https://unitedpetroleum.app)
-- Portal: [United Petroleum](https://unitedpetroleum.com.do)
+- Aplicación: [United Logistics App](https://unitedlogistics.app)
+- Portal: [United Logistics](https://unitedlogistics.com.do)
 
 ---
 
-*Módulo de validación desarrollado para integrar Paso Rápido (Gobierno Dominicano) con ERM Telematics* 
+*Módulo de validación desarrollado para integrar United Logistics con ERM Telematics* 

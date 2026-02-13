@@ -1,0 +1,627 @@
+---
+title: "Filtros y Búsqueda"
+description: "Domine las herramientas de filtrado y búsqueda para encontrar rápidamente la información que necesita"
+---
+
+# Filtros y Búsqueda
+
+El módulo Paso Rápido maneja miles de consumos mensu human. Las herramientas de filtrado y búsqueda son esenciales para trabajar eficientemente. Esta sección explica cómo usar todas las opciones disponibles para encontrar exactamente lo que necesita.
+
+## Barra de Búsqueda Rápida
+
+La forma más directa de encontrar información específica.
+
+### Ubicación
+
+En la parte superior de la página de Consumos, encontrará una barra de búsqueda con el icono de lupa 🔍.
+
+### Campos Buscables
+
+La búsqueda funciona en múltiples campos simultáneamente:
+
+- **ID del cargo**: Busque por número exacto o parcial
+- **Número de tag**: Encuentre todos los consumos de un tag específico
+- **Estación de peaje**: Busque por nombre de la caseta
+- **Vehículo**: Número de unidad o nombre
+- **Placa**: Número de matrícula
+- **Propietario/Fleet**: Nombre de cuenta o departamento
+
+### Cómo Usar
+
+1. Haga clic en la barra de búsqueda
+2. Escriba cualquier parte de lo que busca
+3. El sistema filtra en **tiempo real** mientras escribe
+4. No necesita presionar Enter
+
+**Ejemplos**:
+```
+Buscar: "123"
+Encuentra: Tags 123, 1234, 12345, 51234, etc.
+
+Buscar: "Las Américas"
+Encuentra: Todos los consumos en esa estación
+
+Buscar: "L-234"
+Encuentra: Consumos del vehículo L-234
+
+Buscar: "45678"
+Encuentra: El cargo con ID 45678
+```
+
+<Tip>
+La búsqueda no distingue entre mayúsculas y minúsculas. "las americas", "Las Américas" y "LAS AMERICAS" producen el mismo resultado.
+</Tip>
+
+## Panel de Filtros Avanzados
+
+Para búsquedas más específicas y complejas, use el sistema de filtros avanzados.
+
+### Acceso
+
+Haga clic en el botón **Filtros** (icono de embudo 🔽) en la barra superior.
+
+Se abrirá un panel lateral con todas las opciones de filtrado.
+
+<img src="/images/charges_filter.png" alt="Panel de filtros avanzados" />
+
+## Filtro por Rango de Fechas
+
+El filtro más usado, permite definir el período de análisis.
+
+### Selector de Fechas
+
+**Opciones rápidas**:
+- Hoy
+- Ayer
+- Últimos 7 días
+- Últimos 30 días
+- Este mes
+- Mes anterior
+- Personalizado
+
+**Rango personalizado**:
+1. Haga clic en el selector de fechas
+2. Se abre un calendario
+3. Seleccione **fecha inicial** (clic en el día)
+4. Seleccione **fecha final** (clic en el día)
+5. Haga clic en **Aplicar**
+
+**Comportamiento**:
+- La fecha inicial incluye desde las 00:00:00 de ese día
+- La fecha final incluye hasta las 23:59:59 de ese día
+- El rango es inclusivo en ambos extremos
+
+**Ejemplo**:
+```
+Filtro: 01/02/2026 - 15/02/2026
+Incluye: Todos los consumos desde 01/02/2026 00:00:00 
+         hasta 15/02/2026 23:59:59
+```
+
+<Note>
+Al abrir la página, el sistema carga por defecto los **últimos 30 días**. Ajuste este rango según sus necesidades para mejorar el rendimiento.
+</Note>
+
+## Filtro por Propietario/Fleet
+
+Filtre consumos por cuenta corporativa o departamento.
+
+### Cómo Funcionar
+
+1. Haga clic en el menú desplegable **Propietarios**
+2. Verá una lista de todos los propietarios únicos en sus datos
+3. Seleccione uno o más (checkbox)
+4. Use el botón "Seleccionar todos" para incluir todos
+
+**Barra de búsqueda interna**:
+- Si la lista es larga, use la barra de búsqueda dentro del menú
+- Filtra opciones en tiempo real
+
+**Contadores**:
+- Cada opción muestra cuántos consumos tiene
+- Ejemplo: "TRANSPORTE (1,234)" = 1,234 consumos
+
+### Casos de Uso
+
+**Análisis departamental**:
+```
+Seleccionar: TRANSPORTE
+Ver: Solo consumos de ese departamento
+```
+
+**Comparación entre departamentos**:
+```
+Seleccionar: TRANSPORTE + LOGÍSTICA
+Ver: Consumos de ambos combinados
+```
+
+**Excluir departamento específico**:
+```
+Seleccionar: "Seleccionar todos"
+Deseleccionar: ADMINISTRATIVO
+Ver: Todos excepto administrativos
+```
+
+## Filtro por Vehículos
+
+Enfoque el análisis en vehículos específicos.
+
+### Selección de Vehículos
+
+**Interfaz similar a propietarios**:
+1. Menú desplegable con lista de vehículos
+2. Búsqueda interna para encontrar rápido
+3. Selección múltiple mediante checkboxes
+4. Contador de consumos por vehículo
+
+**Formato de vehículos**:
+- Con GPS: "L-234 (Camión L-234)" + placa
+- Sin GPS: Nombre ingresado manualmente
+
+### Casos de Uso
+
+**Auditoría de vehículo específico**:
+```
+Situación: Investigar consumos sospechosos
+Acción: Filtrar solo ese vehículo
+Beneficio: Ver todos sus cargos en contexto
+```
+
+**Comparación de costos**:
+```
+Seleccionar: Múltiples vehículos similares
+Análisis: Comparar patrones de consumo
+```
+
+**Vehículos de alto consumo**:
+```
+Ordenar por contador (mayor a menor)
+Seleccionar: Top 10 vehículos
+Análisis: Enfoque en los mayores gastadores
+```
+
+## Filtro por Estaciones de Peaje
+
+Analice consumos por ubicación geográfica.
+
+### Selección de Estaciones
+
+**Misma interfaz de selección múltiple**:
+- Lista de todas las estaciones con actividad
+- Búsqueda interna
+- Checkboxes para selección múltiple
+- Contadores por estación
+
+**Estaciones típicas**:
+- Las Américas
+- Juan Pablo II
+- San Cristóbal
+- Duarte
+- Autopista del Coral
+- Y otras según región
+
+### Casos de Uso
+
+**Análisis de ruta**:
+```
+Situación: Vehículos hacen ruta fija
+Seleccionar: Estaciones en esa ruta
+Ver: Frecuencia y patrones
+```
+
+**Problemas por estación**:
+```
+Situación: Muchos duplicados detectados
+Filtrar por: Estación específica
+Análisis: ¿Es problema localizado?
+```
+
+**Validación de territorio**:
+```
+Seleccionar: Estaciones en región norte
+Ver: Vehículos que operan en esa zona
+```
+
+## Filtro por Tags
+
+Análisis centrado en tags específicos.
+
+### Selección de Tags
+
+**Formato numérico con formato**:
+- Tags mostrados con 6 dígitos (000123)
+- Búsqueda funciona con o sin ceros
+- Contador de consumos por tag
+
+### Casos de Uso
+
+**Investigación de tag problemático**:
+```
+Situación: Tag reportado perdido
+Filtrar: Solo ese tag
+Ver: Consumos después de reporte
+```
+
+**Comparación de tags**:
+```
+Seleccionar: Múltiples tags del mismo tipo
+Análisis: Patrones similares o anomalías
+```
+
+**Tags de alto uso**:
+```
+Ordenar por contador
+Seleccionar: Tags con más consumos
+Análisis: Identificar uso intensivo
+```
+
+## Filtros por Estado de Validación
+
+Enfoque en consumos según resultados de validaciones.
+
+### Filtro de Validación GPS
+
+**Opciones**:
+- ☑️ VÁLIDO
+- ☑️ UBICACIÓN_INVÁLIDA
+- ☑️ UBICACIÓN_IMPRECISA
+- ☑️ SIN_TELEMETRÍA
+- ☑️ Sin validar
+
+**Uso típico**:
+```
+Seleccionar: UBICACIÓN_INVÁLIDA
+Resultado: Solo consumos con GPS contradictorio
+Acción: Revisar para posibles reclamos
+```
+
+### Filtro de Duplicados
+
+**Opciones**:
+- ☑️ Es duplicado
+- ☑️ No es duplicado
+- ☑️ Sin validar
+
+**Uso típico**:
+```
+Seleccionar: Es duplicado
+Resultado: Solo cargos identificados como duplicados
+Acción: Preparar reclamo por duplicados
+```
+
+### Filtro de Categoría
+
+**Opciones**:
+- ☑️ Error de categoría (cualquier error)
+- ☑️ Categoría correcta
+- ☑️ Sin validar
+
+**Uso avanzado**: Combinar con otros filtros
+```
+Filtros: Error de categoría + Estación "Las Américas"
+Resultado: Errores de categoría en esa estación específica
+Análisis: ¿Problema localizado en una caseta?
+```
+
+### Filtro de Estado del Tag
+
+**Opciones**:
+- ☑️ Tag válido en fecha del cargo
+- ☑️ Tag inhabilitado en fecha del cargo
+- ☑️ Sin validar
+
+**Uso crítico**:
+```
+Seleccionar: Tag inhabilitado
+Resultado: MÁXIMA PRIORIDAD para reclamo
+Acción: Documentar y reclamar inmediatamente
+```
+
+## Filtros Combinados (Filtrado Avanzado)
+
+La potencia real viene de combinar múltiples filtros simultáneamente.
+
+### Ejemplos Prácticos
+
+#### Ejemplo 1: Investigación de Sospechas en Vehículo Específico
+
+```
+Objetivo: Revisar todas las irregularidades del Camión L-234
+
+Filtros aplicados:
+✓ Vehículos: L-234
+✓ Validación GPS: UBICACIÓN_INVÁLIDA
+✓ Rango de fechas: Último mes
+
+Resultado: Solo consumos del L-234 con ubicación inválida en febrero
+Acción: Investigar cada caso individualmente
+```
+
+#### Ejemplo 2: Reclamo por Duplicados en Estación Específica
+
+```
+Objetivo: Preparar reclamo de duplicados en Las Américas
+
+Filtros aplicados:
+✓ Estaciones: Las Américas
+✓ Duplicados: Es duplicado
+✓ Rango de fechas: Mes de febrero
+
+Resultado: Todos los duplicados en esa estación ese mes
+Acción: Exportar y crear reclamo formal
+```
+
+#### Ejemplo 3: Análisis de Sobrecargos Departamentales
+
+```
+Objetivo: Cuánto sobrecargo tiene el departamento de Transporte
+
+Filtros aplicados:
+✓ Propietarios: TRANSPORTE
+✓ Validación de categoría: Error de categoría
+✓ Rango de fechas: Primer trimestre 2026
+
+Resultado: Todos los errores de categoría de Transporte
+Análisis: Sumar diferencias para calcular impacto financiero
+```
+
+#### Ejemplo 4: Consumos Sin Validación GPS
+
+```
+Objetivo: Identificar vehículos que necesitan mantenimiento de GPS
+
+Filtros aplicados:
+✓ Validación GPS: SIN_TELEMETRÍA
+✓ Rango de fechas: Últimos 30 días
+✓ Agrupar por: Vehículo
+
+Resultado: Qué vehículos no tienen datos GPS
+Acción: Programar mantenimiento de dispositivos
+```
+
+## Persistencia y Guardado de Filtros
+
+### Comportamiento del Sistema
+
+**Durante la sesión**:
+- Los filtros se mantienen mientras navega
+- Si sale de Consumos y vuelve, los filtros persisten
+- Útil para trabajar con el mismo conjunto de datos
+
+**Entre sesiones**:
+- Al cerrar sesión o navegador, los filtros se reinician
+- Próxima vez que entre, verá configuración por defecto
+
+### Exportar Vista Filtrada
+
+Si necesita guardar permanentemente un conjunto filtrado:
+
+1. Aplique los filtros deseados
+2. Haga clic en **Exportar**
+3. El archivo Excel contendrá SOLO los consumos filtrados
+4. Guarde el archivo con nombre descriptivo
+
+**Ejemplo**:
+```
+Filtros: Vehículo L-234 + Febrero + Sospechas
+Exportar como: "L234_Feb2026_Sospechas.xlsx"
+```
+
+Ahora puede volver a ese análisis abriendo el archivo.
+
+## Limpiar Filtros
+
+### Limpiar Todos
+
+Botón **Limpiar Filtros** en la parte superior del panel:
+- Elimina TODOS los filtros aplicados
+- Vuelve a la vista por defecto (últimos 30 días, sin filtros)
+- Útil para empezar un análisis fresco
+
+### Limpiar Individual
+
+Para remover un filtro específico:
+- Haga clic en la "X" junto al nombre del filtro activo
+- O deseleccione las opciones en el menú desplegable
+- Los demás filtros permanecen activos
+
+**Indicadores de filtros activos**:
+```
+🔽 Filtros (3 activos)
+  ✓ Vehículos: L-234 [X]
+  ✓ Estado GPS: UBICACIÓN_INVÁLIDA [X]
+  ✓ Fechas: 01/02 - 28/02 [X]
+```
+
+## Vista de Dashboard con Filtros
+
+Los filtros NO solo afectan la tabla de consumos, también filtran:
+
+**Dashboard principal**:
+- Tarjetas de métricas (total, sospechas, etc.)
+- Gráficos de evolución
+- Secciones de validación
+
+**Comportamiento**:
+```
+Sin filtros → Dashboard muestra todos los datos
+Con filtros → Dashboard muestra solo datos filtrados
+```
+
+**Ventaja**:
+```
+Aplicar: Filtro por departamento "TRANSPORTE"
+Ver: Dashboard completo solo de ese departamento
+Análisis: Métricas específicas del departamento
+```
+
+<Tip>
+Use esta característica para generar vistas departamentales o por proyecto. Aplique filtros y luego genere el reporte PDF para obtener un análisis segmentado.
+</Tip>
+
+## Ordenamiento de Resultados
+
+Además de filtrar, puede ordenar los resultados.
+
+### Cómo Ordenar
+
+Haga clic en los **encabezados de columna**:
+- Primer clic: Orden ascendente (↑)
+- Segundo clic: Orden descendente (↓)
+- Tercer clic: Vuelve al orden original
+
+### Columnas Ordenables
+
+- **ID**: Numérico (menor a mayor o viceversa)
+- **Fecha**: Cronológico (más antiguo a más reciente o viceversa)
+- **Tag**: Numérico
+- **Estación**: Alfabético
+- **Monto**: Numérico (menor a mayor o viceversa)
+- **Vehículo**: Alfabético
+
+### Casos de Uso
+
+**Encontrar el cargo más alto**:
+```
+Ordenar: Monto (descendente ↓)
+Resultado: Cargo más caro arriba
+```
+
+**Cronología de eventos**:
+```
+Ordenar: Fecha (ascendente ↑)
+Resultado: Consumos en orden temporal
+```
+
+**Agrupar por tag visualmente**:
+```
+Ordenar: Tag (ascendente ↑)
+Resultado: Consumos del mismo tag juntos
+```
+
+## Optimización de Rendimiento
+
+### Consejos para Grandes Volúmenes
+
+Si trabaja con decenas de miles de consumos:
+
+**1. Use rangos de fecha más pequeños**:
+```
+En lugar de: Todo el año (50,000 consumos)
+Use: Mes a mes (4,000-5,000 consumos)
+Beneficio: Carga y filtrado más rápido
+```
+
+**2. Filtre primero lo más restrictivo**:
+```
+Orden recomendado:
+1. Rango de fechas (reduce volumen dramáticamente)
+2. Vehículo o tag específico
+3. Estados de validación
+
+Evite: Aplicar muchos filtros a la vez sobre millones de registros
+```
+
+**3. Use la búsqueda directa para casos específicos**:
+```
+Si busca: Un consumo con ID conocido
+Use: Búsqueda rápida (mucho más rápido que filtros)
+```
+
+## Atajos de Teclado
+
+Para usuarios avanzados, algunos atajos útiles:
+
+- **Ctrl/Cmd + F**: Enfocar barra de búsqueda
+- **Esc**: Cerrar panel de filtros
+- **Tab**: Navegar entre opciones de filtro
+
+## Mejores Prácticas
+
+### 1. Empezar Amplio, Luego Afinar
+
+```
+Proceso recomendado:
+1. Aplicar rango de fechas general
+2. Revisar dashboard para identificar patrones
+3. Aplicar filtros adicionales basados en lo observado
+4. Afinar hasta encontrar lo específico
+```
+
+### 2. Documentar Filtros Importantes
+
+Si descubre una combinación de filtros útil para un análisis recurrente:
+```
+Documento: "Filtros_Revision_Mensual.txt"
+Contenido:
+- Fechas: Mes completo
+- Estado GPS: UBICACIÓN_INVÁLIDA + SIN_TELEMETRÍA
+- Propietarios: TRANSPORTE + LOGÍSTICA
+- Propósito: Revisión mensual de irregularidades
+```
+
+### 3. Verificar Contadores
+
+Antes de exportar o generar reportes:
+```
+Check: "Mostrando X de Y consumos"
+Confirmar: X es el número esperado
+Verificar: No filtró accidentalmente más de lo deseado
+```
+
+### 4. Combinar con Exportación
+
+Flujo efectivo:
+```
+1. Aplicar filtros para aislar problema
+2. Revisar en interfaz
+3. Exportar a Excel
+4. Análisis detallado offline
+5. Compartir con equipo
+```
+
+## Solución de Problemas
+
+### Problema: "No se muestran resultados"
+
+**Verificar**:
+1. ¿Los filtros son demasiado restrictivos?
+2. ¿El rango de fechas incluye datos?
+3. ¿La búsqueda tiene errores tipográficos?
+
+**Solución**: Limpiar todos los filtros y empezar de nuevo
+
+### Problema: "La carga es muy lenta"
+
+**Causa**: Rango de fechas muy amplio o muchos consumos
+
+**Solución**:
+1. Reducir rango de fechas
+2. Aplicar filtros más restrictivos primero
+3. Usar búsqueda directa si busca algo específico
+
+### Problema: "Los filtros no se aplican"
+
+**Causa posible**: Caché del navegador
+
+**Solución**:
+1. Refrescar la página (F5)
+2. Limpiar caché del navegador
+3. Cerrar sesión y volver a entrar
+
+## Resumen
+
+Las herramientas de filtrado y búsqueda son fundamentales para:
+
+- ✅ **Búsqueda rápida**: Encontrar consumos específicos en segundos
+- ✅ **Filtros avanzados**: Análisis segmentado por múltiples criterios
+- ✅ **Combinaciones**: Potencia real en filtros combinados
+- ✅ **Dashboard dinámico**: Métricas actualizadas según filtros
+- ✅ **Exportación selectiva**: Solo lo que necesita
+- ✅ **Optimización**: Trabajar eficientemente con grandes volúmenes
+
+Dominar estas herramientas le permitirá realizar auditorías mucho más rápidas y efectivas.
+
+---
+
+**Próximos pasos**: Continúe con [Interpretación de Resultados](/paso-rapido/interpretacion-resultados) para aprender cómo leer y analizar los datos del dashboard.

@@ -1,0 +1,511 @@
+---
+title: "Gestión de Consumos"
+description: "Aprenda a visualizar, analizar y gestionar los cargos de peaje en el sistema"
+---
+
+# Gestión de Consumos
+
+Los consumos de peaje son el núcleo del sistema de auditoría. Esta sección explica cómo visualizar, analizar y trabajar con los cargos registrados en el sistema.
+
+## Acceso a los Consumos
+
+Para acceder al módulo de gestión de consumos:
+
+1. Inicie sesión en United Logistics Portal
+2. Navegue a **Paso Rápido** en el menú principal
+3. Seleccione **Consumos** en el submenú
+
+<img src="/images/charges.png" alt="Vista principal de consumos de peaje" />
+
+La pantalla principal muestra una tabla con todos los consumos, incluyendo:
+- ID del cargo
+- Fecha y hora
+- Número de tag
+- Estación de peaje
+- Monto cobrado
+- Vehículo asociado
+- Propietario (fleet)
+- Estado de validación
+
+## Entendiendo la Vista de Consumos
+
+### Estructura de la Tabla
+
+La tabla de consumos está diseñada para ofrecer máxima información de forma clara:
+
+| Columna | Descripción | Ejemplo |
+|---------|-------------|---------|
+| **ID** | Identificador único del cargo | 45678 |
+| **Fecha** | Día y hora del paso por peaje | 15/02/2026 10:30 AM |
+| **Tag** | Número del tag que generó el cargo | 123456 |
+| **Estación** | Caseta de peaje donde ocurrió | Las Américas |
+| **Monto** | Cargo aplicado en RD$ | $150.00 |
+| **Vehículo** | Unidad asignada al tag | Camión L-234 |
+| **Placa** | Número de placa del vehículo | L123456 |
+| **Propietario** | Cuenta o departamento | TRANSPORTE |
+| **Estado** | Resultado de las validaciones | Válido / Sospecha |
+
+### Indicadores Visuales
+
+El sistema usa códigos de color para facilitar la identificación rápida:
+
+**Verde** 🟢
+- Consumo validado correctamente
+- Sin irregularidades detectadas
+- GPS confirma presencia
+- Categoría correcta
+- Tag válido en la fecha
+
+**Rojo** 🔴
+- Sospecha de irregularidad
+- Requiere revisión inmediata
+- Posible reclamo
+- Ejemplos: duplicado, tag inhabilitado, ubicación inválida
+
+**Amarillo** 🟡
+- Requiere atención
+- Sin validación GPS completa
+- Ubicación imprecisa
+- Revisión recomendada
+
+**Gris** ⚪
+- Sin validar aún
+- Pendiente de procesamiento
+- No hay datos suficientes
+
+<Note>
+Los colores ayudan a priorizar su trabajo de auditoría. Enfóquese primero en los consumos rojos (sospechas), luego revise los amarillos (atención), y finalmente verifique muestras de los verdes (validados).
+</Note>
+
+## Vista Expandida de Consumos
+
+Para ver los detalles completos de un consumo, haga clic en cualquier fila de la tabla. Se expandirá mostrando información detallada en tres secciones:
+
+<img src="/images/charge_detail.png" alt="Vista detallada de un consumo expandido" />
+
+### Sección 1: Detalles del Cargo
+
+**Información básica**:
+- ID del cargo en el sistema
+- Fecha y hora exacta del paso
+- Número de tag (formateado con ceros a la izquierda)
+- Nombre de la estación de peaje
+- Monto cobrado
+- Tipo de transacción (típicamente "PASE")
+
+**Información del vehículo**:
+- Número de unidad vehicular
+- Nombre o título del vehículo
+- Placa de matrícula
+- Propietario o cuenta asociada
+
+### Sección 2: Validación GPS
+
+<img src="/images/charge_detail_2.png" alt="Detalles de validación GPS" />
+
+Esta sección muestra el resultado del cruce con datos de telemetría:
+
+**Estado de validación GPS**:
+- **VÁLIDO**: El vehículo estuvo cerca del peaje en el momento correcto
+- **UBICACIÓN_INVÁLIDA**: El vehículo estaba lejos del peaje
+- **UBICACIÓN_IMPRECISA**: El vehículo estaba cerca pero fuera del margen ideal
+- **SIN_TELEMETRÍA**: No hay datos GPS disponibles para validar
+
+**Detalles geográficos**:
+- **Ubicación del peaje**: Coordenadas GPS de la estación
+- **Ubicación del vehículo**: Coordenadas GPS del vehículo en el momento más cercano
+- **Distancia**: Metros entre el peaje y la posición del vehículo
+- **Diferencia de tiempo**: Minutos entre el cargo y el registro GPS
+
+**Datos del punto GPS**:
+- **Message ID**: Identificador del registro de telemetría
+- **Fecha GPS**: Timestamp del registro de telemetría
+- **Velocidad**: Velocidad del vehículo en ese momento (km/h)
+- **Trip ID**: Identificador del viaje asociado
+
+<Tip>
+Una diferencia de tiempo menor a 10 minutos y una distancia menor a 500 metros generalmente indican un consumo válido. Márgenes mayores pueden indicar problemas.
+</Tip>
+
+### Sección 3: Otras Validaciones
+
+**Validación de duplicados**:
+- Indica si el cargo es un posible duplicado
+- Si es duplicado, muestra el ID del cargo original
+- Criterio: mismo tag, misma fecha, mismo monto, misma estación
+
+**Validación de categoría**:
+- Compara el monto cobrado vs. el monto esperado
+- **Diferencia de monto**: Sobrecargo o descuento detectado
+- **Monto esperado**: Lo que debió cobrarse según la categoría del tag
+- **Categoría del tag**: Categoría asignada al tag (1-5)
+
+**Validación de estado del tag**:
+- Estado del tag en la fecha del cargo
+- **Válido**: Tag estaba activo (esperado)
+- **Inhabilitado**: Tag estaba desactivado (sospechoso)
+
+**Revisión manual** (si aplica):
+- Estado de revisión por auditoría
+- Comentarios del revisor
+- Fecha de revisión
+
+## Estados de Validación
+
+### Sin Validar
+
+**Descripción**: El consumo aún no ha sido procesado por el sistema de validaciones.
+
+**Características**:
+- Recién importado
+- No hay resultados de validación
+- Color gris o blanco en la interfaz
+
+**Acción recomendada**: Ejecute el proceso de validación (ver [Sistema de Validaciones](/paso-rapido/validaciones))
+
+### Válido
+
+**Descripción**: El consumo pasó todas las validaciones satisfactoriamente.
+
+**Criterios**:
+- ✅ GPS confirma presencia del vehículo
+- ✅ Monto correcto según categoría
+- ✅ Tag estaba válido en la fecha
+- ✅ No es un duplicado
+
+**Acción recomendada**: No requiere acción. Estos consumos se consideran legítimos.
+
+### Sospechas Levantadas
+
+**Descripción**: Se detectó al menos una irregularidad que requiere revisión.
+
+**Tipos de sospechas**:
+
+1. **Cargo Duplicado**
+   - Mismo tag, fecha, monto y estación que otro cargo
+   - Posible doble facturación del operador
+   - **Probabilidad de reclamo**: Alta
+
+2. **Tag Inhabilitado**
+   - El tag estaba desactivado en la fecha del cargo
+   - Posible uso no autorizado o error del sistema
+   - **Probabilidad de reclamo**: Muy alta
+
+3. **Error de Categoría** (cobro mayor)
+   - El monto cobrado excede el precio para la categoría del tag
+   - Sobrecargo injustificado
+   - **Probabilidad de reclamo**: Alta
+
+4. **Ubicación Inválida**
+   - El GPS demuestra que el vehículo NO estaba cerca del peaje
+   - Posible error de lectura o uso fraudulento del tag
+   - **Probabilidad de reclamo**: Media a alta (requiere análisis)
+
+<Warning>
+Los consumos marcados como "Sospecha" deben ser revisados individualmente antes de proceder con reclamos. No todos los consumos sospechosos son reclamables; algunos tienen explicaciones legítimas.
+</Warning>
+
+### Sin Telemetría
+
+**Descripción**: No hay datos GPS disponibles para validar el consumo.
+
+**Razones comunes**:
+- Vehículo sin dispositivo GPS
+- Dispositivo GPS desconectado o sin señal
+- Período sin cobertura de datos
+- Tag asignado a vehículo no monitoreable
+
+**Acción recomendada**: 
+- Validar manualmente contra registros de despacho
+- Verificar otras validaciones (categoría, duplicados, estado del tag)
+- Considerar instalar GPS en vehículos de alto consumo
+
+### Ubicación Imprecisa
+
+**Descripción**: El GPS muestra al vehículo cerca del peaje pero fuera del margen ideal.
+
+**Características**:
+- Distancia: entre 500m y 2km del peaje
+- O diferencia de tiempo: entre 10 y 30 minutos
+- No definitivamente inválido, pero tampoco ideal
+
+**Acción recomendada**: 
+- Revisar individualmente en casos de alto valor
+- Analizar patrón: si es recurrente, puede indicar problema con coordenadas del peaje
+- Generalmente se consideran válidos a menos que haya otros indicadores
+
+## Selección y Acciones en Lote
+
+### Seleccionar Consumos
+
+Puede seleccionar consumos individuales o en grupo:
+
+**Selección individual**:
+- Haga clic en el checkbox al lado izquierdo de cada fila
+
+**Seleccionar todos en la página**:
+- Use el checkbox en el encabezado de la tabla
+- Selecciona los consumos visibles actualmente
+
+**Seleccionar todos filtrados**:
+- Después de aplicar filtros, use "Seleccionar todos los filtrados"
+- Selecciona todos los consumos que cumplen los criterios de filtro (incluso en otras páginas)
+
+<Note>
+La función "Seleccionar todos los filtrados" es poderosa pero requiere precaución. Asegúrese de que sus filtros están configurados correctamente antes de aplicar acciones en lote.
+</Note>
+
+### Acciones Disponibles
+
+Una vez seleccionados los consumos, puede realizar estas acciones:
+
+#### Marcar para Revisión Manual
+
+Use esto para:
+- Señalar consumos que requieren análisis adicional
+- Asignar consumos a otros miembros del equipo
+- Crear una cola de trabajo
+
+**Estados disponibles**:
+- **Pendiente**: Requiere revisión
+- **En Revisión**: Actualmente siendo analizado
+- **Aprobado**: Revisado y confirmado como válido
+- **Rechazado**: Revisado y confirmado como inválido
+
+#### Exportar Seleccionados
+
+Exporte solo los consumos seleccionados a Excel para:
+- Análisis detallado offline
+- Compartir con otros departamentos
+- Crear evidencia para reclamos
+- Reportes personalizados
+
+#### Generar Reporte PDF
+
+Cree un reporte PDF que incluya:
+- Solo los consumos seleccionados
+- Análisis y gráficos relevantes
+- Ideal para presentaciones ejecutivas
+
+## Navegación y Paginación
+
+### Carga Progresiva
+
+El sistema utiliza carga progresiva (infinite scroll) para manejar grandes volúmenes de datos:
+
+**Funcionamiento**:
+1. Se cargan inicialmente 100 consumos
+2. Al hacer scroll hacia abajo, se cargan automáticamente los siguientes 100
+3. Continúa cargando mientras haya más registros
+
+**Indicador de progreso**:
+- "Mostrando X de Y consumos" en la parte superior
+- Barra de carga al llegar al final de la lista actual
+
+**Ventaja**: Rendimiento rápido incluso con decenas de miles de consumos
+
+### Búsqueda Rápida
+
+Use la barra de búsqueda para encontrar consumos específicos:
+
+**Campos buscables**:
+- ID del cargo
+- Número de tag
+- Nombre de estación
+- Número de vehículo
+- Placa
+- Propietario
+
+Escriba cualquier parte de estos campos y el sistema filtrará en tiempo real.
+
+## Vista por Lotes de Importación
+
+Los consumos están organizados por **lotes de importación**. Cada vez que importa un archivo Excel, se crea un nuevo lote.
+
+### Ver Lotes
+
+Acceda a "Lotes de Importación" para ver:
+- Fecha de importación
+- Cantidad de registros importados
+- Estado del lote (procesado, validado, etc.)
+- Usuario que realizó la importación
+
+### Filtrar por Lote
+
+Esto es útil para:
+- Validar que la importación más reciente fue exitosa
+- Comparar consumos de diferentes períodos
+- Detectar problemas en importaciones específicas
+
+## Tags Sin Asignar
+
+### Identificación
+
+El sistema detecta automáticamente tags que generan consumos pero no tienen asignación registrada.
+
+**Indicador visual**:
+- Botón "Tags Sin Asignar" con contador en la parte superior
+- Muestra la cantidad de tags sin asignación activa
+
+### ¿Por Qué Ocurre?
+
+**Razones comunes**:
+1. **Tag nuevo**: Recién adquirido, aún no registrado en el sistema
+2. **Importación incompleta**: Falló la importación de asignaciones
+3. **Tag histórico**: De períodos anteriores al inicio del sistema
+4. **Tag de terceros**: Perteneciente a contratistas o partners
+5. **Error administrativo**: Olvidaron registrar la asignación
+
+### Gestión de Tags Sin Asignar
+
+1. Haga clic en el botón "Tags Sin Asignar"
+2. Verá una lista de tags con consumos pero sin asignación
+3. Para cada tag, puede:
+   - **Crear asignación**: Vincúlelo al vehículo correcto
+   - **Marcar como externo**: Si pertenece a terceros
+   - **Investigar**: Consultar con el operador de peaje
+
+<Warning>
+Los consumos de tags sin asignar no pueden ser validados completamente con GPS. Es crítico mantener todas las asignaciones actualizadas para máxima efectividad de auditoría.
+</Warning>
+
+## Interpretación de Campos Específicos
+
+### Campo "Fleet" o "Propietario"
+
+Este campo identifica la cuenta o departamento asociado:
+
+**Origen**: Proviene del archivo de importación del operador de peaje
+
+**Usos**:
+- Segregar consumos por departamento
+- Identificar cuentas corporativas
+- Análisis de costos por centro
+
+**Valores típicos**:
+- Nombre de la empresa
+- Código de departamento
+- Número de cuenta corporativa
+
+### Campo "Type" o "Tipo"
+
+Indica el tipo de transacción:
+
+**PASE**: Transacción normal de peaje (99% de los casos)
+
+**Otros tipos raros**:
+- AJUSTE: Correcciones manuales del operador
+- CRÉDITO: Devoluciones o bonificaciones
+- CARGO_ADICIONAL: Cargos extra por infracciones
+
+## Mejores Prácticas
+
+### 1. Revisión Periódica
+
+Establezca un calendario de revisión:
+- **Diaria**: Verificar importaciones recientes
+- **Semanal**: Ejecutar validaciones y revisar sospechas
+- **Mensual**: Análisis completo y reconciliación
+
+### 2. Priorización de Revisión
+
+Enfoque su tiempo eficientemente:
+
+**Alta prioridad** (revisar primero):
+1. Tags inhabilitados (reclamo casi garantizado)
+2. Duplicados (fáciles de reclamar)
+3. Errores de categoría con alta diferencia (>RD$100)
+
+**Media prioridad**:
+4. Ubicación inválida con alta distancia (más de 5km)
+5. Ubicación imprecisa recurrente
+
+**Baja prioridad**:
+6. Sin telemetría (requiere validación manual completa)
+7. Diferencias de categoría menores (menos de RD$20)
+
+### 3. Documentación de Decisiones
+
+Para cada consumo revisado, documente:
+- Resultado de la revisión (válido/reclamo/monitorear)
+- Evidencia consultada
+- Razón de la decisión
+- Próximos pasos
+
+Use el campo de "Comentarios de revisión manual" para esto.
+
+### 4. Trabajo en Equipo
+
+Si trabaja en equipo:
+- Asigne lotes específicos a cada miembro
+- Use los estados de revisión para evitar duplicar trabajo
+- Realice revisiones cruzadas de decisiones importantes
+- Mantenga reuniones semanales de sincronización
+
+### 5. Mantenga Actualizadas las Asignaciones
+
+La calidad de la auditoría depende de la calidad de los datos:
+- Registre nuevos tags inmediatamente
+- Actualice cambios de vehículo el mismo día
+- Inhabilite tags perdidos sin demora
+- Verifique periódicamente la coherencia
+
+## Solución de Problemas Comunes
+
+### Problema: Los consumos no muestran información del vehículo
+
+**Causa**: El tag no tiene asignación o la asignación no incluye la fecha del consumo
+
+**Solución**:
+1. Verifique si el tag existe en la gestión de tags
+2. Si no existe, créelo con fechas retroactivas apropiadas
+3. Si existe, verifique que las fechas de asignación cubren el período del consumo
+
+### Problema: GPS dice "SIN_TELEMETRÍA" pero el vehículo tiene GPS
+
+**Causas posibles**:
+1. **Dispositivo desconectado**: Verifique el estado del GPS en el vehículo
+2. **Sin señal**: Área sin cobertura celular en el momento del paso
+3. **Período de desconexión**: El GPS estuvo apagado temporalmente
+4. **Asignación incorrecta**: El tag está asignado al vehículo equivocado
+
+**Verificación**:
+- Revise el módulo de Viajes para confirmar si hay datos GPS para esa fecha
+- Verifique que el vehículo asignado al tag es el correcto
+
+### Problema: Muchos consumos muestran "UBICACIÓN_IMPRECISA"
+
+**Causas posibles**:
+1. **Coordenadas incorrectas de la estación**: La ubicación del peaje en el sistema es imprecisa
+2. **Delay en reportes GPS**: El dispositivo reporta con retraso
+3. **Zona de señal débil**: Área con mala recepción GPS
+
+**Solución**:
+- Si es consistente en una estación específica, reporte al equipo técnico para revisar las coordenadas
+- Ajuste los márgenes de tolerancia si es apropiado para su operación
+
+### Problema: Aparecen consumos muy antiguos como "nuevos"
+
+**Causa**: Importación retroactiva de archivos históricos
+
+**Acción**:
+- Esto es normal si está importando datos de períodos pasados
+- Filtre por fecha de importación vs. fecha del consumo para distinguir
+
+## Resumen
+
+La gestión efectiva de consumos requiere:
+
+- ✅ Comprender los indicadores visuales y estados de validación
+- ✅ Usar la vista expandida para análisis detallado de sospechas
+- ✅ Aplicar filtros para enfocarse en consumos relevantes
+- ✅ Priorizar la revisión según tipo y magnitud de irregularidades
+- ✅ Mantener actualizada la información de asignaciones de tags
+- ✅ Documentar decisiones de revisión para auditoría
+- ✅ Trabajar de forma metódica y sistemática
+
+La calidad de su auditoría depende directamente de qué tan bien comprenda e interprete los consumos en el sistema.
+
+---
+
+**Próximos pasos**: Continúe con [Importación de Consumos](/paso-rapido/importacion) para aprender cómo cargar datos desde archivos Excel, o salte a [Sistema de Validaciones](/paso-rapido/validaciones) para entender en profundidad cómo funciona cada validación.

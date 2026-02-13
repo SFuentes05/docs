@@ -1,0 +1,530 @@
+---
+title: "Exportación de Datos"
+description: "Aprenda a exportar consumos, tags y otros datos a Excel para análisis externo y presentaciones"
+---
+
+# Exportación de Datos
+
+El módulo Paso Rápido permite exportar todos los datos a archivos Excel para análisis externo, compartir con otros departamentos, o crear presentaciones personalizadas. Esta sección explica cómo exportar cada tipo de información.
+
+## Formatos de Exportación
+
+Todos los datos se exportan en **formato Excel** (.xlsx):
+
+**Ventajas del formato Excel**:
+- Compatible con Microsoft Excel, Google Sheets, LibreOffice
+- Mantiene formato de números y fechas
+- Permite análisis adicional con fórmulas y tablas dinámicas
+- Fácil de compartir por correo electrónico
+- Importable a sistemas de BI (Power BI, Tableau, etc.)
+
+## Exportar Consumos de Peaje
+
+La exportación más común y completa.
+
+### Acceso
+
+Desde la página de **Consumos**:
+1. Aplique filtros si desea exportar solo un subconjunto (opcional)
+2. Haga clic en el botón **Exportar** (icono de descarga 📥)
+3. Seleccione **Exportar Consumos**
+4. El archivo se descargará automáticamente
+
+<img src="/images/excel_consumos.png" alt="Archivo Excel de consumos exportados" />
+
+### Contenido del Archivo
+
+El archivo Excel incluye una hoja con todas las columnas disponibles:
+
+| Columna | Descripción | Ejemplo |
+|---------|-------------|---------|
+| **ID** | Identificador único | 45678 |
+| **Fecha** | Fecha y hora del paso | 15/02/2026 10:30 |
+| **Tag** | Número del tag | 123456 |
+| **Estación** | Caseta de peaje | Las Américas |
+| **Monto** | Cargo (RD$) | 150.00 |
+| **Tipo** | Tipo de transacción | PASE |
+| **Propietario** | Cuenta/Departamento | TRANSPORTE |
+| **Vehículo** | Número de unidad | L-234 |
+| **Placa** | Matrícula | L123456 |
+| **Validación GPS** | Estado de validación GPS | VÁLIDO |
+| **Es Duplicado** | Sí/No | NO |
+| **Error de Categoría** | Sí/No | NO |
+| **Diferencia de Monto** | Sobrecargo/Descuento | 0.00 |
+| **Estado del Tag** | Válido/Inhabilitado | Válido |
+| **Detalles GPS - Distancia** | Metros del peaje | 350 |
+| **Detalles GPS - Diferencia Tiempo** | Minutos de diferencia | 2 |
+| **ID de Cargo Original** | Si es duplicado, ID del original | - |
+| **Revisión Manual - Estado** | Pendiente/Aprobado/Rechazado | - |
+| **Revisión Manual - Comentario** | Notas del revisor | - |
+| **Fecha de Validación** | Cuándo se validó | 16/02/2026 09:15 |
+| **Lote de Importación** | ID del lote | #5678 |
+
+### Exportación Filtrada
+
+Si aplicó filtros antes de exportar:
+
+**Solo se exportan los consumos que cumplen los filtros**
+
+**Ejemplo**:
+```
+Filtros aplicados:
+- Fecha: Febrero 2026
+- Vehículo: L-234
+- Estado GPS: UBICACIÓN_INVÁLIDA
+
+Resultado: Excel contiene SOLO consumos del L-234 en febrero con ubicación inválida
+```
+
+**Ventaja**: Cree archivos específicos para cada análisis
+
+**Ejemplos de uso**:
+- Exportar solo sospechas para revisión
+- Exportar por departamento para compartir con gerente
+- Exportar duplicados para adjuntar a reclamo
+
+### Exportación Completa
+
+Si NO aplicó filtros:
+
+**Se exportan TODOS los consumos del período visible**
+
+**Consideración**: Con miles de consumos, el archivo puede ser grande
+- 10,000 consumos ≈ 2-3 MB
+- 50,000 consumos ≈ 10-15 MB
+- Excel maneja bien hasta ~100,000 filas
+
+<Tip>
+Para exportaciones muy grandes (más de 50,000 registros), considere exportar por mes o por lotes para facilitar el manejo del archivo.
+</Tip>
+
+## Exportar Tags
+
+Exporte la información de asignaciones de tags.
+
+### Acceso
+
+Desde la página de **Tags**:
+1. Aplique filtros si desea (opcional)
+2. Haga clic en **Exportar**
+3. Seleccione **Exportar Tags**
+
+<img src="/images/excel_tags.png" alt="Archivo Excel de tags exportados" />
+
+### Contenido del Archivo
+
+| Columna | Descripción | Ejemplo |
+|---------|-------------|---------|
+| **ID Asignación** | Identificador de registro | 1234 |
+| **Número de Tag** | Número del tag | 123456 |
+| **Estado** | Válido/Inhabilitado | Válido |
+| **Vehículo - ID** | ID del vehículo (si GPS) | 567 |
+| **Vehículo - Número** | Número de unidad | L-234 |
+| **Vehículo - Placa** | Matrícula | L123456 |
+| **Vehículo - Título** | Nombre descriptivo | Camión L-234 |
+| **Tiene GPS** | Sí/No | Sí |
+| **Categoría** | 1-5 | 2 |
+| **Tipo** | Corporativo/Prepago | Corporativo |
+| **Grupo de Asignación** | Categoría empresarial | TRANSPORTE |
+| **Fecha de Asignación** | Cuándo se asignó | 01/02/2026 |
+| **Fecha de Emisión** | Cuándo se activó | 28/01/2026 |
+| **Fecha de Vencimiento** | Cuándo expira | 31/12/2026 |
+| **Notas** | Comentarios | - |
+| **Creado en Sistema** | Timestamp de creación | 28/01/2026 14:30 |
+| **Última Actualización** | Timestamp de edición | 28/01/2026 14:30 |
+
+### Casos de Uso
+
+**Auditoría de asignaciones**:
+- Compartir con operador de peaje para verificar concordancia
+- Análisis de cobertura GPS (cuántos tags tienen GPS)
+- Identificar tags próximos a vencer
+
+**Reportes gerenciales**:
+- Cantidad de tags por departamento (grupo)
+- Distribución de categorías
+- Tags inhabilitados con causa
+
+**Reconciliación**:
+- Comparar contra factura del operador
+- Verificar que todos los tags activos están registrados
+
+## Exportar Vehículos
+
+Exporte la información de la flota con datos de telemetría.
+
+### Acceso
+
+Desde la página de **Vehículos**:
+1. Haga clic en **Exportar**
+2. El archivo se descarga automáticamente
+
+<img src="/images/excel_vehicles.png" alt="Archivo Excel de vehículos exportados" />
+
+### Contenido del Archivo
+
+| Columna | Descripción |
+|---------|-------------|
+| **ID Vehículo** | Identificador único |
+| **Número de Unidad** | Número interno (L-234) |
+| **Título** | Nombre descriptivo |
+| **Placa** | Matrícula oficial |
+| **Proyecto** | Proyecto asignado |
+| **Estado** | Activo/Inactivo |
+| **Tags Asignados** | Números de tags actuales |
+| **Última Telemetría** | Última fecha con GPS |
+| **Odómetro Actual** | Lectura más reciente |
+
+### Casos de Uso
+
+**Lista de flota**:
+- Inventario completo de vehículos
+- Verificar estado de dispositivos GPS
+- Planificación de mantenimiento
+
+**Cruce con consumos**:
+- Identificar vehículos sin consumos
+- Comparar consumos vs. actividad GPS
+- Detectar vehículos con uso anormal
+
+## Exportar Estaciones de Peaje
+
+Exporte el catálogo de estaciones con ubicaciones y tarifas.
+
+### Acceso
+
+Desde la página de **Configuración** o **Estaciones**:
+1. Haga clic en **Exportar Estaciones**
+
+### Contenido del Archivo
+
+| Columna | Descripción |
+|---------|-------------|
+| **Código** | Identificador de estación |
+| **Nombre** | Nombre de la caseta |
+| **Ubicación - Latitud** | Coordenada GPS |
+| **Ubicación - Longitud** | Coordenada GPS |
+| **Operador** | Empresa administradora |
+| **Tarifa Cat. 1** | Precio para categoría 1 |
+| **Tarifa Cat. 2** | Precio para categoría 2 |
+| **Tarifa Cat. 3** | Precio para categoría 3 |
+| **Tarifa Cat. 4** | Precio para categoría 4 |
+| **Tarifa Cat. 5** | Precio para categoría 5 |
+
+### Casos de Uso
+
+**Verificación de tarifas**:
+- Comparar contra lista oficial del operador
+- Actualizar tarifas cuando cambian
+- Auditoría de precios aplicados
+
+**Análisis geográfico**:
+- Mapear rutas por estaciones
+- Calcular distancias entre peajes
+- Planificar rutas óptimas
+
+## Exportar Resultados de Validación
+
+Exporte un resumen de todas las validaciones ejecutadas.
+
+### Contenido
+
+Archivo con múltiples hojas:
+
+**Hoja 1: Resumen General**
+- Total de consumos validados
+- Cantidad por estado de validación
+- Porcentajes
+- Montos involucrados
+
+**Hoja 2: Validación GPS**
+- Detalle de cada estado GPS
+- Listado de consumos por estado
+- Estadísticas de cobertura
+
+**Hoja 3: Validación de Categoría**
+- Errores detectados
+- Diferencias de monto
+- Consumos por estación
+
+**Hoja 4: Validación de Estado**
+- Tags inhabilitados con consumos
+- Fechas y detalles
+
+**Hoja 5: Duplicados**
+- Grupos de duplicados
+- IDs originales y duplicados
+- Montos reclamables
+
+### Caso de Uso
+
+**Reporte ejecutivo**:
+- Presentación a gerencia
+- Documentación de hallazgos
+- Justificación de reclamos
+
+## Trabajar con Archivos Exportados
+
+### Abrir en Excel
+
+1. Descargue el archivo (usualmente va a carpeta `Descargas`)
+2. Abra con Microsoft Excel
+3. Si pregunta, seleccione "Habilitar edición"
+4. ¡Listo para trabajar!
+
+### Formato de Datos
+
+**Fechas**:
+- Exportadas en formato DD/MM/YYYY HH:MM:SS
+- Excel reconoce automáticamente como fechas
+- Puede aplicar formato diferente si desea
+
+**Números**:
+- Montos en formato numérico (150.00)
+- Sin símbolos de moneda para facilitar cálculos
+- Puede agregar formato de moneda en Excel: Formato > Número > Moneda
+
+**Texto**:
+- Campos de texto exportados tal cual
+- Sin caracteres especiales que causen problemas
+
+### Análisis Recomendados en Excel
+
+**Tablas Dinámicas**:
+```
+Uso: Resumir consumos por departamento, vehículo, estación
+Ventaja: Análisis interactivo rápido
+```
+
+**Fórmulas SUMAR.SI**:
+```
+=SUMAR.SI(columna_validación, "UBICACIÓN_INVÁLIDA", columna_monto)
+Resultado: Total de montos con ubicación inválida
+```
+
+**Filtros y Ordenamiento**:
+- Use filtros automáticos de Excel (Ctrl+Shift+L)
+- Ordene por múltiples columnas
+- Cree vistas personalizadas
+
+**Gráficos**:
+- Cree gráficos de barras por estación
+- Gráficos de tendencia temporal
+- Gráficos de pastel por departamento
+
+**Formato Condicional**:
+```
+Resaltar:
+- Montos > $500 en rojo
+- Validación = "UBICACIÓN_INVÁLIDA" en amarillo
+- Duplicados en naranja
+```
+
+### Compartir con Otros
+
+**Por correo electrónico**:
+- Archivos son suficientemente pequeños para email
+- Comprimir si son muy grandes (WinZip, 7-Zip)
+- Proteger con contraseña si contienen datos sensibles
+
+**Almacenamiento en la nube**:
+- OneDrive, Google Drive, Dropbox
+- Compartir link en lugar de adjuntar
+- Control de acceso y permisos
+
+**Impresión**:
+- Configure márgenes y orientación (horizontal para muchas columnas)
+- Use "Ajustar a 1 página de ancho"
+- Agregue encabezado con título y fecha
+
+## Automatización y Programación
+
+### Exportaciones Periódicas
+
+Establezca una rutina:
+
+**Semanal**:
+```
+Cada lunes:
+1. Filtrar: Semana anterior
+2. Exportar consumos
+3. Guardar como: "Consumos_Semana_[Número]_2026.xlsx"
+4. Análisis rápido
+5. Archivar
+```
+
+**Mensual**:
+```
+Primer día del mes:
+1. Filtrar: Mes completo anterior
+2. Exportar consumos, tags, validaciones
+3. Análisis completo
+4. Generar reporte PDF
+5. Presentar a gerencia
+```
+
+**Antes de reuniones**:
+```
+Previo a revisión gerencial:
+1. Exportar datos relevantes al tema
+2. Crear presentación en PowerPoint con gráficos
+3. Tener Excel de respaldo para consultas
+```
+
+### Nomenclatura de Archivos
+
+Sistema recomendado:
+
+```
+Formato: [Tipo]_[Período]_[Fecha-Exportación].xlsx
+
+Ejemplos:
+Consumos_Feb2026_20260305.xlsx
+Tags_Activos_20260305.xlsx
+Validaciones_Q1-2026_20260405.xlsx
+Sospechas_Semana10_20260310.xlsx
+```
+
+Beneficios:
+- Orden cronológico automático
+- Identificación rápida del contenido
+- No confundir versiones
+
+## Exportaciones Avanzadas
+
+### Exportar con Filtros Complejos
+
+**Escenario**: Necesita un informe muy específico
+
+**Proceso**:
+1. Aplique todos los filtros necesarios
+2. Verifique el contador ("Mostrando X consumos")
+3. Revise muestra en pantalla
+4. Exporte
+5. Verifique que el archivo tiene la cantidad esperada
+
+**Ejemplo práctico**:
+```
+Objetivo: Reclamo de duplicados en Las Américas durante febrero
+
+Filtros:
+✓ Fechas: 01/02/2026 - 28/02/2026
+✓ Estaciones: Las Américas
+✓ Validación Duplicados: Es duplicado
+
+Verificar: "Mostrando 23 consumos"
+Exportar: "Duplicados_LasAmericas_Feb2026.xlsx"
+Resultado: 23 filas en Excel ✓
+```
+
+### Exportar para Análisis Cruzado
+
+**Combinar múltiples exportaciones**:
+
+1. **Exportar consumos** (hoja 1)
+2. **Exportar tags** (hoja 2)
+3. **En Excel**: Usar BUSCARV() para cruzar datos
+4. **Análisis**: Comparar consumo real vs. expectativa
+
+**Ejemplo de fórmula**:
+```
+=BUSCARV(A2, Tags!A:F, 3, FALSO)
+Busca el tag de la fila actual en la hoja Tags
+Retorna la categoría asignada
+Permite comparar vs. categoría detectada en consumo
+```
+
+## Límites y Consideraciones
+
+### Límites Técnicos
+
+**Excel**:
+- Máximo: ~1,048,576 filas por hoja
+- Práctico: ~100,000 filas para rendimiento óptimo
+
+**Sistema**:
+- Tiempo de generación: ~1,000 registros por segundo
+- Tamaño de archivo: ~10 KB por 100 registros
+
+**Navegador**:
+- Puede demorar descargar archivos muy grandes (más de 50 MB)
+- Use filtros para reducir tamaño si es necesario
+
+### Datos Sensibles
+
+**Precauciones**:
+- Los archivos exportados contienen información empresarial
+- Proteja con contraseña si envía por email
+- No comparta en redes públicas
+- Elimine copias temporales después de usar
+
+**Proteger archivo en Excel**:
+```
+1. Archivo > Información > Proteger libro
+2. Cifrar con contraseña
+3. Ingrese contraseña fuerte
+4. Guarde
+```
+
+## Mejores Prácticas
+
+### 1. Exporte Regularmente
+
+No espere hasta necesitar los datos urgentemente:
+- Exportaciones semanales automáticas
+- Respaldo de datos importante
+- Facilita análisis histórico
+
+### 2. Organice Sus Archivos
+
+```
+Carpeta_PasoRapido/
+├── 2026/
+│   ├── Enero/
+│   │   ├── Consumos/
+│   │   ├── Tags/
+│   │   └── Reportes/
+│   └── Febrero/
+│       ├── Consumos/
+│       ├── Tags/
+│       └── Reportes/
+```
+
+### 3. Documente el Propósito
+
+En cada archivo, agregue una hoja "Info":
+```
+Propósito: Análisis de sospechas febrero 2026
+Filtros aplicados: Validación GPS = INVÁLIDA, Fecha = Feb 2026
+Generado por: Juan Pérez
+Fecha de exportación: 05/03/2026
+Uso: Preparación de reclamo #2026-002
+```
+
+### 4. Versiones y Backups
+
+```
+Archivo original: Consumos_Feb2026_v1.xlsx
+Archivo con análisis: Consumos_Feb2026_v2_analizado.xlsx
+Archivo final: Consumos_Feb2026_FINAL.xlsx
+```
+
+Mantenga versiones para poder recuperar si comete errores.
+
+## Resumen
+
+La exportación de datos permite:
+
+- ✅ **Análisis offline** con herramientas de su preferencia
+- ✅ **Compartir información** con otros departamentos
+- ✅ **Crear presentaciones** personalizadas
+- ✅ **Respaldo** de información crítica
+- ✅ **Análisis avanzado** con Excel o Power BI
+- ✅ **Documentación** para reclamos y auditorías
+- ✅ **Integración** con otros sistemas empresariales
+
+Dominar la exportación le da flexibilidad total para trabajar con los datos de la forma que mejor se adapte a sus necesidades.
+
+---
+
+**Próximos pasos**: Continúe con [Reporte PDF](/paso-rapido/reporte-pdf) para aprender a generar el informe ejecutivo completo, o consulte [Gestión de Reclamos](/paso-rapido/reclamos) para usar exportaciones en el proceso de reclamos.
