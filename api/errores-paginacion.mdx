@@ -1,0 +1,36 @@
+---
+title: "Errores y paginación"
+description: "Formato de error y cursores de la API v1"
+---
+
+# Errores y paginación
+
+## Errores
+
+```json
+{
+  "error": {
+    "code": "unauthorized",
+    "message": "Missing Authorization header.",
+    "details": {}
+  }
+}
+```
+
+Códigos HTTP habituales: `200` / `201`, `400`, `401`, `403`, `404`, `409`, `429`, `500`.
+
+## Paginación por cursor
+
+Listados tipicamente:
+
+```json
+{
+  "data": [ ... ],
+  "pagination": {
+    "next_cursor": "eyJpZCI6...",
+    "has_more": true
+  }
+}
+```
+
+Pase `next_cursor` en la siguiente petición hasta `has_more: false`.

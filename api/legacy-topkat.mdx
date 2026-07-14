@@ -1,0 +1,37 @@
+---
+title: "Legacy Topkat"
+description: "Endpoint legacy POST /api/fuel-entries/topkat con X-API-Key"
+deprecated: true
+---
+
+# Legacy: Fuel entries Topkat
+
+<Warning>
+Integración **legacy**. Para proyectos nuevos use `POST /api/v1/fuel/entries` con Bearer. Este endpoint permanece por compatibilidad con Topkat.
+</Warning>
+
+```http
+POST /api/fuel-entries/topkat
+```
+
+## Autenticación
+
+```bash
+X-API-Key: your_api_key_here
+```
+
+## Body (resumen)
+
+| Campo | Requerido | Descripción |
+|-------|-----------|-------------|
+| `license_plate` | Sí | Placa para matching de vehículo |
+| `quantity` | Sí | Galones |
+| `ppv` | Sí | Precio por galón |
+| `id` | Sí | ID externo de transacción Topkat |
+| `timestamp` | Sí | ISO 8601 con zona (ej. `-04:00` Santo Domingo) |
+| `stn_id` | No | UUID proveedor |
+| `product_name` | No | Default `Diesel` |
+| `odometer` | No | Odómetro |
+| `driver_name` | No | Default `Desconocido` |
+
+El servidor hace matching inteligente de vehículo y producto contra su organización.

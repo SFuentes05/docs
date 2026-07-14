@@ -1,0 +1,51 @@
+---
+title: "Conceptos"
+description: "Consumos, tags, categorías, propietarios y estados de validación"
+---
+
+# Conceptos de Paso Rápido
+
+## Consumo (cargo / pase)
+
+Registro de un paso por caseta de peaje: fecha/hora, número de tag, estación, monto y tipo (normalmente **PASE**). Llegan al producto al [importar](/paso-rapido/importar-consumos) el archivo del operador.
+
+Se auditan porque pueden existir cobros duplicados, errores de categoría, tags inhabilitados o uso no autorizado.
+
+## Tag
+
+Dispositivo RFID en el vehículo. En United Logistics un **tag** se gestiona como **asignación** (`tag_assignments`):
+
+| Campo | Significado |
+|-------|-------------|
+| Número de tag | Identificador del dispositivo |
+| Estado | **Válido** o **Inhabilitado** |
+| Vehículo | Unidad a la que pertenece |
+| Categoría | 1–5 (tarifa de peaje) |
+| Tipo | Corporativo o prepago |
+| Fechas | Asignación y vencimiento |
+| Grupo | Categoría interna de asignación |
+
+### Con GPS vs sin GPS
+
+- **Con GPS** (indicador verde): el tag apunta a un vehículo de la flota telemática; la validación puede cruzar ubicación.
+- **Sin GPS** (indicador naranja): vehículo manual (título + placa). Útil cuando no hay telemetría, pero la validación GPS no aplica igual.
+
+## Propietario
+
+Cuenta o departamento al que se asocia un lote de consumos al importar (ej. TRANSPORTE). Filtra dashboard, listados y reportes.
+
+## Estados de validación GPS (resumen)
+
+| Estado | Idea |
+|--------|------|
+| **Válido** | El vehículo estuvo cerca del peaje en la ventana de tiempo |
+| **Sin telemetría** | No hay puntos GPS útiles en la ventana |
+| **Sin GPS** | Tag/vehículo sin telemetría vinculada |
+| **Sospechoso / ubicación inválida** | Demasiado lejos del peaje o inconsistente |
+| **Doble cargo** | Posible duplicado de otra transacción |
+
+Además: validación de **categoría** (monto vs categoría del tag) y **estado del tag** (activo en la fecha del cargo).
+
+## Revisión manual
+
+No hay un módulo separado de “reclamos”. El procedimiento de disputa operativa es la [Revisión manual](/paso-rapido/revision-manual) sobre cada cargo.

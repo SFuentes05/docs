@@ -1,135 +1,41 @@
 ---
-title: "Manual de Usuario - Paso Rápido"
-description: "Guía completa para el equipo de auditoría sobre el módulo de gestión y validación de consumos de peaje"
+title: "Paso Rápido"
+description: "Módulo de peajes: tags, consumos, validación GPS y reportes"
 ---
 
-# Manual de Usuario: Módulo Paso Rápido
+# Paso Rápido
 
-Bienvenido al manual de usuario del módulo Paso Rápido de United Logistics. Este manual ha sido diseñado específicamente para el equipo de auditoría y proporciona una guía completa sobre cómo utilizar el sistema para la gestión, validación y análisis de consumos en las casetas de peaje de República Dominicana.
+Paso Rápido es el módulo de **auditoría de peajes**: une lo que factura el operador de peaje con la telemetría de su flota.
 
-## ¿Qué es el Módulo Paso Rápido?
+<img src="/images/charges.png" alt="Gestión de consumos en Paso Rápido" />
 
-El módulo Paso Rápido es un sistema integral de auditoría que permite a su organización:
+## Procedimientos del producto
 
-- **Gestionar tags de peaje**: Controlar las asignaciones de tags corporativos y prepago a los vehículos de su flota
-- **Validar consumos automáticamente**: Verificar la legitimidad de cada cargo mediante cuatro tipos de validaciones cruzadas
-- **Detectar irregularidades**: Identificar duplicados, cobros incorrectos, uso indebido de tags y otras anomalías
-- **Generar reportes detallados**: Crear informes completos en PDF para análisis ejecutivo y presentaciones
-- **Gestionar reclamos**: Documentar y dar seguimiento a cargos que requieren disputa ante los operadores de peaje
+<Steps>
+  <Step title="Asignar tags">
+    Cada tag de peaje debe estar vinculado a un vehículo (con o sin GPS). Guía: [Tags](/paso-rapido/tags).
+  </Step>
+  <Step title="Importar consumos">
+    Suba el Excel/CSV exportado del operador (solo filas PASE). Guía: [Importar consumos](/paso-rapido/importar-consumos).
+  </Step>
+  <Step title="Validar">
+    Cruce cada cargo contra GPS (ubicación, categoría, estado del tag, duplicados). Guía: [Validar consumos](/paso-rapido/validar-consumos).
+  </Step>
+  <Step title="Revisar y reportar">
+    Resuelva casos dudosos y genere PDF o Excel. Guías: [Revisión manual](/paso-rapido/revision-manual), [Reporte PDF](/paso-rapido/reporte-consumos).
+  </Step>
+</Steps>
 
-## Contexto: Sistema de Peajes en República Dominicana
+## Pantallas principales
 
-En República Dominicana, el sistema de peajes opera mediante tecnología de paso rápido que permite el tránsito vehicular sin detenerse. Los tags (dispositivos electrónicos adheridos al parabrisas) se comunican con los lectores en las casetas de peaje, registrando automáticamente cada paso y generando un cargo según la categoría del vehículo.
+| Pantalla | Ruta | Uso |
+|----------|------|-----|
+| Briefing / dashboard | `/paso-rapido` | KPIs del período, gasto, sospechas, cobertura GPS |
+| Tags | `/paso-rapido/tags` | Crear y editar asignaciones |
+| Consumos | `/paso-rapido/consumos` | Listado, filtros, importar, exportar, revisión |
+| Validar | `/paso-rapido/validar` | Motor de validación masiva |
+| Generar reporte | `/paso-rapido/dashboard/generar-reporte` | PDF ejecutivo de consumos |
 
-### Categorías de Peaje
+## Conceptos clave
 
-El sistema clasifica los vehículos en cinco categorías, cada una con una tarifa diferente:
-
-- **Categoría 1**: Automóviles, jeeps y camionetas pequeñas
-- **Categoría 2**: Autobuses pequeños, camiones de 2 ejes
-- **Categoría 3**: Autobuses grandes, camiones de 3 ejes
-- **Categoría 4**: Camiones de 4 ejes
-- **Categoría 5**: Camiones de 5 o más ejes
-
-<Note>
-Las tarifas varían según la estación de peaje. Un mismo vehículo puede tener diferentes cargos dependiendo de qué caseta cruce.
-</Note>
-
-## Objetivos del Sistema de Auditoría
-
-El módulo Paso Rápido fue desarrollado para ayudar a las empresas con flotas vehiculares a:
-
-1. **Reducir gastos operativos**: Identificando cobros duplicados, errores de categoría y uso no autorizado de tags
-2. **Mejorar el control**: Manteniendo un registro preciso de qué vehículo usa qué tag y cuándo
-3. **Facilitar reclamos**: Documentando evidencia sólida (GPS, asignaciones, validaciones) para disputar cargos incorrectos
-4. **Optimizar rutas**: Analizando patrones de consumo para identificar oportunidades de ahorro
-5. **Prevenir fraude**: Detectando automáticamente anomalías que podrían indicar uso indebido
-
-## Estructura de Este Manual
-
-Este manual está organizado en secciones que le guiarán desde los conceptos básicos hasta las funciones avanzadas:
-
-<CardGroup cols={2}>
-  <Card title="Conceptos Fundamentales" icon="book" href="/paso-rapido/conceptos-fundamentales">
-    Entienda qué son los consumos, tags y asignaciones
-  </Card>
-  
-  <Card title="Gestión de Tags" icon="tag" href="/paso-rapido/gestion-tags">
-    Aprenda a crear y administrar tags de peaje
-  </Card>
-  
-  <Card title="Gestión de Consumos" icon="credit-card" href="/paso-rapido/gestion-consumos">
-    Trabaje con los cargos de peaje en el sistema
-  </Card>
-  
-  <Card title="Sistema de Validaciones" icon="shield-check" href="/paso-rapido/validaciones">
-    Comprenda las cuatro validaciones automáticas
-  </Card>
-  
-  <Card title="Filtros y Búsqueda" icon="filter" href="/paso-rapido/filtros-busqueda">
-    Encuentre información específica rápidamente
-  </Card>
-  
-  <Card title="Interpretación de Resultados" icon="chart-line" href="/paso-rapido/interpretacion-resultados">
-    Lea y analice los datos del dashboard
-  </Card>
-  
-  <Card title="Reporte PDF" icon="file-pdf" href="/paso-rapido/reporte-pdf">
-    Genere e interprete el informe ejecutivo completo
-  </Card>
-  
-  <Card title="Exportación de Datos" icon="download" href="/paso-rapido/exportacion">
-    Exporte información a Excel para análisis externo
-  </Card>
-  
-  <Card title="Gestión de Reclamos" icon="exclamation-triangle" href="/paso-rapido/reclamos">
-    Documente y gestione disputas de cargos
-  </Card>
-  
-  <Card title="Importación de Datos" icon="upload" href="/paso-rapido/importacion">
-    Cargue consumos desde archivos Excel
-  </Card>
-</CardGroup>
-
-## Primeros Pasos
-
-Si es su primera vez utilizando el módulo Paso Rápido, le recomendamos seguir este orden:
-
-1. Lea la sección de [Conceptos Fundamentales](/paso-rapido/conceptos-fundamentales) para familiarizarse con la terminología
-2. Revise la [Gestión de Tags](/paso-rapido/gestion-tags) para entender cómo se asignan los tags a los vehículos
-3. Explore el [Sistema de Validaciones](/paso-rapido/validaciones) para comprender cómo el sistema detecta irregularidades
-4. Practique con los [Filtros y Búsqueda](/paso-rapido/filtros-busqueda) para navegar los datos eficientemente
-5. Genere su primer [Reporte PDF](/paso-rapido/reporte-pdf) para ver el análisis completo
-
-## Flujo de Trabajo Típico
-
-Un ciclo de auditoría típico con el módulo Paso Rápido sigue estos pasos:
-
-```mermaid
-graph TD
-    A[Importar Consumos] --> B[Ejecutar Validaciones]
-    B --> C[Revisar Dashboard]
-    C --> D[Aplicar Filtros]
-    D --> E[Analizar Sospechas]
-    E --> F{¿Hay Irregularidades?}
-    F -->|Sí| G[Marcar para Reclamo]
-    F -->|No| H[Generar Reporte]
-    G --> H
-    H --> I[Exportar Evidencia]
-    I --> J[Presentar a Dirección]
-```
-
-<Tip>
-Ejecute las validaciones semanalmente para mantener un control constante sobre los consumos de su flota. Esto facilita la identificación temprana de problemas y hace más efectiva la gestión de reclamos.
-</Tip>
-
-## Soporte y Asistencia
-
-Si tiene preguntas sobre el uso del módulo Paso Rápido o encuentra algún problema:
-
-- **Soporte Técnico**: sfuentes@solidarityagents.com
-- **Acceso al Sistema**: [United Logistics Portal](https://unitedpetroleum.app)
-
----
-
-**Última actualización**: Febrero 2026
+Antes de operar, lea [Conceptos](/paso-rapido/conceptos): qué es un consumo, un tag, categorías, propietarios y estados de validación.

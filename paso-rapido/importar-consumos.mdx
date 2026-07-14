@@ -1,0 +1,49 @@
+---
+title: "Importar consumos"
+description: "Paso a paso: importar el archivo de peajes (solo registros PASE)"
+---
+
+# Importar consumos
+
+Ruta de trabajo: `/paso-rapido/consumos` → botón **Importar**  
+(atajo legacy: `/dashboard/consumos/importar`)
+
+Suba el archivo exportado del operador de peaje. El producto importa **solo registros PASE**.
+
+## Requisitos
+
+- Archivo **CSV**, **XLSX** o **XLS**
+- Un **propietario** (cuenta/departamento) al que asociar el lote
+- Preferible tener [tags asignados](/paso-rapido/tags) para los números que vienen en el archivo
+
+## Paso a paso
+
+<Steps>
+  <Step title="Abrir el asistente">
+    En **Consumos**, pulse **Importar**. Se abre el wizard **Importar consumos**.
+  </Step>
+  <Step title="Propietario">
+    Busque o cree el propietario → **Continuar**.
+  </Step>
+  <Step title="Archivo">
+    Arrastre o seleccione el archivo. Espere el procesamiento de filas.
+  </Step>
+  <Step title="Vista previa">
+    Revise contadores: **A importar**, **Omitidos**, **Total filas**. Confirme → **Importar**.
+  </Step>
+  <Step title="Progreso">
+    La importación corre en segundo plano con barra de progreso. Al terminar, los cargos aparecen en el listado de Consumos.
+  </Step>
+</Steps>
+
+<img src="/images/excel_consumos.png" alt="Ejemplo de archivo de consumos" />
+
+## Después de importar
+
+1. Revise **Tags sin asignar** si el badge muestra pendientes.
+2. Pase a [Validar consumos](/paso-rapido/validar-consumos).
+3. Use filtros de fecha/propietario para acotar el lote recién cargado.
+
+<Warning>
+No reimporte el mismo archivo completo sin control: puede generar duplicados operativos. Si necesita re-validar, use la opción de re-validar en el motor de validación, no necesariamente reimportar.
+</Warning>

@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "United Logistics | API",
+  "name": "United Logistics",
   "colors": {
     "primary": "#00a3e0",
     "light": "#63ccee",
@@ -11,65 +11,95 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "API Documentation",
+        "tab": "Manual de uso",
         "groups": [
           {
-            "group": "Getting Started",
+            "group": "Inicio",
             "pages": [
-              "index"
+              "index",
+              "manual/primeros-pasos",
+              "manual/navegacion"
             ]
           },
           {
-            "group": "API Reference",
+            "group": "Paso Rápido",
             "pages": [
-              "api/fuel-entries"
+              "paso-rapido/index",
+              "paso-rapido/conceptos",
+              "paso-rapido/tags",
+              "paso-rapido/importar-consumos",
+              "paso-rapido/validar-consumos",
+              "paso-rapido/gestionar-consumos",
+              "paso-rapido/revision-manual",
+              "paso-rapido/reporte-consumos",
+              "paso-rapido/exportar"
+            ]
+          },
+          {
+            "group": "Combustible",
+            "pages": [
+              "combustible/index",
+              "combustible/entradas",
+              "combustible/productos",
+              "combustible/proveedores",
+              "combustible/importar",
+              "combustible/reporte-rendimiento"
+            ]
+          },
+          {
+            "group": "Flota y telemática",
+            "pages": [
+              "flota/index",
+              "flota/mapa-en-vivo",
+              "flota/flotas",
+              "flota/vehiculos",
+              "flota/viajes",
+              "flota/eventos",
+              "flota/conductores",
+              "flota/pois"
+            ]
+          },
+          {
+            "group": "Reportes",
+            "pages": [
+              "reportes/index",
+              "reportes/conduccion",
+              "reportes/jornada-conductor",
+              "reportes/velocidad",
+              "reportes/paradas-no-autorizadas"
+            ]
+          },
+          {
+            "group": "Alertas",
+            "pages": [
+              "alertas/index"
+            ]
+          },
+          {
+            "group": "Configuración",
+            "pages": [
+              "configuracion/index",
+              "configuracion/usuarios",
+              "configuracion/api-keys"
             ]
           }
         ]
       },
       {
-        "tab": "Paso Rápido",
+        "tab": "API",
         "groups": [
           {
-            "group": "Introducción",
+            "group": "Guía",
             "pages": [
-              "paso-rapido/index"
+              "api/index",
+              "api/autenticacion",
+              "api/errores-paginacion",
+              "api/legacy-topkat"
             ]
           },
           {
-            "group": "Conceptos Básicos",
-            "pages": [
-              "paso-rapido/conceptos-fundamentales"
-            ]
-          },
-          {
-            "group": "Gestión de Datos",
-            "pages": [
-              "paso-rapido/gestion-tags",
-              "paso-rapido/gestion-consumos",
-              "paso-rapido/importacion"
-            ]
-          },
-          {
-            "group": "Sistema de Validaciones",
-            "pages": [
-              "paso-rapido/validaciones",
-              "paso-rapido/interpretacion-resultados"
-            ]
-          },
-          {
-            "group": "Herramientas de Análisis",
-            "pages": [
-              "paso-rapido/filtros-busqueda",
-              "paso-rapido/reporte-pdf",
-              "paso-rapido/exportacion"
-            ]
-          },
-          {
-            "group": "Gestión de Reclamos",
-            "pages": [
-              "paso-rapido/reclamos"
-            ]
+            "group": "Referencia",
+            "openapi": "openapi.json"
           }
         ]
       }
@@ -77,14 +107,14 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Soporte Técnico",
-          "href": "mailto:sfuentes@solidarityagents.com",
-          "icon": "envelope"
+          "anchor": "Ir a la aplicación",
+          "href": "https://unitedpetroleum.app/dashboard",
+          "icon": "gauge-high"
         },
         {
-          "anchor": "Ir a la aplicación",
-          "href": "https://unitedpetroleum.app",
-          "icon": "gauge-high"
+          "anchor": "Soporte",
+          "href": "mailto:sfuentes@solidarityagents.com",
+          "icon": "envelope"
         }
       ]
     }
@@ -93,10 +123,15 @@
     "light": "/logo/united-petroleum-logo.png",
     "dark": "/logo/united-petroleum-logo.png"
   },
+  "api": {
+    "playground": {
+      "display": "interactive"
+    }
+  },
   "footerSocials": {
     "website": "https://unitedlogistics.com.do"
   },
   "search": {
-    "prompt": "Buscar en la documentación..."
+    "prompt": "Buscar en el manual..."
   }
 }

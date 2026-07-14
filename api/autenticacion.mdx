@@ -1,0 +1,35 @@
+---
+title: "Autenticación"
+description: "Bearer API keys ulk_… para la REST v1"
+---
+
+# Autenticación
+
+## Esquema
+
+```bash
+Authorization: Bearer ulk_<prefix>_<secret>
+```
+
+Las claves nuevas se crean en **Configuración → API**. Formato: `ulk_` + prefijo (12) + `_` + secreto.
+
+Las claves legacy `ak_…` siguen aceptándose en v1 durante la transición.
+
+## Ejemplo
+
+```bash
+curl -s https://unitedpetroleum.app/api/v1/organizations/me \
+  -H "Authorization: Bearer ulk_xxxxxxxxxxxx_xxxxxxxxxxxxxxxxxxxx"
+```
+
+## Scopes
+
+Por defecto las claves tienen acceso completo (`*`). El producto puede restringir por recurso (`fuel_entries:read`, `paso_rapido:write`, etc.) según la clave.
+
+## Rate limit
+
+Por defecto **60 solicitudes/minuto** por clave (configurable por clave en el dashboard). Respuesta `429` al exceder.
+
+<Warning>
+No suba la clave a repositorios ni la incruste en frontends públicos. Trátela como contraseña.
+</Warning>

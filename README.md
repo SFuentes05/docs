@@ -1,36 +1,33 @@
-# United Logistics | App
+# United Logistics — Documentación
 
-Herramienta de validación de consumos de peajes exportados desde la aplicación oficial United Logistics.
+Manual de uso del producto **United Logistics** (Paso Rápido, combustible, flota, reportes) y referencia de la **API REST v1**.
 
-## Acerca del Sistema
+## Desarrollo local
 
-Esta herramienta permite validar automáticamente los consumos de peajes exportados desde la aplicación United Logistics, cruzándolos con datos de telemetría GPS de vehículos registrados en ERM Telematics.
+```bash
+# Desde la raíz del monorepo (submódulo en docs/)
+cd docs
+npx mintlify dev
+# o: mint dev
+```
 
-## Características Principales
+Regenerar snapshot OpenAPI (app en `npm run dev`):
 
-- **Importación de CSV**: Procesa archivos exportados desde la app oficial United Logistics
-- **Integración ERM Telematics**: Conecta con datos de vehículos, proyectos, eventos y viajes
-- **Validación GPS**: Verifica ubicación del vehículo contra telemetría ERM al momento del cobro
-- **Detección de Anomalías**: Identifica duplicados, sobrecargos y tags inhabilitados
-- **Tabla Puente**: Utiliza `tag_assignments` para vincular datos de ambos sistemas
-- **Reportes de Validación**: Análisis detallados con exportación a Excel
+```bash
+npm run docs:openapi
+```
 
-## Estructura de la Documentación
+## Estructura
 
-- **Introducción**: Flujo de trabajo e integración de sistemas
-- **Conceptos Básicos**: Terminología y entidades del sistema
-- **Modelos de Datos**: Estructura de las tablas y relaciones
-- **Sistema de Validación**: Funcionamiento interno de las validaciones
-- **Guías de Usuario**: Instrucciones paso a paso para operadores
-- **Flujos de Trabajo**: Procesos completos desde exportación hasta reportes
+- **Manual de uso** — procedimientos operativos (prioridad)
+- **API** — autenticación v1 + referencia OpenAPI + legacy Topkat
 
-## Soporte Técnico
+## Repositorio
 
-Para consultas técnicas o solicitudes de implementación:
-- Email: sfuentes@solidarityagents.com
-- Aplicación: [United Logistics App](https://unitedlogistics.app)
-- Portal: [United Logistics](https://unitedlogistics.com.do)
+Submódulo: [github.com/SFuentes05/docs](https://github.com/SFuentes05/docs)
 
----
+Aplicación: [unitedpetroleum.app](https://unitedpetroleum.app)
 
-*Módulo de validación desarrollado para integrar United Logistics con ERM Telematics* 
+Documentación: [docs.unitedlogistics.com.do](https://docs.unitedlogistics.com.do)
+
+Soporte: sfuentes@solidarityagents.com

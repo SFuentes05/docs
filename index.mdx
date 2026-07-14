@@ -1,99 +1,61 @@
 ---
-title: "United Logistics | API Documentation"
-description: "REST API documentation for United Logistics fuel management system"
+title: "United Logistics"
+description: "Manual de uso del producto United Logistics — flota, peajes Paso Rápido, combustible y reportes"
 ---
 
-# United Logistics API
+# United Logistics
 
-Welcome to the United Logistics API documentation. This API allows you to programmatically manage fuel entries, products, and vendors for your fleet.
+United Logistics es un **producto** de operación de flota: procedimientos definidos para peajes (Paso Rápido), combustible, telemática y reportes ejecutivos. No es una plataforma genérica — cada módulo tiene un flujo de trabajo pensado para el día a día del operador.
 
-<Note>
-This API uses REST principles and returns JSON responses. All requests require authentication using an API key.
-</Note>
+<img src="/images/main_dashboard.png" alt="Vista principal de United Logistics" />
 
-## Getting Started
+## Qué puede hacer con el producto
 
-To get started with the United Logistics API:
-
-1. **Generate an API Key**: Navigate to Settings in your dashboard to generate your API key
-2. **Authenticate**: Include your API key in the `X-API-Key` header of all requests
-3. **Make Requests**: Use the documented endpoints to manage your fuel data
-
-## Base URL
-
-All API requests should be made to:
-
-```
-https://unitedpetroleum.app/api
-```
-
-## Authentication
-
-All API requests must include your API key in the request headers:
-
-```bash
-X-API-Key: your_api_key_here
-```
-
-<Warning>
-Keep your API key secure and never share it publicly. Treat it like a password.
-</Warning>
-
-## Rate Limiting
-
-API requests are rate-limited to:
-- **100 requests per minute** per API key
-- **1,000 requests per hour** per API key
-
-If you exceed these limits, you'll receive a `429 Too Many Requests` response.
-
-## Response Format
-
-All responses are returned in JSON format with the following structure:
-
-### Success Response
-
-```json
-{
-  "data": { ... },
-  "status": 200
-}
-```
-
-### Error Response
-
-```json
-{
-  "error": "Error message here",
-  "status": 400
-}
-```
-
-## Common HTTP Status Codes
-
-| Status Code | Description |
-|-------------|-------------|
-| `200` | Success |
-| `201` | Created |
-| `400` | Bad Request - Invalid parameters |
-| `401` | Unauthorized - Invalid or missing API key |
-| `403` | Forbidden - Insufficient permissions |
-| `404` | Not Found |
-| `429` | Too Many Requests - Rate limit exceeded |
-| `500` | Internal Server Error |
-
-## Available Endpoints
-
-<CardGroup cols={1}>
-  <Card
-    title="Fuel Entries API"
-    icon="gas-pump"
-    href="/api/fuel-entries"
-  >
-    Create, read, update, and delete fuel entry records
+<CardGroup cols={2}>
+  <Card title="Paso Rápido" icon="road" href="/paso-rapido">
+    Asignar tags, importar consumos de peaje, validarlos contra GPS y generar el informe PDF.
+  </Card>
+  <Card title="Combustible" icon="gas-pump" href="/combustible">
+    Registrar entradas, productos y proveedores; importar cargas y medir rendimiento.
+  </Card>
+  <Card title="Flota y telemática" icon="truck" href="/flota">
+    Mapa en vivo, flotas, vehículos, viajes, eventos, conductores y POIs.
+  </Card>
+  <Card title="Reportes" icon="file-chart-column" href="/reportes">
+    Conducción, jornada, velocidad, paradas no autorizadas y más.
   </Card>
 </CardGroup>
 
-## Support
+## Flujo típico del mes (Paso Rápido)
 
-For API support or questions, contact: sfuentes@solidarityagents.com
+```mermaid
+flowchart LR
+  A[Asignar tags] --> B[Importar consumos]
+  B --> C[Validar vs GPS]
+  C --> D[Revisión manual]
+  D --> E[Reporte PDF / Excel]
+```
+
+1. Mantenga al día las [asignaciones de tags](/paso-rapido/tags).
+2. [Importe](/paso-rapido/importar-consumos) el archivo de peajes (solo registros PASE).
+3. [Valide](/paso-rapido/validar-consumos) contra telemetría.
+4. Resuelva casos dudosos con [revisión manual](/paso-rapido/revision-manual).
+5. Genere el [reporte de consumos](/paso-rapido/reporte-consumos) o [exporte a Excel](/paso-rapido/exportar).
+
+## Empezar
+
+| Paso | Guía |
+|------|------|
+| Iniciar sesión y cambiar de organización | [Primeros pasos](/manual/primeros-pasos) |
+| Menú, búsqueda y Generar reporte | [Navegación](/manual/navegacion) |
+| Claves API (integradores) | [API](/api) |
+
+<Note>
+La pestaña **API** documenta la REST v1 para integraciones. El día a día del operador está en este **Manual de uso**.
+</Note>
+
+## Soporte
+
+- Aplicación: [unitedpetroleum.app](https://unitedpetroleum.app)
+- Documentación: [docs.unitedlogistics.com.do](https://docs.unitedlogistics.com.do)
+- Correo: [sfuentes@solidarityagents.com](mailto:sfuentes@solidarityagents.com)

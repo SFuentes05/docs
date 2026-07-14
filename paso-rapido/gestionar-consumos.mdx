@@ -1,0 +1,43 @@
+---
+title: "Gestionar consumos"
+description: "Listado, filtros, selección masiva y detalle de cargos"
+---
+
+# Gestionar consumos
+
+Ruta: `/paso-rapido/consumos`
+
+Centro operativo de peajes: búsqueda, filtros, validación, importación y exportación.
+
+<img src="/images/charges_filter.png" alt="Filtros en consumos" />
+
+## Acciones del encabezado
+
+| Botón | Acción |
+|-------|--------|
+| **Validar** | Ir al motor de validación |
+| **Importar** | Wizard de importación |
+| **Exportar Excel** | Excel del conjunto filtrado |
+| **Tags sin asignar** | Badge con conteo → diálogo de asignación |
+
+## Filtros
+
+- Búsqueda: vehículo, tag, estación, placa, monto
+- Rango de fechas y **Propietarios**
+- **Más filtros**: vehículos, estaciones, tags
+- Badges de estado: **Válido**, **Sin Telemetría**, **Sin GPS**, **Doble Cargo**, **Sospechoso**
+- Ciclo: **Todos** / **Validados** / **Sin validar**
+
+## Tabla
+
+Columnas típicas: ID, Fecha, Tag, Vehículo, Propietario, Estación, Monto, Estado GPS, Doble Cargo, Categoría, Estado Tag, Revisión Manual, Comentarios.
+
+- Expanda una fila para mapa mini y detalle de validación.
+- Selección múltiple: **Deshacer Validación**, **Eliminar**.
+- Desde la fila puede abrir **Revisión Manual de Cargo**.
+
+## Buenas prácticas
+
+1. Trabaje siempre con un rango de fechas del período a cerrar.
+2. Filtre primero por **Sospechoso** y **Doble Cargo**.
+3. Exporte Excel solo cuando los filtros reflejen el alcance del análisis (el export respeta filtros).

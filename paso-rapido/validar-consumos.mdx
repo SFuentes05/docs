@@ -1,0 +1,49 @@
+---
+title: "Validar consumos"
+description: "Cómo cruzar consumos contra telemetría GPS paso a paso"
+---
+
+# Validar consumos
+
+Ruta: `/paso-rapido/validar`
+
+El motor cruza cada cargo con telemetría (y reglas de categoría, estado de tag y duplicados).
+
+## Qué valida el producto
+
+1. **GPS / ubicación** — ¿el vehículo del tag estuvo cerca del peaje en la ventana de tiempo?
+2. **Categoría** — ¿el monto encaja con la categoría del tag?
+3. **Estado del tag** — ¿el tag estaba válido en la fecha del cargo?
+4. **Duplicados** — ¿hay otro cargo equivalente (doble cobro)?
+
+## Paso a paso
+
+<Steps>
+  <Step title="Abrir Validar">
+    Desde el menú Paso Rápido, Acciones → **Validar consumos**, o el botón **Validar** en Consumos.
+  </Step>
+  <Step title="Configurar">
+    - **Rango de fechas** (vacío = todos los pendientes aplicables)
+    - **Vehículos** opcionales (GPS y sin GPS)
+    - **Re-validar cargos ya validados** si necesita volver a correr el mes
+    - Avanzado: ventana de tiempo (minutos) y distancia límite (metros)
+  </Step>
+  <Step title="Vista previa">
+    Pulse **Generar vista previa**. Revise totales: cargos, por validar, cobertura, ETA.
+  </Step>
+  <Step title="Ejecutar">
+    **Iniciar validación** → confirme. Siga el progreso por tag en vivo.
+  </Step>
+</Steps>
+
+<img src="/images/gps_validation.png" alt="Resultados de validación GPS" />
+
+## Después de validar
+
+- En [Consumos](/paso-rapido/gestionar-consumos) filtre por estado (Válido, Sin telemetría, Sospechoso, Doble cargo…).
+- Expanda una fila para ver mapa, prueba GPS y detalle.
+- Para disputas operativas use [Revisión manual](/paso-rapido/revision-manual).
+
+<Tip>
+Si muchos cargos salen **Sin telemetría**, revise cobertura Karma/ERM del período y que los tags estén en modo **Con GPS** con el vehículo correcto.
+</Tip>

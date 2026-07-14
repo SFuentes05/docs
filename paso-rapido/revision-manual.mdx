@@ -1,0 +1,25 @@
+---
+title: "Revisión manual"
+description: "Cómo marcar un cargo como válido, sin telemetría o ubicación inválida"
+---
+
+# Revisión manual
+
+Cuando la validación automática no cierra el caso (falta de GPS, peaje en zona sin cobertura, excepción operativa), use **Revisión Manual de Cargo** desde el listado de Consumos.
+
+## Paso a paso
+
+1. En `/paso-rapido/consumos`, localice el cargo (filtros o búsqueda).
+2. Abra la acción / diálogo **Revisión Manual de Cargo**.
+3. Elija un estado:
+   - **Válido** — acepta el cargo pese a la señal automática
+   - **Sin Telemetría** — documenta ausencia de datos GPS
+   - **Ubicación Inválida** — confirma inconsistencia de ubicación
+4. Escriba un **comentario** (motivo, ticket, evidencia).
+5. Guarde.
+
+El estado y comentario quedan visibles en la tabla y en exportaciones/reportes.
+
+<Note>
+Esto sustituye el antiguo concepto de “reclamos” en documentación previa. El procedimiento oficial del producto es la revisión manual por cargo.
+</Note>

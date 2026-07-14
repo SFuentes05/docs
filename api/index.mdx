@@ -1,0 +1,32 @@
+---
+title: "API REST v1"
+description: "Introducción a la API pública de United Logistics"
+---
+
+# API REST v1
+
+La API permite integrar flota, combustible y Paso Rápido con sistemas externos. Es **secundaria** al [manual de uso](/); el operador diario trabaja en la aplicación.
+
+## Base URL
+
+```
+https://unitedpetroleum.app/api/v1
+```
+
+Desarrollo local: `http://localhost:3000/api/v1`
+
+Especificación OpenAPI (viva): [`/api/v1/openapi.json`](https://unitedpetroleum.app/api/v1/openapi.json)
+
+## Empezar en 3 pasos
+
+1. Cree una clave en **Configuración → API** ([guía](/configuracion/api-keys)).
+2. Autentique con Bearer ([Autenticación](/api/autenticacion)).
+3. Llame los endpoints de la pestaña **Referencia** (generados desde OpenAPI).
+
+## Recursos principales
+
+Organización, vehículos, conductores, eventos, viajes, POIs, combustible (entradas/productos/proveedores), Paso Rápido (tags, peajes, cargos), flotas, rutas programadas y shares.
+
+## Legacy
+
+La integración antigua Topkat (`POST /api/fuel-entries/topkat` con `X-API-Key`) está documentada en [Legacy Topkat](/api/legacy-topkat). Prefiera `/api/v1/fuel/entries` para integraciones nuevas.
