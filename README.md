@@ -26,8 +26,8 @@ npm run docs:openapi
 
 Submódulo: [github.com/SFuentes05/docs](https://github.com/SFuentes05/docs)
 
-Aplicación: [unitedpetroleum.app](https://unitedpetroleum.app)
+Aplicación: [app.unitedlogistics.com.do](https://app.unitedlogistics.com.do)
 
 Documentación: [docs.unitedlogistics.com.do](https://docs.unitedlogistics.com.do)
 
-Soporte: sfuentes@solidarityagents.com
+Soporte: sfuentes@assetmg.tech

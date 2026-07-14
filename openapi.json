@@ -6,12 +6,12 @@
     "description": "Industry-grade public API for fleet, fuel, and toll operations. Every endpoint is scoped to the organization owning the API key. Authentication: bearer API key (`ulk_<prefix>_<secret>`). Rate limit: 60 requests/minute/key by default (override per key via the dashboard).",
     "contact": {
       "name": "United Logistics Engineering",
-      "email": "sfuentes@solidarityagents.com"
+      "email": "sfuentes@assetmg.tech"
     }
   },
   "servers": [
     {
-      "url": "https://unitedpetroleum.app/api/v1",
+      "url": "https://app.unitedlogistics.com.do/api/v1",
       "description": "Production"
     },
     {

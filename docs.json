@@ -108,12 +108,12 @@
       "anchors": [
         {
           "anchor": "Ir a la aplicación",
-          "href": "https://unitedpetroleum.app/dashboard",
+          "href": "https://app.unitedlogistics.com.do/dashboard",
           "icon": "gauge-high"
         },
         {
           "anchor": "Soporte",
-          "href": "mailto:sfuentes@solidarityagents.com",
+          "href": "mailto:sfuentes@assetmg.tech",
           "icon": "envelope"
         }
       ]
